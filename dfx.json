@@ -1,0 +1,17 @@
+{
+    "canisters": {
+        "connect": {
+            "main": "app/main.mo"
+        }
+    },
+    "defaults": {
+        "build": {
+            "output": "build"
+        },
+        "start": {
+            "address": "127.0.0.1",
+            "port": 8001
+        }
+    },
+    "version": 1
+}
