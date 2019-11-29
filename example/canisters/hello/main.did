@@ -1,0 +1,3 @@
+service anon {
+  "greet": (text) -> (text);
+}
