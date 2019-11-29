@@ -5,7 +5,7 @@ install:
 - yes Y | sh install.sh
 - # Install Nginx with Lua support.
 - travis_retry sudo apt-get install --yes nginx libnginx-mod-http-lua
-- sudo chown travis /var/log/nginx/*
+- sudo usermod -G adm -a $USER
 - # Install Lua package manager.
 - travis_retry sudo apt-get install --yes luarocks
 - # Install Lua CBOR package.
@@ -29,7 +29,7 @@ script:
 - id=$(xxd -p -u build/connect/_canister.id  | sed -e "s/.*/ibase=16; \0/" | bc)
 - sed -e "s/^local CANISTER = '\(.*\)'/local CANISTER = '$id'/g" -i nginx/index.lua
 - # Start Nginx server.
-- nohup nginx -c nginx.conf -p nginx &
+- sudo sg adm -c "nohup nginx -c nginx.conf -p nginx &"
 - # Render index page.
 - wget 127.0.0.1:8000
 - cat index.html
