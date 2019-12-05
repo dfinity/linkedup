@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+
+	<!-- Header -->
+	<head>
+
+		<!-- Metadata -->
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+		<!-- Title -->
+		<title>Connect | An open professional network.</title>
+
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400" rel="stylesheet" type="text/css">
+
+		<!-- Styles -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css" rel="stylesheet" type="text/css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type="text/css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+		<!-- Custom -->
+		<style>
+
+		/**
+		 * Preloader
+		 */
+		.preloader-canvas {
+			background-color: #FFF;
+			bottom: 0;
+			left: 0;
+			position: fixed;
+			right: 0;
+			top: 0;
+			z-index: 1;
+		}
+		.preloader-image {
+			background-image: url('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/loader.gif');
+			background-position: center;
+			background-repeat: no-repeat;
+			height: 200px;
+			left: 50%;
+			margin: -100px 0 0 -100px;
+			position: absolute;
+			top: 50%;
+			width: 200px;
+		}
+
+		/**
+		 * Navigation
+		 */
+		.navbar-custom {
+			background-color: transparent;
+		}
+		.navbar-custom > .container {
+			color: #FFF;
+			outline: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
+		.navbar-custom.collapse-custom {
+			background-color: #FFF;
+		}
+		.navbar-custom.collapse-custom > .container {
+			color: #333;
+		}
+		.navbar-toggler {
+			outline: none !important;
+		}
+		.navbar-toggler-icon {
+			background-image: url('data:image/svg+xml;charset=utf8,<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path stroke="rgba(51, 51, 51, 1)" stroke-width="4" stroke-linecap="square" stroke-miterlimit="8" d="M4 8h24M4 16h24M4 24h24"/></svg>');
+		}
+		.navbar-brand {
+			color: inherit;
+			font-family: 'Montserrat', sans-serif;
+			font-size: 32px;
+			font-weight: 700;
+			outline: inherit;
+		}
+		.navbar-brand:hover {
+			color: inherit;
+		}
+		.nav-link {
+			color: inherit;
+			font-family: 'Raleway', sans-serif;
+			font-size: 16px;
+			font-weight: 500;
+			outline: inherit;
+			text-transform: uppercase;
+		}
+		.nav-link:hover {
+			color: inherit;
+		}
+		.dropdown-menu {
+			margin-top: 18px;
+			padding: 0;
+		}
+		.dropdown-toggle:after {
+			content: none;
+		}
+
+		/**
+		 * Modals
+		 */
+		.modal-title {
+			color: #222;
+			font-family: 'Montserrat', sans-serif;
+			font-size: 22px;
+			font-weight: 700;
+		}
+		.modal-body {
+			min-width: 300px;
+			padding: 1rem 1rem 0 1rem;
+			text-align: center;
+		}
+		.modal-body > p {
+			border-bottom: 1px solid #E5E5E5;
+			color: #545454;
+			font-family: 'Raleway', sans-serif;
+			font-size: 15px;
+			font-weight: 500;
+			margin-bottom: 15px;
+			padding-bottom: 15px;
+		}
+		.modal-body > .response {
+			color: #FF0000;
+			margin-bottom: 15px;
+		}
+		.close:active {
+			outline: none;
+		}
+
+		/**
+		 * Forms
+		 */
+		.form-control {
+			appearance: none;
+			-moz-appearance: none;
+			-ms-appearance: none;
+			-o-appearance: none;
+			-webkit-appearance: none;
+			background-color: #F9F9F9;
+			border: 1px solid #E5E5E5;
+			color: #545454;
+			font-family: 'Roboto Mono', sans-serif;
+			font-size: 15px;
+			font-weight: 400;
+		}
+		.form-control:focus {
+			border: 1px solid #02ADEA;
+			box-shadow: 0 0 8px #29ABE2;
+			-moz-box-shadow: 0 0 8px #29ABE2;
+			-ms-box-shadow: 0 0 8px #29ABE2;
+			-o-box-shadow: 0 0 8px #29ABE2;
+			-webkit-box-shadow: 0 0 8px #29ABE2;
+		}
+
+		/**
+		 * Buttons
+		 */
+		.btn:focus {
+			box-shadow: none;
+			-moz-box-shadow: none;
+			-ms-box-shadow: none;
+			-o-box-shadow: none;
+			-webkit-box-shadow: none;
+			color: #FFF;
+		}
+		.btn-custom {
+			background-color: #02ADEA;
+			border-color: #02ADEA;
+			border-radius: .25rem;
+			color: #FFF;
+			font-family: 'Montserrat', sans-serif;
+			font-size: 18px;
+			font-weight: 700;
+			height: 46px;
+			width: 100%;
+		}
+		.btn-custom:hover {
+			color: #FFF;
+		}
+
+		/**
+		 * Introduction
+		 */
+		.intro {
+			display: flex;
+			display: -moz-flex;
+			display: -ms-flex;
+			display: -o-flex;
+			display: -webkit-flex;
+			flex-direction: column;
+			-moz-flex-direction: column;
+			-ms-flex-direction: column;
+			-o-flex-direction: column;
+			-webkit-flex-direction: column;
+			justify-content: center;
+			-moz-justify-content: center;
+			-ms-justify-content: center;
+			-o-justify-content: center;
+			-webkit-justify-content: center;
+		}
+		.dim {
+			background-image: url('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/overlay.png');
+			height: 100%;
+			position: absolute;
+			width: 100%;
+		}
+		.callout {
+			text-align: center;
+		}
+		.callout > h1 {
+			color: #FFF;
+			font-family: 'Montserrat', sans-serif;
+			font-size: 24px;
+			font-weight: 700;
+		}
+		@media (max-width: 575px) {
+			.callout > h1 {
+				font-size: 30px;
+			}
+		}
+		@media (min-width: 576px) and (max-width: 767px) {
+			.callout > h1 {
+				font-size: 44px;
+			}
+		}
+		@media (min-width: 768px) and (max-width: 991px) {
+			.callout > h1 {
+				font-size: 60px;
+			}
+		}
+		@media (min-width: 992px) and (max-width: 1199px) {
+			.callout > h1 {
+				font-size: 80px;
+			}
+		}
+		@media (min-width: 1200px) {
+			.callout > h1 {
+				font-size: 92px;
+			}
+		}
+		.typed-cursor--blink {
+			animation: typedjsBlink 1.5s infinite !important;
+			-moz-animation: typedjsBlink 1.5s infinite !important;
+			-ms-animation: typedjsBlink 1.5s infinite !important;
+			-o-animation: typedjsBlink 1.5s infinite !important;
+			-webkit-animation: typedjsBlink 1.5s infinite !important;
+		}
+
+		</style>
+
+	</head>
+
+	<!-- Body -->
+	<body>
+
+		<!-- Splash View -->
+		<div class="splash-view">
+
+			<!-- Preloader -->
+			<div class="preloader-canvas">
+				<div class="preloader-image"></div>
+			</div>
+
+			<!-- Navigation -->
+			<nav class="fixed-top navbar navbar-custom navbar-expand-sm">
+
+				<div class="container">
+
+					<!-- Logo -->
+					<a class="navbar-brand" href="/">
+						<span><i class="fa fa-share-alt"></i> Connect</span>
+					</a>
+
+					<!-- Toggler -->
+					<button class="navbar-toggler" data-target="#menu" data-toggle="collapse" type="button">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<!-- Menu -->
+					<div class="collapse navbar-collapse navbar-menu" id="menu">
+
+						<ul class="ml-auto navbar-nav">
+
+							<!-- Registration Link -->
+							<li class="nav-item">
+								<a class="nav-link" data-dismiss="dropdown" data-target="#register-form" data-toggle="dropdown" href="#" id="register">Register</a>
+							</li>
+
+							<!-- Login Link -->
+							<li class="dropdown dropdown-custom nav-item">
+
+								<a class="nav-link" data-dismiss="dropdown" data-target="#login-form" data-toggle="dropdown" href="#" id="login">Login</a>
+
+								<!-- Registration Form -->
+								<form class="dropdown-menu dropdown-menu-right fade" id="register-form" role="form" aria-labelledby="register">
+
+									<!-- Header -->
+									<div class="modal-header">
+										<h4 class="modal-title">Register</h4>
+										<button class="close pull-right" data-toggle="dropdown" type="button">&times;</button>
+									</div>
+
+									<!-- Body -->
+									<div class="modal-body">
+										<p>Write down the following mnemonic<br>seed on a piece of paper, keep it<br>somewhere safe, and never share it<br>with anyone. It is the only key to your<br>account and it cannot be recovered.</p>
+										<div class="mnemonic-seed"></div>
+									</div>
+
+									<!-- Footer -->
+									<div class="modal-footer">
+										<button class="btn btn-lg btn-custom" type="submit">Complete</button>
+									</div>
+
+								</form>
+
+								<!-- Login Form -->
+								<form class="dropdown-menu dropdown-menu-right fade" id="login-form" role="form" aria-labelledby="login">
+
+									<!-- Header -->
+									<div class="modal-header">
+										<h4 class="modal-title">Login</h4>
+										<button class="close pull-right" data-toggle="dropdown" type="button">&times;</button>
+									</div>
+
+									<!-- Body -->
+									<div class="modal-body">
+
+										<p>Enter your mnemonic seed.</p>
+
+										<div class="response"></div>
+
+										<div class="form-row">
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-00" name="word-00" placeholder="01." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-01" name="word-01" placeholder="02." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-02" name="word-02" placeholder="03." type="password">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-03" name="word-03" placeholder="04." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-04" name="word-04" placeholder="05." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-05" name="word-05" placeholder="06." type="password">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-06" name="word-06" placeholder="07." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-07" name="word-07" placeholder="08." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-08" name="word-08" placeholder="09." type="password">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-09" name="word-09" placeholder="10." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-10" name="word-10" placeholder="11." type="password">
+											</div>
+											<div class="col-lg-4 form-group form-group-lg">
+												<input class="form-control" id="word-11" name="word-11" placeholder="12." type="password">
+											</div>
+										</div>
+
+									</div>
+
+									<!-- Footer -->
+									<div class="modal-footer">
+										<button class="btn btn-lg btn-custom" type="submit">Login</button>
+									</div>
+
+								</form>
+
+							</li>
+
+						</ul>
+
+					</div>
+
+				</div>
+
+			</nav>
+
+			<!-- Intro -->
+			<section class="intro">
+				<div class="container">
+					<div class="callout wow fadeInUp" data-wow-delay="1s">
+						<h1>A<span id="typed"></span><br>professional network.</h1>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+		<!-- Profile View -->
+		<div class="profile-view hidden">
+			TODO: Implement profile view!
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.1/nacl.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.0.3/wow.min.js" type="text/javascript"></script>
+
+		<!-- Custom -->
+		<script src="https://enzohaussecker.s3-us-west-2.amazonaws.com/js/rfc1751.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+
+		(function($) {
+
+			$(document).ready(function() {
+
+				// Reveal animations.
+				const wow = new WOW();
+				wow.init();
+
+				// 
+				function renderNavbar() {
+					const navbar = $('.navbar-custom');
+					if (navbar.width() < 576) {
+						navbar.addClass('collapse-custom');
+					} else {
+						navbar.removeClass('collapse-custom');
+					}
+				}
+				renderNavbar();
+				$(window).resize(function() {
+					renderNavbar();
+				});
+
+				// 
+				function renderIntro() {
+					const windowHeight = $(window).innerHeight();
+					$('.intro').css('height', windowHeight);
+				};
+				renderIntro();
+				$(window).resize(function() {
+					renderIntro();
+				});
+				$('.intro').backstretch('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/handshake.jpg');
+				$('.backstretch > img').after('<span class="dim"></span>');
+
+				// 
+				const typed = new Typed('#typed', {
+					cursorChar: '_',
+					strings: [
+						'n&nbsp;autonomous',
+						'&nbsp;transparent',
+						'n&nbsp;unstoppable',
+						'&nbsp;tamperproof'
+					],
+					typeSpeed: 50,
+					backSpeed: 25,
+					backDelay: 3000,
+					loop: true
+				});
+
+				// 
+				function hexEncode(buf) {
+					const arr = new Uint8Array(buf);
+					return Array.prototype.map.call(arr, i =>
+						('00' + i.toString(16)).slice(-2)
+					).join('');
+				}
+
+				//
+				var words = [];
+				function resetPhrase() {
+					var arr = new Uint8Array(16);
+					window.crypto.getRandomValues(arr);
+					words = key_to_english(hexEncode(arr)).split(' ');
+				}
+				$('.dropdown').on('show.bs.dropdown', function() {
+					resetPhrase();
+					var accum = '';
+					for (var i = 0; i < 4; i++) {
+						accum = accum + '<div class="form-row">';
+						for (var j = 0; j < 3; j++) {
+							accum = accum + '<div class="col-lg-4 form-group form-group-lg"><div class="form-control">' + words[3 * i + j] + '</div></div>';
+						}
+						accum = accum + '</div>';
+					}
+					$('.mnemonic-seed').html(accum);
+				});
+
+				const decode = hexString =>
+					new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+				const encode = bytes =>
+					bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+
+				// Disable submit button.
+				function disableSubmitButton(btn) {
+					btn.prop('disabled', true);
+					btn.empty();
+					btn.append('<i class="fa fa-cog fa-spin"></i> Wait...');
+				};
+
+				// Enable submit button.
+				function enableSubmitButton(btn) {
+					btn.empty();
+					btn.append('<i class="fa fa-retweet"></i> Try again');
+					btn.prop('disabled', false);
+				};
+
+				// Handle registration form.
+				$('#register-form').submit(function(event) {
+					event.preventDefault();
+					const button = $(this).find('button[type="submit"]');
+					disableSubmitButton(button);
+					var word;
+					for (var i = 0; i < 12; i++) {
+						word = '#word-' + ('00' + i.toString()).slice(-2);
+						$(word).val(words[i]);
+					}
+					$('#login').click();
+					enableSubmitButton(button);
+				});
+
+				// Handle login form.
+				var keyPair;
+				$('#login-form').submit(function(event) {
+					event.preventDefault();
+					const button = $(this).find('button[type="submit"]');
+					disableSubmitButton(button);
+					const response = $(this).find('.response');
+					var words = [];
+					for (var i = 0; i < 12; i++) {
+						word = '#word-' + ('00' + i.toString()).slice(-2);
+						words.push($(word).val());
+					}
+					try {
+						var seed = new Uint8Array(32);
+						seed.set(decode(english_to_key(words.join(' ').toUpperCase())));
+						keyPair = nacl.sign.keyPair.fromSeed(seed);
+						// TODO: Fetch profile.
+						alert(encode(keyPair.publicKey));
+						enableSubmitButton(button);
+					} catch (err) {
+						response.hide().html('<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>').slideDown(350, 'linear', function() {
+							enableSubmitButton(button);
+						});
+					}
+				});
+
+			});
+
+			$(window).on("load", function(e) {
+				// Remove preloader overlay.
+				$(".preloader-canvas").fadeOut(1000, "linear");
+			});
+
+		})(jQuery);
+
+		</script>
+
+	</body>
+
+</html>
