@@ -47,12 +47,16 @@
 			loop: true
 		});
 
-		// 
-		function hexEncode(buf) {
-			const arr = new Uint8Array(buf);
-			return Array.prototype.map.call(arr, i =>
-				('00' + i.toString(16)).slice(-2)
-			).join('');
+		function decode(str) {
+			return new Uint8Array(str.match(/.{1,2}/g).map(function (x) {
+				return parseInt(x, 16)
+			}))
+		}
+
+		function encode(bytes) {
+			return bytes.reduce(function (str, x) {
+				return str + x.toString(16).padStart(2, '0')
+			}, '')
 		}
 
 		//
@@ -60,7 +64,7 @@
 		function resetPhrase() {
 			var arr = new Uint8Array(16);
 			window.crypto.getRandomValues(arr);
-			words = key_to_english(hexEncode(arr)).split(' ');
+			words = key_to_english(encode(arr)).split(' ');
 		}
 		$('.dropdown').on('show.bs.dropdown', function() {
 			resetPhrase();
@@ -74,12 +78,6 @@
 			}
 			$('.mnemonic-seed').html(accum);
 		});
-
-		const decode = hexString =>
-			new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-
-		const encode = bytes =>
-			bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
 		// Disable submit button.
 		function disableSubmitButton(btn) {

@@ -3,6 +3,12 @@ install:
 - # Install DFINITY SDK.
 - travis_retry wget https://sdk.dfinity.org/install.sh
 - yes Y | sh install.sh
+- # Install Google HTML Compressor.
+- travis_retry wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/htmlcompressor/htmlcompressor-1.5.3.jar
+- sudo mv htmlcompressor-1.5.3.jar /usr/share/java
+- # Install Yahoo CSS and JavaScript Compressor.
+- travis_retry wget https://github.com/yui/yuicompressor/releases/download/v2.4.8/yuicompressor-2.4.8.jar
+- sudo mv yuicompressor-2.4.8.jar /usr/share/java
 - # Install Nginx with Lua support.
 - travis_retry sudo apt-get install --yes nginx libnginx-mod-http-lua
 - sudo usermod -G adm -a $USER
@@ -18,7 +24,9 @@ install:
 - # Install Lua Socket package.
 - travis_retry sudo luarocks install luasocket
 script:
-- # Compile WebAssembly module.
+- # Generate Motoko source code.
+- make
+- # Compile Motoko source code.
 - dfx build
 - # Start DFINITY server.
 - nohup dfx start &

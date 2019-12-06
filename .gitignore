@@ -1,3 +1,4 @@
 .dfx/
+app/
 build/
 nohup.out

@@ -1,7 +1,7 @@
 {
     "canisters": {
         "connect": {
-            "main": "app/main.mo"
+            "main": "app/index.mo"
         }
     },
     "defaults": {

@@ -1,0 +1,5 @@
+actor Index {
+  public query func html() : async Text { HTML };
+  public query func css() : async Text { CSS };
+  public query func js() : async Text { JS };
+}
