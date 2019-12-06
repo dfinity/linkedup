@@ -5,7 +5,6 @@
 # Stability  : Experimental
 
 SRC = src
-TGT = app
 
 HTML = /usr/share/java/htmlcompressor-1.5.3.jar
 CSS  = /usr/share/java/yuicompressor-2.4.8.jar
@@ -15,13 +14,13 @@ E1 = "s/\\\"/\\\\\\\\\"/g"
 E2 = "s/\//\\\\\//g"
 
 .PHONY: all
-all: $(TGT)/index.mo
+all: $(SRC)/index.mo
 
 .PHONY: clean
 clean:
-	rm -rf $(TGT)
+	rm -f $(SRC)/index.mo
 
-$(TGT)/index.mo: $(TGT)
+$(SRC)/index.mo:
 	cat $(SRC)/index.template | #\\ \
 		sed -e "s/HTML/\"$$( \
 			java -jar $(HTML) $(SRC)/index.html | \
@@ -39,6 +38,3 @@ $(TGT)/index.mo: $(TGT)
 				sed -e $(E2) \
 		)\"/g" | #\\ \
 		tee $@
-
-$(TGT):
-	mkdir -p $@

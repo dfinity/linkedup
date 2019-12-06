@@ -1,4 +1,4 @@
 .dfx/
-app/
 build/
 nohup.out
+src/index.mo
