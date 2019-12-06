@@ -27,7 +27,7 @@ script:
 - dfx canister install --all connect
 - # Update Lua script.
 - id=$(xxd -p -u build/connect/_canister.id  | sed -e "s/.*/ibase=16; \0/" | bc)
-- sed -e "s/^local CANISTER = '\(.*\)'/local CANISTER = '$id'/g" -i nginx/index.lua
+- sed -e "s/canister_id '\(.*\)'/canister_id '$id'/g" -i nginx/nginx.conf
 - # Start Nginx server.
 - sudo sg adm -c "nohup nginx -c nginx.conf -p nginx &"
 - # Render index page.
