@@ -1,0 +1,262 @@
+@charset 'UTF-8';
+
+/**
+ * Preloader
+ */
+
+.preloader-canvas {
+	background-color: #FFF;
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1;
+}
+
+.preloader-image {
+	background-image: url('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/loader.gif');
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 200px;
+	left: 50%;
+	margin: -100px 0 0 -100px;
+	position: absolute;
+	top: 50%;
+	width: 200px;
+}
+
+/**
+ * Navigation
+ */
+
+.navbar-custom {
+	background-color: transparent;
+}
+
+.navbar-custom > .container {
+	color: #FFF;
+	outline: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.navbar-custom.collapse-custom {
+	background-color: #FFF;
+}
+
+.navbar-custom.collapse-custom > .container {
+	color: #333;
+}
+
+.navbar-toggler {
+	outline: none !important;
+}
+
+.navbar-toggler-icon {
+	background-image: url('data:image/svg+xml;charset=utf8,<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path stroke="rgba(51, 51, 51, 1)" stroke-width="4" stroke-linecap="square" stroke-miterlimit="8" d="M4 8h24M4 16h24M4 24h24"/></svg>');
+}
+
+.navbar-brand {
+	color: inherit;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 32px;
+	font-weight: 700;
+	outline: inherit;
+}
+
+.navbar-brand:hover {
+	color: inherit;
+}
+
+.nav-link {
+	color: inherit;
+	font-family: 'Raleway', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	outline: inherit;
+	text-transform: uppercase;
+}
+
+.nav-link:hover {
+	color: inherit;
+}
+
+.dropdown-menu {
+	margin-top: 18px;
+	padding: 0;
+}
+
+.dropdown-toggle:after {
+	content: none;
+}
+
+/**
+ * Modals
+ */
+
+.modal-title {
+	color: #222;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.modal-body {
+	min-width: 300px;
+	padding: 1rem 1rem 0 1rem;
+	text-align: center;
+}
+
+.modal-body > p {
+	border-bottom: 1px solid #E5E5E5;
+	color: #545454;
+	font-family: 'Raleway', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+}
+
+.modal-body > .response {
+	color: #FF0000;
+	margin-bottom: 15px;
+}
+
+.close:active {
+	outline: none;
+}
+
+/**
+ * Forms
+ */
+
+.form-control {
+	appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	-webkit-appearance: none;
+	background-color: #F9F9F9;
+	border: 1px solid #E5E5E5;
+	color: #545454;
+	font-family: 'Roboto Mono', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+}
+
+.form-control:focus {
+	border: 1px solid #02ADEA;
+	box-shadow: 0 0 8px #29ABE2;
+	-moz-box-shadow: 0 0 8px #29ABE2;
+	-ms-box-shadow: 0 0 8px #29ABE2;
+	-o-box-shadow: 0 0 8px #29ABE2;
+	-webkit-box-shadow: 0 0 8px #29ABE2;
+}
+
+/**
+ * Buttons
+ */
+
+.btn:focus {
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-ms-box-shadow: none;
+	-o-box-shadow: none;
+	-webkit-box-shadow: none;
+	color: #FFF;
+}
+
+.btn-custom {
+	background-color: #02ADEA;
+	border-color: #02ADEA;
+	border-radius: .25rem;
+	color: #FFF;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	height: 46px;
+	width: 100%;
+}
+
+.btn-custom:hover {
+	color: #FFF;
+}
+
+/**
+ * Intro
+ */
+
+.intro {
+	display: flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	-moz-flex-direction: column;
+	-ms-flex-direction: column;
+	-o-flex-direction: column;
+	-webkit-flex-direction: column;
+	justify-content: center;
+	-moz-justify-content: center;
+	-ms-justify-content: center;
+	-o-justify-content: center;
+	-webkit-justify-content: center;
+}
+
+.dim {
+	background-image: url('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/overlay.png');
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+
+.callout {
+	text-align: center;
+}
+
+.callout > h1 {
+	color: #FFF;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+@media (max-width: 575px) {
+	.callout > h1 {
+		font-size: 30px;
+	}
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+	.callout > h1 {
+		font-size: 44px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.callout > h1 {
+		font-size: 60px;
+	}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+	.callout > h1 {
+		font-size: 80px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.callout > h1 {
+		font-size: 92px;
+	}
+}
+
+.typed-cursor--blink {
+	animation: typedjsBlink 1.5s infinite !important;
+	-moz-animation: typedjsBlink 1.5s infinite !important;
+	-ms-animation: typedjsBlink 1.5s infinite !important;
+	-o-animation: typedjsBlink 1.5s infinite !important;
+	-webkit-animation: typedjsBlink 1.5s infinite !important;
+}

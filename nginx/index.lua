@@ -1,9 +1,9 @@
 --[[
--- File        : index.lua
--- Copyright   : 2019 Enzo Haussecker
--- License     : Apache 2.0 with LLVM Exception
--- Maintainer  : Enzo Haussecker <enzo@dfinity.org>
--- Stability   : Experimental
+-- File       : index.lua
+-- Copyright  : 2019 Enzo Haussecker
+-- License    : Apache 2.0 with LLVM Exception
+-- Maintainer : Enzo Haussecker <enzo@dfinity.org>
+-- Stability  : Experimental
 ]]
 
 local bignum = require 'openssl.bignum'
@@ -13,63 +13,73 @@ local http = require 'socket.http'
 local ltn12 = require 'ltn12'
 local rand = require 'openssl.rand'
 
-local HOST = '127.0.0.1'
-local PORT = 8001
-local CANISTER = '12744825594756334163'
-
 local function bignum_to_cbor(n)	
-  local tag = ''
-  if n >= bignum.new('0') then
-    tag = string.char(0x1B)
+  local ref = ''
+  if n >= bignum.new('0')
+  then
+    ref = string.char(0x1B)
   else
-    tag = string.char(0x3B)
+    ref = string.char(0x3B)
     n = bignum.new('-1') - n
   end
   local bin = n:tobin()
   local len = string.len(bin)
   local pad = string.rep(string.char(0x00), 8 - len)
-  return tag .. pad .. bin
+  return ref .. pad .. bin
 end
 
 bignum.interpose('__tocbor', bignum_to_cbor)
 
-local message = {
-  canister_id = bignum.new(CANISTER),
-  request_type = 'query',
-  method_name = 'index',
+local ic_message = {
   arg = hex.decode('4449444C0000'),
-  nonce = rand.bytes(32)
+  canister_id = bignum.new(ngx.var.canister_id),
+  method_name = ngx.var.method_name,
+  nonce = rand.bytes(32),
+  request_type = 'query'
 }
 
-local body = cbor.encode(message)
+local request_body = cbor.encode(ic_message)
 
-local data = ''
+local response_body = ''
 
 local function collect(chunk)
-  if chunk ~= nil then
-    data = data .. chunk
+  if chunk ~= nil
+  then
+    response_body = response_body .. chunk
   end
   return true
 end
 
 http.TIMEOUT = 30
 
-local ok, statusCode = http.request {
-  url = string.format('http://%s:%d/api/v1/read', HOST, PORT),
-  method = 'POST',
+local ok, status_code = http.request {
   headers = {
-    ['Content-Length'] = string.len(body),
+    ['Content-Length'] = string.len(request_body),
     ['Content-Type'] = 'application/cbor'
   },
-  source = ltn12.source.string(body),
-  sink = collect
+  method = 'POST',
+  sink = collect,
+  source = ltn12.source.string(request_body),
+  url = string.format('http://%s/api/v1/read', ngx.var.http_host)
 }
 
-if ok and statusCode == 200 then
-  local html = string.sub(cbor.decode(data, 4)['reply']['arg'], 9)
-  ngx.header['Content-Length'] = string.len(html)
-  ngx.header['Content-Type'] = 'text/html'
-  ngx.print(html)
-else
-  return ngx.exit(statusCode)
+local function get_content_type()
+  local method_name = ngx.var.method_name
+  if method_name == 'html'
+  then return 'text/html'
+  elseif method_name == 'css'
+  then return 'text/css'
+  elseif method_name == 'js'
+  then return 'text/javascript'
+  else return 'application/cbor'
+  end
 end
+
+if ok and status_code == 200
+then
+  local content = string.sub(cbor.decode(response_body, 4)['reply']['arg'], 10)
+  ngx.header['Content-Length'] = string.len(content)
+  ngx.header['Content-Type'] = get_content_type()
+  ngx.say(content)
+end
+ngx.exit(status_code)
