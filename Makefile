@@ -26,15 +26,14 @@ $(SRC)/index.mo:
 			java -jar $(HTML) $(SRC)/index.html | \
 				sed -e $(E1) | \
 				sed -e $(E2) \
-		)\"/g" | #\\ \
+		)\\\\n\"/g" | #\\ \
 		sed -e "s/CSS/\"$$( \
 			java -jar $(CSS) $(SRC)/index.css | \
 				sed -e $(E1) | \
 				sed -e $(E2) \
-		)\"/g" | #\\ \
+		)\\\\n\"/g" | #\\ \
 		sed -e "s/JS/\"$$( \
 			java -jar $(JS) $(SRC)/index.js | \
 				sed -e $(E1) | \
 				sed -e $(E2) \
-		)\"/g" | #\\ \
-		tee $@
+		)\\\\n\"/g" > $@
