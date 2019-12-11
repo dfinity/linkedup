@@ -1,15 +1,15 @@
 actor Index {
 
   public query func html() : async Text {
-    __INCLUDE_HTML__
+    ___HTML___
   };
 
   public query func css() : async Text {
-    __INCLUDE_CSS__
+    ___CSS___
   };
 
   public query func js() : async Text {
-    __INCLUDE_JS__
+    ___JS___
   };
 
 }

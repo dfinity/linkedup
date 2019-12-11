@@ -46,9 +46,9 @@ $(SOURCE)/index.mo: $(SOURCE)/index.js
 	CSS=$$($(call compress_css,$(SOURCE)/index.css) | $(escape)) #\\ \
 	JS=$$($(call compress_js,$(SOURCE)/index.js) | $(escape)) #\\ \
 	cat $(SOURCE)/index.template | sed \
-		-e "s/__INCLUDE_HTML__/\"$$HTML\\\\n\"/g" \
-		-e "s/__INCLUDE_CSS__/\"$$CSS\\\\n\"/g" \
-		-e "s/__INCLUDE_JS__/\"$$JS\\\\n\"/g" > $@
+		-e "s/___HTML___/\"$$HTML\\\\n\"/g" \
+		-e "s/___CSS___/\"$$CSS\\\\n\"/g" \
+		-e "s/___JS___/\"$$JS\\\\n\"/g" > $@
 
 .PHONY: index
 index: $(SOURCE)/index.mo
@@ -63,7 +63,7 @@ $(NGINX)/index.lua: $(NGINX)
 $(NGINX)/nginx.conf: $(NGINX) index
 	ID=$$($(call show_id, $(INDEX)/_canister.id)) #\\ \
 	cat $(SOURCE)/nginx.template | sed \
-		-e "s/canister_id ''/canister_id '$$ID'/g" > $@
+		-e "s/___ID___/$$ID/g" > $@
 
 .PHONY: nginx
 nginx: $(NGINX)/index.lua $(NGINX)/nginx.conf
