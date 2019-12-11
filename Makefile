@@ -29,15 +29,6 @@ show_id = xxd -p -u $(1) | sed -e "s/.*/ibase=16; \0/" | bc
 .PHONY: all
 all: nginx
 
-$(SOURCE)/index.mo:
-	HTML=$$($(call compress_html,$(SOURCE)/index.html) | $(escape)) #\\ \
-	CSS=$$($(call compress_css,$(SOURCE)/index.css) | $(escape)) #\\ \
-	JS=$$($(call compress_js,$(SOURCE)/index.js) | $(escape)) #\\ \
-	cat $(SOURCE)/index.template | sed \
-		-e "s/__INCLUDE_HTML__/\"$$HTML\\\\n\"/g" \
-		-e "s/__INCLUDE_CSS__/\"$$CSS\\\\n\"/g" \
-		-e "s/__INCLUDE_JS__/\"$$JS\\\\n\"/g" > $@
-
 .PHONY: profile
 profile:
 	dfx build $@
@@ -46,8 +37,21 @@ profile:
 social-graph:
 	dfx build $@
 
+$(SOURCE)/index.js: profile social-graph
+	# TODO: Bundle JavaScript sources.
+	touch $(SOURCE)/index.js
+
+$(SOURCE)/index.mo: $(SOURCE)/index.js
+	HTML=$$($(call compress_html,$(SOURCE)/index.html) | $(escape)) #\\ \
+	CSS=$$($(call compress_css,$(SOURCE)/index.css) | $(escape)) #\\ \
+	JS=$$($(call compress_js,$(SOURCE)/index.js) | $(escape)) #\\ \
+	cat $(SOURCE)/index.template | sed \
+		-e "s/__INCLUDE_HTML__/\"$$HTML\\\\n\"/g" \
+		-e "s/__INCLUDE_CSS__/\"$$CSS\\\\n\"/g" \
+		-e "s/__INCLUDE_JS__/\"$$JS\\\\n\"/g" > $@
+
 .PHONY: index
-index: $(SOURCE)/index.mo | profile social-graph
+index: $(SOURCE)/index.mo
 	dfx build $@
 
 $(NGINX):
@@ -56,7 +60,7 @@ $(NGINX):
 $(NGINX)/index.lua: $(NGINX)
 	cp $(SOURCE)/index.lua $@
 
-$(NGINX)/nginx.conf: $(NGINX) | index
+$(NGINX)/nginx.conf: $(NGINX) index
 	ID=$$($(call show_id, $(INDEX)/_canister.id)) #\\ \
 	cat $(SOURCE)/nginx.template | sed \
 		-e "s/canister_id ''/canister_id '$$ID'/g" > $@
