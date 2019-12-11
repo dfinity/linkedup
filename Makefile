@@ -7,6 +7,9 @@
 SOURCE = src
 TARGET = build
 
+INDEX = $(TARGET)/index
+NGINX = $(TARGET)/nginx
+
 HTML_COMPRESSOR = /usr/share/java/htmlcompressor-1.5.3.jar
 YUI_COMPRESSOR = /usr/share/java/yuicompressor-2.4.8.jar
 
@@ -22,6 +25,9 @@ E3 = "s/\//\\\\\//g"
 escape = sed -e $(E1) -e $(E2) -e $(E3)
 
 show_id = xxd -p -u $(1) | sed -e "s/.*/ibase=16; \0/" | bc
+
+.PHONY: all
+all: nginx
 
 $(SOURCE)/index.mo:
 	HTML=$$($(call compress_html,$(SOURCE)/index.html) | $(escape)) #\\ \
@@ -41,25 +47,22 @@ social-graph:
 	dfx build $@
 
 .PHONY: index
-index: $(SOURCE)/index.mo profile social-graph
+index: $(SOURCE)/index.mo | profile social-graph
 	dfx build $@
 
-$(TARGET)/nginx:
+$(NGINX):
 	mkdir -p $@
 
-$(TARGET)/nginx/index.lua: $(TARGET)/nginx
+$(NGINX)/index.lua: $(NGINX)
 	cp $(SOURCE)/index.lua $@
 
-$(TARGET)/nginx/nginx.conf: $(TARGET)/nginx index
-	ID=$$($(call show_id, $(TARGET)/index/_canister.id)) #\\ \
+$(NGINX)/nginx.conf: $(NGINX) | index
+	ID=$$($(call show_id, $(INDEX)/_canister.id)) #\\ \
 	cat $(SOURCE)/nginx.template | sed \
 		-e "s/canister_id ''/canister_id '$$ID'/g" > $@
 
 .PHONY: nginx
-nginx: $(TARGET)/nginx/index.lua $(TARGET)/nginx/nginx.conf
-
-.PHONY: all
-all: nginx
+nginx: $(NGINX)/index.lua $(NGINX)/nginx.conf
 
 .PHONY: install
 install:
