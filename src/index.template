@@ -1,5 +1,15 @@
 actor Index {
-  public query func html() : async Text { HTML };
-  public query func css() : async Text { CSS };
-  public query func js() : async Text { JS };
+
+  public query func html() : async Text {
+    __INCLUDE_HTML__
+  };
+
+  public query func css() : async Text {
+    __INCLUDE_CSS__
+  };
+
+  public query func js() : async Text {
+    __INCLUDE_JS__
+  };
+
 }

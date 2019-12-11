@@ -1,7 +1,13 @@
 {
     "canisters": {
-        "connect": {
+        "index": {
             "main": "src/index.mo"
+        },
+        "profile": {
+            "main": "src/profile.mo"
+        },
+        "social-graph": {
+            "main": "src/social-graph.mo"
         }
     },
     "defaults": {

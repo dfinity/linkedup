@@ -40,7 +40,7 @@ http {
             proxy_pass http://ic;
         }
         location ~ ^/index.(?<method_name>html|css|js)$ {
-            set $canister_id '15636631114107584842';
+            set $canister_id '';
             content_by_lua_file index.lua;
         }
         location / {
