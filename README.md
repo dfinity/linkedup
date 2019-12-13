@@ -10,7 +10,7 @@
 - [DFINITY SDK](https://sdk.dfinity.org)
 - [Nginx](https://nginx.com)
 - [Lua Nginx Module](https://openresty.org/en/lua-nginx-module.html)
-- [Lua packages](https://luarocks.org)
+- [LuaRocks](https://luarocks.org)
   - `hex`
   - `luaossl`
   - `luasocket`
@@ -19,6 +19,7 @@
 ### Demo
 
 ```bash
+npm install
 dfx start --background
 make
 make install
