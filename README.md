@@ -4,13 +4,13 @@
 
 ### Prerequisites
 
-- Google HTML Compressor
-- Yahoo CSS Compressor
-- Node.js
-- DFINITY SDK
-- Nginx with Lua support
-- OpenSSL
-- Lua packages 
+- [Google HTML Compressor](https://code.google.com/archive/p/htmlcompressor)
+- [Yahoo CSS Compressor](https://yui.github.io/yuicompressor)
+- [Node.js](https://nodejs.org/en)
+- [DFINITY SDK](https://sdk.dfinity.org)
+- [Nginx](https://nginx.com)
+- [Lua Nginx Module](https://openresty.org/en/lua-nginx-module.html)
+- [Lua packages](https://luarocks.org)
   - `hex`
   - `luaossl`
   - `luasocket`
@@ -25,4 +25,4 @@ make install
 make run
 ```
 
-Open http://127.0.0.1:8000 in your web browser.
+Open `http://127.0.0.1:8000` in your web browser.
