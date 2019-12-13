@@ -32,17 +32,21 @@ canister_id = xxd -p -u $(1) | sed -e "s/.*/ibase=16; \0/" | bc
 .PHONY: all
 all: nginx
 
+.PHONY: graph
+graph:
+	$(DFX) build $@
+
 .PHONY: profile
 profile:
 	$(DFX) build $@
 
-$(SOURCE)/index.js: profile
+$(SOURCE)/index/index.js: graph profile
 	$(NODE) node_modules/webpack-cli/bin/cli.js
 
 .ONESHELL:
-$(SOURCE)/index.sed: $(SOURCE)/index.js
-	HTML=$$($(call compress_html,$(SOURCE)/index.html) | $(escape))
-	CSS=$$($(call compress_css,$(SOURCE)/index.css) | $(escape))
+$(SOURCE)/index/index.sed: $(SOURCE)/index/index.js
+	HTML=$$($(call compress_html,$(SOURCE)/index/index.html) | $(escape))
+	CSS=$$($(call compress_css,$(SOURCE)/index/index.css) | $(escape))
 	JS=$$($(call compress_js,$<) | $(escape))
 	cat > $@ <<EOF
 	s/___HTML___/"$$HTML"/g
@@ -50,23 +54,23 @@ $(SOURCE)/index.sed: $(SOURCE)/index.js
 	s/___JS___/"$$JS"/g
 	EOF
 
-$(SOURCE)/index.mo: $(SOURCE)/index.sed
-	sed -f $< $(SOURCE)/index.template > $@
+$(SOURCE)/index/main.mo: $(SOURCE)/index/index.sed
+	sed -f $< $(SOURCE)/index/main.template > $@
 
 .PHONY: index
-index: $(SOURCE)/index.mo
+index: $(SOURCE)/index/main.mo
 	$(DFX) build $@
 
 $(TARGET)/nginx:
 	mkdir -p $@
 
 $(TARGET)/nginx/index.lua: $(TARGET)/nginx
-	cp $(SOURCE)/index.lua $@
+	cp $(SOURCE)/nginx/index.lua $@
 
 .ONESHELL:
 $(TARGET)/nginx/nginx.conf: $(TARGET)/nginx index
 	ID=$$($(call canister_id, $(TARGET)/index/_canister.id))
-	sed -e "s/___ID___/$$ID/g" $(SOURCE)/nginx.template > $@
+	sed -e "s/___ID___/$$ID/g" $(SOURCE)/nginx/nginx.template > $@
 
 .PHONY: nginx
 nginx: $(TARGET)/nginx/index.lua $(TARGET)/nginx/nginx.conf
@@ -81,7 +85,7 @@ run:
 
 .PHONY: clean
 clean:
-	rm -f $(SOURCE)/index.js
-	rm -f $(SOURCE)/index.mo
-	rm -f $(SOURCE)/index.sed
+	rm -f $(SOURCE)/index/index.js
+	rm -f $(SOURCE)/index/index.sed
+	rm -f $(SOURCE)/index/main.mo
 	rm -rf $(TARGET)

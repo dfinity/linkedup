@@ -1,5 +1,5 @@
 /**
- * File        : social-graph.mo
+ * File        : main.mo
  * Copyright   : 2019 Enzo Haussecker
  * License     : Apache 2.0 with LLVM Exception
  * Maintainer  : Enzo Haussecker <enzo@dfinity.org>
@@ -8,7 +8,7 @@
 
 import Prelude "mo:stdlib/prelude.mo"
 
-actor SocialGraph {
+actor Graph {
 
     /**
      * Create a connection invitation.

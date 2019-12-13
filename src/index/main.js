@@ -1,3 +1,4 @@
+import graph from 'canisters:graph';
 import profile from 'canisters:profile';
 
 (function($) {

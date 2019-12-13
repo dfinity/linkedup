@@ -1,10 +1,13 @@
 {
     "canisters": {
+        "graph": {
+            "main": "src/graph/main.mo"
+        },
         "index": {
-            "main": "src/index.mo"
+            "main": "src/index/main.mo"
         },
         "profile": {
-            "main": "src/profile.mo"
+            "main": "src/profile/main.mo"
         }
     },
     "defaults": {

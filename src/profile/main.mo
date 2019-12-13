@@ -1,5 +1,5 @@
 /**
- * File        : profile.mo
+ * File        : main.mo
  * Copyright   : 2019 Enzo Haussecker
  * License     : Apache 2.0 with LLVM Exception
  * Maintainer  : Enzo Haussecker <enzo@dfinity.org>

@@ -2,6 +2,6 @@
 build/
 node_modules/
 nohup.out
-src/index.js
-src/index.mo
-src/index.sed
+src/index/index.js
+src/index/index.sed
+src/index/main.mo
