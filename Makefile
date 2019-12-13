@@ -14,13 +14,13 @@ TARGET = build
 HTML_COMPRESSOR = /usr/share/java/htmlcompressor-1.5.3.jar
 YUI_COMPRESSOR = /usr/share/java/yuicompressor-2.4.8.jar
 
-C1 = ":a; s/(.*)\/\*.*\*\//\1/; ta; /\/\*/ !b; N; ba"
-C2 = ":a; N; \$$!ba; s/\n//g"
+R1 = ":a; s/(.*)\/\*.*\*\//\1/; ta; /\/\*/ !b; N; ba"
+R2 = ":a; N; \$$!ba; s/\n//g"
 
 compress = java -jar $(1) $(2)
 compress_html = $(call compress,$(HTML_COMPRESSOR),$1)
 compress_css = $(call compress,$(YUI_COMPRESSOR),$1)
-compress_js = cat $(1) | sed -r $(C1) | sed -e $(C2)
+compress_js = cat $(1) | sed -r $(R1) | sed -r $(R2)
 
 E1 = "s/\([\"\\]\)/\\\\\1/g"
 E2 = "s/\([&/@\\]\)/\\\\\1/g"
