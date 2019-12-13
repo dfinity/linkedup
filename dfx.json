@@ -5,9 +5,6 @@
         },
         "profile": {
             "main": "src/profile.mo"
-        },
-        "social-graph": {
-            "main": "src/social-graph.mo"
         }
     },
     "defaults": {

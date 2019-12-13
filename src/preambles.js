@@ -1,3 +1,5 @@
+import profile from 'canisters:profile';
+
 (function($) {
 
 	$(document).ready(function() {
@@ -36,10 +38,10 @@
 		const typed = new Typed('#typed', {
 			cursorChar: '_',
 			strings: [
-				'n&nbsp;autonomous',
-				'&nbsp;transparent',
-				'n&nbsp;unstoppable',
-				'&nbsp;tamperproof'
+				'n autonomous',
+				' transparent',
+				'n unstoppable',
+				'tamperproof'
 			],
 			typeSpeed: 50,
 			backSpeed: 25,
@@ -114,6 +116,7 @@
 			const button = $(this).find('button[type="submit"]');
 			disableSubmitButton(button);
 			const response = $(this).find('.response');
+			var word;
 			var words = [];
 			for (var i = 0; i < 12; i++) {
 				word = '#word-' + ('00' + i.toString()).slice(-2);

@@ -1,4 +1,7 @@
 .dfx/
 build/
+node_modules/
 nohup.out
+src/index.js
 src/index.mo
+src/index.sed

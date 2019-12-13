@@ -63,6 +63,23 @@ local ok, status_code = http.request {
   url = string.format('http://%s/api/v1/read', ngx.var.http_host)
 }
 
+local function decode_uleb128(budget, input0)
+  if budget <= 0
+  then error('invalid bit budget')
+  elseif input0 == nil or input0 == ''
+  then error('not enough input')
+  end
+  local byte = string.byte(input0)
+  local input1 = string.sub(input0, 2)
+  if budget < 7 and bit.lshift(1, budget) < bit.band(byte, 127)
+  then error('integer overflow')
+  elseif bit.band(bit.rshift(byte, 7), 1) ~= 1
+  then return byte, input1
+  end
+  local value, input2 = decode_uleb128(budget - 7, input1)
+  return bit.bor(bit.lshift(value, 7), bit.band(byte, 127)), input2
+end
+
 local function get_content_type()
   local method_name = ngx.var.method_name
   if method_name == 'html'
@@ -77,8 +94,10 @@ end
 
 if ok and status_code == 200
 then
-  local content = string.sub(cbor.decode(response_body, 4)['reply']['arg'], 10)
-  ngx.header['Content-Length'] = string.len(content)
+  local iface = cbor.decode(response_body, 4)['reply']['arg']
+  local n, content = decode_uleb128(64, string.sub(iface, 8))
+  assert(string.len(content) == n, 'inconsistent length')
+  ngx.header['Content-Length'] = n
   ngx.header['Content-Type'] = get_content_type()
   ngx.say(content)
 end
