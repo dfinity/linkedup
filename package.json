@@ -7,8 +7,5 @@
     "license": "Apache 2.0 with LLVM Exception",
     "main": "webpack.config.js",
     "name": "connect",
-    "scripts": {
-        "webpack": "node_modules/webpack-cli/bin/cli.js"
-    },
     "version": "1.0.0"
 }

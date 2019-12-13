@@ -5,12 +5,11 @@
 # Stability  : Experimental
 
 DFX = dfx
+NODE = node
+NGINX = nginx
 
 SOURCE = src
 TARGET = build
-
-INDEX = $(TARGET)/index
-NGINX = $(TARGET)/nginx
 
 HTML_COMPRESSOR = /usr/share/java/htmlcompressor-1.5.3.jar
 YUI_COMPRESSOR = /usr/share/java/yuicompressor-2.4.8.jar
@@ -21,7 +20,7 @@ C2 = ":a; N; \$$!ba; s/\n//g"
 compress = java -jar $(1) $(2)
 compress_html = $(call compress,$(HTML_COMPRESSOR),$1)
 compress_css = $(call compress,$(YUI_COMPRESSOR),$1)
-compress_js = sed -r $(C1) -e $(C2) $(1)
+compress_js = cat $(1) | sed -r $(C1) | sed -e $(C2)
 
 E1 = "s/\([\"\\]\)/\\\\\1/g"
 E2 = "s/\([&/@\\]\)/\\\\\1/g"
@@ -38,16 +37,18 @@ profile:
 	$(DFX) build $@
 
 $(SOURCE)/index.js: profile
-	npm run webpack
+	$(NODE) node_modules/webpack-cli/bin/cli.js
 
+.ONESHELL:
 $(SOURCE)/index.sed: $(SOURCE)/index.js
-	printf "s/___HTML___/\"" > $@
-	$(call compress_html,$(SOURCE)/index.html) | $(escape) >> $@
-	printf "\"/g\ns/___CSS___/\"" >> $@
-	$(call compress_css,$(SOURCE)/index.css) | $(escape) >> $@
-	printf "\"/g\ns/___JS___/\"" >> $@
-	$(call compress_js,$<) | $(escape) >> $@
-	printf "\"/g\n" >> $@
+	HTML=$$($(call compress_html,$(SOURCE)/index.html) | $(escape))
+	CSS=$$($(call compress_css,$(SOURCE)/index.css) | $(escape))
+	JS=$$($(call compress_js,$<) | $(escape))
+	cat > $@ <<EOF
+	s/___HTML___/"$$HTML"/g
+	s/___CSS___/"$$CSS"/g
+	s/___JS___/"$$JS"/g
+	EOF
 
 $(SOURCE)/index.mo: $(SOURCE)/index.sed
 	sed -f $< $(SOURCE)/index.template > $@
@@ -56,25 +57,31 @@ $(SOURCE)/index.mo: $(SOURCE)/index.sed
 index: $(SOURCE)/index.mo
 	$(DFX) build $@
 
-$(NGINX):
+$(TARGET)/nginx:
 	mkdir -p $@
 
-$(NGINX)/index.lua: $(NGINX)
+$(TARGET)/nginx/index.lua: $(TARGET)/nginx
 	cp $(SOURCE)/index.lua $@
 
 .ONESHELL:
-$(NGINX)/nginx.conf: $(NGINX) index
-	ID=$$($(call canister_id, $(INDEX)/_canister.id))
+$(TARGET)/nginx/nginx.conf: $(TARGET)/nginx index
+	ID=$$($(call canister_id, $(TARGET)/index/_canister.id))
 	sed -e "s/___ID___/$$ID/g" $(SOURCE)/nginx.template > $@
 
 .PHONY: nginx
-nginx: $(NGINX)/index.lua $(NGINX)/nginx.conf
+nginx: $(TARGET)/nginx/index.lua $(TARGET)/nginx/nginx.conf
 
 .PHONY: install
 install:
 	$(DFX) canister install --all
 
+.PHONY: run
+run:
+	$(NGINX) -c nginx.conf -p build/nginx
+
 .PHONY: clean
 clean:
-	rm -f $(SOURCE)/index.{js,mo,sed}
+	rm -f $(SOURCE)/index.js
+	rm -f $(SOURCE)/index.mo
+	rm -f $(SOURCE)/index.sed
 	rm -rf $(TARGET)
