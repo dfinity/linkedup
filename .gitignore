@@ -3,5 +3,5 @@ build/
 node_modules/
 nohup.out
 src/index/index.js
-src/index/index.sed
 src/index/main.mo
+src/index/main.sed

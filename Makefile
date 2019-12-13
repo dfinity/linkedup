@@ -44,7 +44,7 @@ $(SOURCE)/index/index.js: graph profile
 	$(NODE) node_modules/webpack-cli/bin/cli.js
 
 .ONESHELL:
-$(SOURCE)/index/index.sed: $(SOURCE)/index/index.js
+$(SOURCE)/index/main.sed: $(SOURCE)/index/index.js
 	HTML=$$($(call compress_html,$(SOURCE)/index/index.html) | $(escape))
 	CSS=$$($(call compress_css,$(SOURCE)/index/index.css) | $(escape))
 	JS=$$($(call compress_js,$<) | $(escape))
@@ -54,7 +54,7 @@ $(SOURCE)/index/index.sed: $(SOURCE)/index/index.js
 	s/___JS___/"$$JS"/g
 	EOF
 
-$(SOURCE)/index/main.mo: $(SOURCE)/index/index.sed
+$(SOURCE)/index/main.mo: $(SOURCE)/index/main.sed
 	sed -f $< $(SOURCE)/index/main.template > $@
 
 .PHONY: index
@@ -86,6 +86,6 @@ run:
 .PHONY: clean
 clean:
 	rm -f $(SOURCE)/index/index.js
-	rm -f $(SOURCE)/index/index.sed
 	rm -f $(SOURCE)/index/main.mo
+	rm -f $(SOURCE)/index/main.sed
 	rm -rf $(TARGET)
