@@ -11,6 +11,8 @@ import Hash "mo:stdlib/hash.mo";
 import Prelude "mo:stdlib/prelude.mo";
 import Trie "mo:stdlib/trie.mo";
 
+import Util "../util/util.mo"
+
 type Trie<K,V> = Trie.Trie<K,V>;
 
 actor Profile {
@@ -20,6 +22,29 @@ actor Profile {
      */
     type ProfileId = {
         unbox : [Word8];
+    };
+
+    /**
+     * Test profile identifiers for equality.
+     *
+     * TODO: Replace 'Util.equals' with 'Array.equals' once dfx 0.4.10 becomes
+     * available.
+     */
+    func eqProfileId(x : ProfileId, y : ProfileId) : Bool {
+        Util.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi})
+    };
+
+    /**
+     * Create a trie key from a profile identifier.
+     */
+    func keyProfileId(profileId : ProfileId) : Trie.Key<ProfileId> {
+        func convert(array : [Word8]) : [Word32] {
+            Array.map<Word8, Word32>(Util.word8ToWord32, array)
+        };
+        {
+            key = profileId;
+            hash = Hash.BitVec.hashWord8s(convert(profileId.unbox));
+        }
     };
 
     /**
@@ -34,6 +59,14 @@ actor Profile {
     };
 
     /**
+     * Serialize a profile.
+     */
+    func serialize(profile : Profile) : [Word8] {
+        Prelude.printLn("serialize: Not yet implemented!");
+        Prelude.unreachable()
+    };
+
+    /**
      * The type of the profile database.
      */
     type ProfileDatabase = Trie<ProfileId, Profile>;
@@ -42,51 +75,6 @@ actor Profile {
      * Initialize the profile database.
      */
     var profiles : ProfileDatabase = Trie.empty<ProfileId, Profile>();
-
-    /**
-     * Create a trie key from a profile identifier.
-     */
-    func keyProfileId(profileId : ProfileId) : Trie.Key<ProfileId> {
-        func convert(bytes : [Word8]) : [Word32] {
-            Array.map<Word8, Word32>(func (byte : Word8) {
-                natToWord32(word8ToNat(byte))
-            }, bytes)
-        };
-        {
-            key = profileId;
-            hash = Hash.BitVec.hashWord8s(convert(profileId.unbox));
-        }
-    };
-
-    /**
-     * Test profile identifiers for equality.
-     *
-     * TODO: Replace function body with 'Array.equals' once dfx 0.4.10 is
-     * released.
-     */
-    func eqProfileId(x : ProfileId, y : ProfileId) : Bool {
-        let xs = x.unbox;
-        let ys = y.unbox;
-        if (xs.len() != ys.len()) {
-            return false;
-        };
-        var i = 0;
-        while (i < xs.len()) {
-            if (xs[i] != ys[i]) {
-                return false;
-            };
-            i += 1;
-        };
-        true
-    };
-
-    /**
-     * Serialize a profile.
-     */
-    func serialize(profile : Profile) : [Word8] {
-        Prelude.printLn("serialize: Not yet implemented!");
-        Prelude.unreachable()
-    };
 
     /**
      * Find a profile in the profile database.
