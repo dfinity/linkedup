@@ -8,62 +8,79 @@
 
 import Array "mo:stdlib/array.mo";
 import Hash "mo:stdlib/hash.mo";
+import Iter "mo:stdlib/iter.mo";
 import Prelude "mo:stdlib/prelude.mo";
 import Trie "mo:stdlib/trie.mo";
-
 import Util "../util/util.mo"
 
-type Trie<K,V> = Trie.Trie<K,V>;
+type Trie<Key, Value> = Trie.Trie<Key, Value>;
 
 actor Profile {
 
     /**
      * The type of a profile identifier.
      */
-    type ProfileId = {
+    public type ProfileId = {
         unbox : [Word8];
     };
 
     /**
      * Test profile identifiers for equality.
-     *
-     * TODO: Replace 'Util.equals' with 'Array.equals' once dfx 0.4.10 becomes
-     * available.
      */
-    func eqProfileId(x : ProfileId, y : ProfileId) : Bool {
-        Util.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi})
+    func eq(x : ProfileId, y : ProfileId) : Bool {
+        return Util.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi});
     };
 
     /**
      * Create a trie key from a profile identifier.
      */
-    func keyProfileId(profileId : ProfileId) : Trie.Key<ProfileId> {
-        func convert(array : [Word8]) : [Word32] {
-            Array.map<Word8, Word32>(Util.word8ToWord32, array)
+    func key(x : ProfileId) : Trie.Key<ProfileId> {
+        func convert(bytes : [Word8]) : [Word32] {
+            return Array.map<Word8, Word32>(Util.word8ToWord32, bytes);
         };
-        {
-            key = profileId;
-            hash = Hash.BitVec.hashWord8s(convert(profileId.unbox));
-        }
+        return {
+            key = x;
+            hash = Hash.BitVec.hashWord8s(convert(x.unbox));
+        };
     };
 
     /**
      * The type of a profile.
      */
-    type Profile = {
+    public type Profile = {
         firstName : Text;
         lastName : Text;
-        organization : Text;
-        position : Text;
-        summary : Text;
+        // TODO: Add more attributes.
     };
 
     /**
-     * Serialize a profile.
+     * Decode a profile or fail.
      */
-    func serialize(profile : Profile) : [Word8] {
-        Prelude.printLn("serialize: Not yet implemented!");
-        Prelude.unreachable()
+    func decodeProfileOrFail(next : () -> ?Word8) : Profile {
+
+        // Decode a first name or fail.
+        let fnLen = word8ToNat(Util.decodeByteOrFail(next));
+        var fn = "" : Text;
+        var i = 0;
+        while (i < fnLen) {
+            fn #= charToText(Util.decodeASCIIOrFail(next));
+            i += 1;
+        };
+
+        // Decode a last name or fail.
+        let lnLen = word8ToNat(Util.decodeByteOrFail(next));
+        var ln = "";
+        var j = 0;
+        while (j < lnLen) {
+            ln #= charToText(Util.decodeASCIIOrFail(next));
+            j += 1;
+        };
+
+        // Return.
+        return {
+            firstName = fn;
+            lastName = ln;
+        };
     };
 
     /**
@@ -79,40 +96,62 @@ actor Profile {
     /**
      * Find a profile in the profile database.
      */
-    public func lookup(profileId : ProfileId) : async (?Profile) {
-        Trie.find<ProfileId, Profile>(
-            profiles,
-            keyProfileId(profileId),
-            eqProfileId
-        )
+    public func find(profileId : ProfileId) : async (?Profile) {
+        return Trie.find<ProfileId, Profile>(profiles, key(profileId), eq);
     };
 
     /**
-     * Insert a profile into the profile database.
+     * Perform a privileged operation on the profile database.
      */
-    public func insert(
+    public func run(
         signer : [Word8],
         signature : [Word8],
-        nonce : Word64,
-        profile : Profile
+        message : [Word8]
     ) : async Bool {
-        //let message = serialize(profile);
-        //let digest = Sha256.hash(message);
-        //let success = Account.authenticate(signer, signature, nonce, digest);
-        //if (success) {
-            let profileId = {
-                unbox = signer;
+        // let authentic = Account.authenticate(signer, signature, message);
+        // if (not authentic) {
+        //     return false;
+        // };
+        let stream = Iter.fromArray<Word8>(message);
+        let next = stream.next;
+        let _ = Util.decodeNonceOrFail(next);
+        let messgeType = word8ToNat(Util.decodeByteOrFail(next));
+        switch messgeType {
+
+            // Add a profile to the profile database.
+            case 1 {
+                let profileId = {
+                    unbox = signer;
+                };
+                let profile = decodeProfileOrFail(next);
+                profiles := Trie.insert<ProfileId, Profile>(
+                    profiles,
+                    key(profileId),
+                    eq,
+                    profile
+                ).0;
+                return true;
             };
-            profiles := Trie.insert<ProfileId, Profile>(
-                profiles,
-                keyProfileId(profileId),
-                eqProfileId,
-                profile
-            ).0;
-            true
-        //} else {
-        //    false
-        //}
+
+            // Remove a profile from the profile database.
+            case 2 {
+                let profileId = {
+                    unbox = signer;
+                };
+                profiles := Trie.remove<ProfileId, Profile>(
+                    profiles,
+                    key(profileId),
+                    eq
+                ).0;
+                return true;
+            };
+
+            // Invalid message type.
+            case _ {
+                Prelude.printLn("invalid message type");
+                return false;
+            };
+        };
     };
 
-}
+};
