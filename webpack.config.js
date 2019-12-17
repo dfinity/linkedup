@@ -24,8 +24,11 @@ module.exports = [
     },
     resolve: {
       alias: {
-        "canisters:graph": path.join(targetRootMap["graph"], "main.js"),
-        "canisters:profile": path.join(targetRootMap["profile"], "main.js")
+        "ic:canister/graph": path.join(targetRootMap["graph"], "main.js"),
+        "ic:canister/profile": path.join(targetRootMap["profile"], "main.js"),
+        "ic:idl/graph": path.join(targetRootMap["graph"], "main.did.js"),
+        "ic:idl/profile": path.join(targetRootMap["profile"], "main.did.js"),
+        "ic:userlib": "/home/developer/.cache/dfinity/versions/0.4.9-28-g3127c46/js-user-library/dist/lib.prod.js"
       }
     }
   }

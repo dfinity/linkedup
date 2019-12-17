@@ -1,5 +1,5 @@
-import graph from 'canisters:graph';
-import profile from 'canisters:profile';
+import graph from 'ic:canister/graph';
+import profile from 'ic:canister/profile';
 
 (function($) {
 
@@ -127,8 +127,33 @@ import profile from 'canisters:profile';
 				var seed = new Uint8Array(32);
 				seed.set(decode(english_to_key(words.join(' ').toUpperCase())));
 				keyPair = nacl.sign.keyPair.fromSeed(seed);
-				// TODO: Fetch profile.
-				alert(encode(keyPair.publicKey));
+				// TODO: Create profile.
+				var message = decode('00000000000000000104456e7a6f0a486175737365636b6572');
+				console.log(Array.from(message));
+				var signature = nacl.sign(message, keyPair.secretKey);
+				console.log(Array.from(signature));
+				var signer = keyPair.publicKey;
+				console.log(Array.from(signer));
+
+				async function doit1() {
+					var result = await profile.run(Array.from(signer), Array.from(signature), Array.from(message));
+					alert(result);
+				};
+
+				async function doit2() {
+					var result = await profile.find({ "unbox": Array.from(signer) });
+					alert(result.firstName + "" + result.lastName);
+				};
+
+				doit1();
+				doit2();
+
+
+
+
+
+
+
 				enableSubmitButton(button);
 			} catch (err) {
 				response.hide().html('<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>').slideDown(350, 'linear', function() {
@@ -136,6 +161,12 @@ import profile from 'canisters:profile';
 				});
 			}
 		});
+
+
+
+
+
+
 
 	});
 

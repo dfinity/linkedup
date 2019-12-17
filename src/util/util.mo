@@ -43,10 +43,10 @@ module Util {
      */
     public func decodeNonceOrFail(next : () -> ?Word8) : Word64 {
         var n = 0;
-        var i = 7;
+        var i = 7 : Int;
         while (i >= 0) {
-            n += word8ToNat(decodeByteOrFail(next)) * 256 ** i;
-            i -= 1;
+            n += word8ToNat(decodeByteOrFail(next)) * 256 ** abs(i);
+            i -= 1 : Int;
         };
         return natToWord64(n);
     };
