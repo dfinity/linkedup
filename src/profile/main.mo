@@ -113,7 +113,7 @@ actor Profile {
         //let success = Account.authenticate(signer, signature, nonce, digest);
         //if (success) {
             let profileId = {
-                unbox = signer
+                unbox = signer;
             };
             profiles := Trie.insert<ProfileId, Profile>(
                 profiles,
