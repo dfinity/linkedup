@@ -28,7 +28,7 @@ actor Profile {
      * Test profile identifiers for equality.
      */
     func eq(x : ProfileId, y : ProfileId) : Bool {
-        return Util.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi});
+        return Array.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi});
     };
 
     /**

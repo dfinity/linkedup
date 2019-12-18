@@ -52,23 +52,6 @@ module Util {
     };
 
     /**
-     * Test arrays for equality.
-     */
-    public func equals<T>(a : [T], b : [T], eq : (T, T) -> Bool) : Bool {
-        if (a.len() != b.len()) { 
-            return false;
-        };
-        var i = 0;
-        while (i < a.len()) {
-            if (not eq(a[i], b[i])) {
-                return false;
-            };
-            i += 1;
-        };
-        return true;
-    };
-
-    /**
      * Convert an 8-bit unsigned integer to a 32-bit unsigned integer.
      */
     public func word8ToWord32(byte : Word8) : Word32 {
