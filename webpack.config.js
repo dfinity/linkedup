@@ -1,4 +1,17 @@
+const fs = require('fs');
 const path = require("path");
+
+const versionsDir = path.join(process.env["HOME"], ".cache/dfinity/versions");
+const versions = fs.readdirSync(versionsDir);
+const version = process.env["DFX_VERSION"];
+const latest = versions.map(function (version) {
+  const chunks = version.split('-');
+  const prefix = chunks[0].split('.').map(s => parseInt(s));
+  const suffix = chunks[1] == null ? 0 : parseInt(chunks[1]);
+  return [prefix.concat(suffix), version];
+}).sort(function (a, b) {
+  return a[0] == b[0];
+}).slice(-1)[0][1];
 
 const sourceDir = path.join(__dirname, "src");
 const sourceRootMap = {
@@ -28,7 +41,11 @@ module.exports = [
         "ic:canister/profile": path.join(targetRootMap["profile"], "main.js"),
         "ic:idl/graph": path.join(targetRootMap["graph"], "main.did.js"),
         "ic:idl/profile": path.join(targetRootMap["profile"], "main.did.js"),
-        "ic:userlib": "/home/developer/.cache/dfinity/versions/0.4.9-28-g3127c46/js-user-library/dist/lib.prod.js"
+        "ic:userlib": path.join(
+          versionsDir,
+          version ? version : latest,
+          "js-user-library/dist/lib.prod.js",
+        ),
       }
     }
   }
