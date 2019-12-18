@@ -9,7 +9,7 @@
 local bignum = require 'openssl.bignum'
 local cbor = require 'org.conman.cbor'
 local hex = require 'hex'
-local http = require 'socket.http'
+local https = require 'ssl.https'
 local ltn12 = require 'ltn12'
 local rand = require 'openssl.rand'
 
@@ -50,9 +50,9 @@ local function collect(chunk)
   return true
 end
 
-http.TIMEOUT = 30
+https.TIMEOUT = 30
 
-local ok, status_code = http.request {
+local ok, status_code = https.request {
   headers = {
     ['Content-Length'] = string.len(request_body),
     ['Content-Type'] = 'application/cbor'
@@ -60,7 +60,7 @@ local ok, status_code = http.request {
   method = 'POST',
   sink = collect,
   source = ltn12.source.string(request_body),
-  url = string.format('http://%s/api/v1/read', ngx.var.http_host)
+  url = string.format('https://%s/api/v1/read', ngx.var.http_host)
 }
 
 local function decode_uleb128(budget, input0)

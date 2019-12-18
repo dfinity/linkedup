@@ -28,6 +28,10 @@ http {
     access_log /dev/stdout;
     error_log /dev/stderr;
 
+    # Security settings.
+    ssl_certificate /etc/ssl/certs/connect.crt;
+    ssl_certificate_key /etc/ssl/private/connect.key;
+
     # Upstream settings.
     upstream ic {
         server 127.0.0.1:8001;
@@ -35,7 +39,7 @@ http {
 
     # Server settings.
     server {
-        listen 8000;
+        listen 8000 ssl;
         location /api {
             proxy_pass http://ic;
         }
