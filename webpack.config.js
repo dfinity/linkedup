@@ -2,16 +2,17 @@ const fs = require('fs');
 const path = require("path");
 
 const versionsDir = path.join(process.env["HOME"], ".cache/dfinity/versions");
-const versions = fs.readdirSync(versionsDir);
-const version = process.env["DFX_VERSION"];
+const versions = fs.readdirSync(
+  path.join(process.env["HOME"], ".cache/dfinity/versions")
+);
+const specific = process.env["DFX_VERSION"];
 const latest = versions.map(function (version) {
   const chunks = version.split('-');
   const prefix = chunks[0].split('.').map(s => parseInt(s));
   const suffix = chunks[1] == null ? 0 : parseInt(chunks[1]);
-  return [prefix.concat(suffix), version];
-}).sort(function (a, b) {
-  return a[0] == b[0];
-}).slice(-1)[0][1];
+  return [prefix.concat(suffix).map(n => 1000000 + n).join(), version];
+}).sort().slice(-1)[0][1];
+const version = specific ? specific : latest;
 
 const sourceDir = path.join(__dirname, "src");
 const sourceRootMap = {
