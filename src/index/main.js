@@ -1,5 +1,6 @@
 import graph from 'ic:canister/graph';
 import profile from 'ic:canister/profile';
+import userlib from 'ic:userlib'
 
 (function($) {
 
@@ -42,7 +43,7 @@ import profile from 'ic:canister/profile';
 				'n&nbsp;autonomous',
 				'&nbsp;transparent',
 				'n&nbsp;unstoppable',
-				'tamperproof'
+				'&nbsp;tamperproof'
 			],
 			typeSpeed: 50,
 			backSpeed: 25,
