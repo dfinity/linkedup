@@ -127,6 +127,11 @@
 	outline: none;
 }
 
+.profile-edit .modal-body,
+.profile-view .modal-body {
+    text-align: left;
+}
+
 /**
  * Forms
  */

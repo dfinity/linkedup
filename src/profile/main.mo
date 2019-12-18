@@ -50,7 +50,9 @@ actor Profile {
     public type Profile = {
         firstName : Text;
         lastName : Text;
-        // TODO: Add more attributes.
+        title : Text;
+        company : Text;
+        experience : Text;
     };
 
     /**
@@ -59,27 +61,59 @@ actor Profile {
     func decodeProfileOrFail(next : () -> ?Word8) : Profile {
 
         // Decode a first name or fail.
-        let fnLen = word8ToNat(Util.decodeByteOrFail(next));
-        var fn = "" : Text;
+        let firstNameLen = word8ToNat(Util.decodeByteOrFail(next));
+        var firstNamePrime = "" : Text;
         var i = 0;
-        while (i < fnLen) {
-            fn #= charToText(Util.decodeASCIIOrFail(next));
+        while (i < firstNameLen) {
+            firstNamePrime #= charToText(Util.decodeASCIIOrFail(next));
             i += 1;
         };
 
         // Decode a last name or fail.
-        let lnLen = word8ToNat(Util.decodeByteOrFail(next));
-        var ln = "";
-        var j = 0;
-        while (j < lnLen) {
-            ln #= charToText(Util.decodeASCIIOrFail(next));
-            j += 1;
+        let lastNameLen = word8ToNat(Util.decodeByteOrFail(next));
+        var lastNamePrime = "";
+        i := 0;
+        while (i < lastNameLen) {
+            lastNamePrime #= charToText(Util.decodeASCIIOrFail(next));
+            i += 1;
+        };
+
+        // Decode a title or fail.
+        let titleLen = word8ToNat(Util.decodeByteOrFail(next));
+        var titlePrime = "";
+        i := 0;
+        while (i < titleLen) {
+            titlePrime #= charToText(Util.decodeASCIIOrFail(next));
+            i += 1;
+        };
+
+        // Decode a company or fail.
+        let companyLen = word8ToNat(Util.decodeByteOrFail(next));
+        var companyPrime = "";
+        i := 0;
+        while (i < companyLen) {
+            companyPrime #= charToText(Util.decodeASCIIOrFail(next));
+            i += 1;
+        };
+
+        // Decode an experience or fail.
+        let experienceLen = 256
+            * word8ToNat(Util.decodeByteOrFail(next))
+            + word8ToNat(Util.decodeByteOrFail(next));
+        var experiencePrime = "";
+        i := 0;
+        while (i < experienceLen) {
+            experiencePrime #= charToText(Util.decodeASCIIOrFail(next));
+            i += 1;
         };
 
         // Return.
         return {
-            firstName = fn;
-            lastName = ln;
+            firstName = firstNamePrime;
+            lastName = lastNamePrime;
+            title = titlePrime;
+            company = companyPrime;
+            experience = experiencePrime;
         };
     };
 
