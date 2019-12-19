@@ -117,6 +117,7 @@ import userlib from 'ic:userlib'
 			$('.splash-view').slideUp(10, 'linear');
 			$('.profile-view').slideUp(10, 'linear');
 			$('.profile-edit').slideDown(10, 'linear');
+			$('.profile-search').slideUp(10, 'linear');
 			async function action() {
 				var signer = keyPair.publicKey;
 				var result = await profile.find({ "unbox": Array.from(signer) });
@@ -140,8 +141,9 @@ import userlib from 'ic:userlib'
 
 		function renderProfileView() {
 			$('.splash-view').slideUp(10, 'linear');
-			$('.profile-edit').slideUp(10, 'linear');
 			$('.profile-view').slideDown(10, 'linear');
+			$('.profile-edit').slideUp(10, 'linear');
+			$('.profile-search').slideUp(10, 'linear');
 			async function action() {
 				var signer = keyPair.publicKey;
 				var result = await profile.find({ "unbox": Array.from(signer) });
@@ -162,6 +164,13 @@ import userlib from 'ic:userlib'
 				$('.profile-view').find('#experience').html(result.experience.replace(/\n/g, "<br />"));
 			};
 			action();
+		};
+
+		function renderProfileSearch() {
+			$('.splash-view').slideUp(10, 'linear');
+			$('.profile-view').slideUp(10, 'linear');
+			$('.profile-edit').slideUp(10, 'linear');
+			$('.profile-search').slideDown(10, 'linear');
 		};
 
 		$('#profile-edit-form').submit(function(event) {
@@ -210,12 +219,38 @@ import userlib from 'ic:userlib'
 			action();
 		});
 
+		$('#profile-search-form').submit(function(event) {
+			event.preventDefault();
+			const button = $(this).find('button[type="submit"]');
+			disableSubmitButton(button);
+			$('.search-result').slideUp(500, 'linear', function () {
+				const address = decode($('#profile-search-form').find('#address').val());
+				console.log(address);
+				async function action() {
+					var result = await profile.find({ "unbox": Array.from(address) });
+					if (result == null) {
+						$('.search-result').html('Profile not found.');
+						$('.search-result').slideDown(500, 'linear');
+					} else {
+						$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + result.firstName + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + result.lastName + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + result.title + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + result.company + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + result.experience + '</div></div>');
+						$('.search-result').slideDown(500, 'linear');
+					};
+				};
+				action();
+				enableSubmitButton(button);
+			});
+		});
+
 		$('a#edit').click(function() {
 			renderProfileEdit();
 		});
 
 		$('a#view').click(function() {
 			renderProfileView();
+		});
+
+		$('a#search').click(function() {
+			renderProfileSearch();
 		});
 
 		$('a#logout').click(function() {

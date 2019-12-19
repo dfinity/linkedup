@@ -196,6 +196,9 @@
 								<a class="nav-link" href="#" id="edit">Edit</a>
 							</li>
 							<li class="nav-item">
+								<a class="nav-link" href="#" id="search">search</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link" href="#" id="logout">Logout</a>
 							</li>
 						</ul>
@@ -258,6 +261,9 @@
 								<a class="nav-link" href="#" id="edit">Edit</a>
 							</li>
 							<li class="nav-item">
+								<a class="nav-link" href="#" id="search">search</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link" href="#" id="logout">Logout</a>
 							</li>
 						</ul>
@@ -276,27 +282,78 @@
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
 										<label for="first-name">First Name</label>
-										<input class="form-control" id="first-name" name="first-name" placeholder="First Name" type="text">
+										<input class="form-control" id="first-name" name="first-name" placeholder="Joe" type="text">
 									</div>
 									<div class="form-group form-group-lg">
 										<label for="last-name">Last Name</label>
-										<input class="form-control" id="last-name" name="last-name" placeholder="Last Name" type="text">
+										<input class="form-control" id="last-name" name="last-name" placeholder="Doe" type="text">
 									</div>
 									<div class="form-group form-group-lg">
 										<label for="title">Title</label>
-										<input class="form-control" id="title" name="title" placeholder="Title" type="text">
+										<input class="form-control" id="title" name="title" placeholder="Engineer" type="text">
 									</div>
 									<div class="form-group form-group-lg">
 										<label for="company">Company</label>
-										<input class="form-control" id="company" name="company" placeholder="Company" type="text">
+										<input class="form-control" id="company" name="company" placeholder="DFINITY" type="text">
 									</div>
 									<div class="form-group form-group-lg">
 										<label for="experience">Experience</label>
-										<textarea class="form-control" id="experience" name="experience" placeholder="Experience" rows="10" type="text"></textarea>
+										<textarea class="form-control" id="experience" name="experience" placeholder="Describe your current position..." rows="10" type="text"></textarea>
 									</div>
 								</div>
 								<div class="modal-footer">
-									<button class="btn btn-lg btn-custom" type="submit">Submit</button>
+									<button class="btn btn-md btn-custom" type="submit">Submit</button>
+								</div>
+							</form>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Profile Search -->
+		<div class="profile-search" style="display: none">
+			<nav class="navbar navbar-expand-sm">
+				<div class="container">
+					<div class="collapse navbar-collapse navbar-menu">
+						<ul class="ml-auto navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="view">View</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="edit">Edit</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="search">search</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="logout">Logout</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<section>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+							<form autocomplete="off" id="profile-search-form" role="form">
+								<div class="modal-header">
+									<h4 class="modal-title">Search For A Profile</h4>
+								</div>
+								<div class="modal-body">
+									<div class="form-group form-group-lg">
+										<label for="address">Address</label>
+										<div class="input-group input-group-md mb-3">
+											<input class="form-control" id="address" name="address" placeholder="Address" type="text">
+											<div class="input-group-append">
+												<button class="btn btn-md btn-custom" type="submit">Search</button>
+											</div>
+										</div>
+									</div>
+								<div class="search-result"></div>
 								</div>
 							</form>
 						</div>

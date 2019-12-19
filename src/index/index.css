@@ -128,7 +128,8 @@
 }
 
 .profile-edit .modal-body,
-.profile-view .modal-body {
+.profile-view .modal-body,
+.profile-search .modal-body {
     text-align: left;
 }
 
@@ -186,6 +187,13 @@
 
 .btn-custom:hover {
 	color: #FFF;
+}
+
+.profile-edit .btn-custom,
+.profile-view .btn-custom,
+.profile-search .btn-custom {
+    font-size: 1rem;
+    height: auto;
 }
 
 /**
