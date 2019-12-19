@@ -12,50 +12,59 @@ import Option "mo:stdlib/option.mo";
 module Util {
 
     /**
-     * Decode an ASCII character or fail.
+     * Convert a byte to an unsigned 32-bit integer.
      */
-    public func decodeASCIIOrFail(next : () -> ?Word8) : Char {
-        return word32ToChar(word8ToWord32(decodeByteOrFail(next)));
+    public func convertByteToWord32(byte : Word8) : Word32 {
+        return natToWord32(word8ToNat(byte));
     };
 
     /**
-     * Decode a byte or fail.
+     * Convert a byte array to an unsigned integer.
      */
-    public func decodeByteOrFail(next : () -> ?Word8) : Word8 {
+    public func convertByteArrayToNat(bytes : [Word8]) : Nat {
+        var n = 0;
+        var i = 0;
+        Array.foldr<Word8, ()>(func (byte, _) {
+            n += word8ToNat(byte) * 256 ** i;
+            i += 1;
+        }, (), bytes);
+        return n;
+    };
+
+    /**
+     * Decode a byte or trap.
+     */
+    public func decodeByteOrTrap(next : () -> ?Word8) : Word8 {
         return Option.unwrap<Word8>(next());
     };
 
     /**
-     * Decode a byte array or fail.
+     * Decode a byte array or trap.
      */
-    public func decodeByteArrayOrFail(n : Nat, next : () -> ?Word8) : [Word8] {
+    public func decodeByteArrayOrTrap(n : Nat, next : () -> ?Word8) : [Word8] {
         var array = Array_init<Word8>(n, 0);
         var i = 0;
         while (i < n) {
-            array[i] := decodeByteOrFail(next);
+            array[i] := decodeByteOrTrap(next);
             i += 1;
         };
         return Array.freeze<Word8>(array);
     };
 
     /**
-     * Decode a nonce or fail.
+     * Decode an unsigned 16-bit integer or trap.
      */
-    public func decodeNonceOrFail(next : () -> ?Word8) : Word64 {
-        var n = 0;
-        var i = 7 : Int;
-        while (i >= 0) {
-            n += word8ToNat(decodeByteOrFail(next)) * 256 ** abs(i);
-            i -= 1 : Int;
-        };
-        return natToWord64(n);
+    public func decodeWord16OrTrap(next : () -> ?Word8) : Word16 {
+        let bytes = decodeByteArrayOrTrap(2, next);
+        return natToWord16(convertByteArrayToNat(bytes));
     };
 
     /**
-     * Convert an 8-bit unsigned integer to a 32-bit unsigned integer.
+     * Decode an unsigned 64-bit integer or trap.
      */
-    public func word8ToWord32(byte : Word8) : Word32 {
-        return natToWord32(word8ToNat(byte));
+    public func decodeWord64OrTrap(next : () -> ?Word8) : Word64 {
+        let bytes = decodeByteArrayOrTrap(8, next);
+        return natToWord64(convertByteArrayToNat(bytes));
     };
 
 };

@@ -123,18 +123,19 @@ import userlib from 'ic:userlib'
 				var result = await profile.find({ "unbox": Array.from(signer) });
 				if (result == null) {
 					result = {
-						"firstName": "",
-						"lastName": "",
-						"title": "",
-						"company": "",
-						"experience": ""
+						"firstName": [],
+						"lastName": [],
+						"title": [],
+						"company": [],
+						"experience": []
 					};
 				};
-				$('.profile-edit').find('#first-name').val(result.firstName);
-				$('.profile-edit').find('#last-name').val(result.lastName);
-				$('.profile-edit').find('#title').val(result.title);
-				$('.profile-edit').find('#company').val(result.company);
-				$('.profile-edit').find('#experience').val(result.experience);
+				let decoder = new TextDecoder();
+				$('.profile-edit').find('#first-name').val(decoder.decode(new Uint8Array(result.firstName)));
+				$('.profile-edit').find('#last-name').val(decoder.decode(new Uint8Array(result.lastName)));
+				$('.profile-edit').find('#title').val(decoder.decode(new Uint8Array(result.title)));
+				$('.profile-edit').find('#company').val(decoder.decode(new Uint8Array(result.company)));
+				$('.profile-edit').find('#experience').val(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
 			};
 			action();
 		};
@@ -149,19 +150,20 @@ import userlib from 'ic:userlib'
 				var result = await profile.find({ "unbox": Array.from(signer) });
 				if (result == null) {
 					result = {
-						"firstName": "",
-						"lastName": "",
-						"title": "",
-						"company": "",
-						"experience": ""
+						"firstName": [],
+						"lastName": [],
+						"title": [],
+						"company": [],
+						"experience": []
 					};
 				};
+				let decoder = new TextDecoder();
 				$('.profile-view').find('#address').html(encode(signer));
-				$('.profile-view').find('#first-name').html(result.firstName);
-				$('.profile-view').find('#last-name').html(result.lastName);
-				$('.profile-view').find('#title').html(result.title);
-				$('.profile-view').find('#company').html(result.company);
-				$('.profile-view').find('#experience').html(result.experience.replace(/\n/g, "<br />"));
+				$('.profile-view').find('#first-name').html(decoder.decode(new Uint8Array(result.firstName)));
+				$('.profile-view').find('#last-name').html(decoder.decode(new Uint8Array(result.lastName)));
+				$('.profile-view').find('#title').html(decoder.decode(new Uint8Array(result.title)));
+				$('.profile-view').find('#company').html(decoder.decode(new Uint8Array(result.company)));
+				$('.profile-view').find('#experience').html(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
 			};
 			action();
 		};

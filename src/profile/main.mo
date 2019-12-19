@@ -36,7 +36,7 @@ actor Profile {
      */
     func key(x : ProfileId) : Trie.Key<ProfileId> {
         func convert(bytes : [Word8]) : [Word32] {
-            return Array.map<Word8, Word32>(Util.word8ToWord32, bytes);
+            return Array.map<Word8, Word32>(Util.convertByteToWord32, bytes);
         };
         return {
             key = x;
@@ -48,64 +48,37 @@ actor Profile {
      * The type of a profile.
      */
     public type Profile = {
-        firstName : Text;
-        lastName : Text;
-        title : Text;
-        company : Text;
-        experience : Text;
+        firstName : [Word8];
+        lastName : [Word8];
+        title : [Word8];
+        company : [Word8];
+        experience : [Word8];
     };
 
     /**
-     * Decode a profile or fail.
+     * Decode a profile or trap.
      */
-    func decodeProfileOrFail(next : () -> ?Word8) : Profile {
+    func decodeProfileOrTrap(next : () -> ?Word8) : Profile {
 
-        // Decode a first name or fail.
-        let firstNameLen = word8ToNat(Util.decodeByteOrFail(next));
-        var firstNamePrime = "" : Text;
-        var i = 0;
-        while (i < firstNameLen) {
-            firstNamePrime #= charToText(Util.decodeASCIIOrFail(next));
-            i += 1;
-        };
+        // Decode a first name or trap.
+        let firstNameLen = word8ToNat(Util.decodeByteOrTrap(next));
+        let firstNamePrime = Util.decodeByteArrayOrTrap(firstNameLen, next);
 
-        // Decode a last name or fail.
-        let lastNameLen = word8ToNat(Util.decodeByteOrFail(next));
-        var lastNamePrime = "";
-        i := 0;
-        while (i < lastNameLen) {
-            lastNamePrime #= charToText(Util.decodeASCIIOrFail(next));
-            i += 1;
-        };
+        // Decode a last name or trap.
+        let lastNameLen = word8ToNat(Util.decodeByteOrTrap(next));
+        let lastNamePrime = Util.decodeByteArrayOrTrap(lastNameLen, next);
 
-        // Decode a title or fail.
-        let titleLen = word8ToNat(Util.decodeByteOrFail(next));
-        var titlePrime = "";
-        i := 0;
-        while (i < titleLen) {
-            titlePrime #= charToText(Util.decodeASCIIOrFail(next));
-            i += 1;
-        };
+        // Decode a title or trap.
+        let titleLen = word8ToNat(Util.decodeByteOrTrap(next));
+        let titlePrime = Util.decodeByteArrayOrTrap(titleLen, next);
 
-        // Decode a company or fail.
-        let companyLen = word8ToNat(Util.decodeByteOrFail(next));
-        var companyPrime = "";
-        i := 0;
-        while (i < companyLen) {
-            companyPrime #= charToText(Util.decodeASCIIOrFail(next));
-            i += 1;
-        };
+        // Decode a company or trap.
+        let companyLen = word8ToNat(Util.decodeByteOrTrap(next));
+        let companyPrime = Util.decodeByteArrayOrTrap(companyLen, next);
 
-        // Decode an experience or fail.
-        let experienceLen = 256
-            * word8ToNat(Util.decodeByteOrFail(next))
-            + word8ToNat(Util.decodeByteOrFail(next));
-        var experiencePrime = "";
-        i := 0;
-        while (i < experienceLen) {
-            experiencePrime #= charToText(Util.decodeASCIIOrFail(next));
-            i += 1;
-        };
+        // Decode an experience or trap.
+        let experienceLen = word16ToNat(Util.decodeWord16OrTrap(next));
+        let experiencePrime = Util.decodeByteArrayOrTrap(experienceLen, next);
 
         // Return.
         return {
@@ -148,8 +121,8 @@ actor Profile {
         // };
         let stream = Iter.fromArray<Word8>(message);
         let next = stream.next;
-        let _ = Util.decodeNonceOrFail(next);
-        let messgeType = word8ToNat(Util.decodeByteOrFail(next));
+        let _ = Util.decodeWord64OrTrap(next);
+        let messgeType = word8ToNat(Util.decodeByteOrTrap(next));
         switch messgeType {
 
             // Add a profile to the profile database.
@@ -157,7 +130,7 @@ actor Profile {
                 let profileId = {
                     unbox = signer;
                 };
-                let profile = decodeProfileOrFail(next);
+                let profile = decodeProfileOrTrap(next);
                 profiles := Trie.insert<ProfileId, Profile>(
                     profiles,
                     key(profileId),

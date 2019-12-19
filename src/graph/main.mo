@@ -39,7 +39,7 @@ actor Graph {
      */
     func key(x : VertexId) : Trie.Key<VertexId> {
         func convert(bytes : [Word8]) : [Word32] {
-            return Array.map<Word8, Word32>(Util.word8ToWord32, bytes);
+            return Array.map<Word8, Word32>(Util.convertByteToWord32, bytes);
         };
         return {
             key = x;
@@ -104,8 +104,8 @@ actor Graph {
         // };
         let stream = Iter.fromArray<Word8>(message);
         let next = stream.next;
-        let _ = Util.decodeNonceOrFail(next);
-        let messgeType = word8ToNat(Util.decodeByteOrFail(next));
+        let _ = Util.decodeWord64OrTrap(next);
+        let messgeType = word8ToNat(Util.decodeByteOrTrap(next));
         switch messgeType {
 
             // TODO:
