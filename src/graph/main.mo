@@ -259,9 +259,57 @@ actor Graph {
 
             // Accept or reject a connection invitation.
             case 5 {
-              Util.decodeWord8Then<()>(next, func (accept) {
-                Prelude.unreachable()
-              })
+              switch (find(fromId)) {
+                case (?from) {
+                  Util.decodeWord8Then<()>(next, func (accept) {
+                    if (accept == (0 : Word8)) {
+                      insert(fromId, {
+                        connections = from.connections;
+                        invitations = List.filter<UserId>(
+                          from.invitations,
+                          func (invitation) {
+                            not eq(invitation, toId)
+                          }
+                        )
+                      })
+                    } else {
+                      insert(fromId, {
+                        connections = List.push<UserId>(toId, from.connections);
+                        invitations = List.filter<UserId>(
+                          from.invitations,
+                          func (invitation) {
+                            not eq(invitation, toId)
+                          }
+                        )
+                      });
+                      switch (find(toId)) {
+                        case (?to) {
+                          insert(toId, {
+                            connections =
+                              List.push<UserId>(fromId, to.connections);
+                            invitations = List.filter<UserId>(
+                              to.invitations,
+                              func (invitation) {
+                                not eq(invitation, fromId)
+                              }
+                            )
+                          })
+                        };
+                        case _ {
+                          insert(toId, {
+                            connections = List.singleton<UserId>(fromId);
+                            invitations = List.nil<UserId>()
+                          })
+                        }
+                      }
+                    };
+                    #ok()
+                  })
+                };
+                case _ {
+                  #err("User does not exist!")
+                }
+              }
             };
 
             // Revoke a connection.
