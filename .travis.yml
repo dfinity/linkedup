@@ -18,6 +18,10 @@ install:
 - # Install Nginx with Lua support.
 - travis_retry sudo apt-get install -y nginx libnginx-mod-http-lua
 - sudo usermod -G adm -a $USER
+- # Install self-signed certificate.
+- sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/connect.key -out /etc/ssl/certs/connect.crt -subj '/C=US/ST=CA/L=San Francisco/O=DFINITY USA Research, LLC/OU=IT/CN=*'
+- sudo chmod 640 /etc/ssl/private/connect.key
+- sudo chgrp adm /etc/ssl/private/connect.key
 - # Install Lua package manager.
 - travis_retry sudo apt-get install -y luarocks
 - # Install Lua CBOR package.
