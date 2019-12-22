@@ -41,4 +41,3 @@ script:
 - sudo sg adm -c 'nohup nginx -c nginx.conf -p build/nginx &'
 - wget --no-check-certificate https://127.0.0.1:8000
 - cat index.html
-- cat nohup.out
