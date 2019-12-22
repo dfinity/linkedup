@@ -1,6 +1,6 @@
 ## Connect: An open professional network.
 
-[![Build Status](https://travis-ci.org/enzoh/connect.svg?branch=master)](https://travis-ci.org/enzoh/connect?branch=master)
+[![Build Status](https://travis-ci.org/dfinity-lab/connect.svg?branch=master)](https://travis-ci.org/dfinity-lab/connect?branch=master)
 
 ### Prerequisites
 
@@ -26,4 +26,4 @@ make install
 make run
 ```
 
-Open [`http://127.0.0.1:8000`](http://127.0.0.1:8000) in your web browser.
+Open [`https://127.0.0.1:8000`](http://127.0.0.1:8000) in your web browser.
