@@ -9,39 +9,42 @@
 import Array "mo:stdlib/array.mo";
 import Hash "mo:stdlib/hash.mo";
 import Iter "mo:stdlib/iter.mo";
-import Prelude "mo:stdlib/prelude.mo";
+import Result "mo:stdlib/result.mo";
 import Trie "mo:stdlib/trie.mo";
-import Util "../util/util.mo"
-
-type Trie<Key, Value> = Trie.Trie<Key, Value>;
+import Util "../common/util.mo";
 
 actor Profile {
 
+  type Result<Ok, Error> = Result.Result<Ok, Error>;
+  type Trie<Key, Value> = Trie.Trie<Key, Value>;
+
   /**
-   * The type of a profile identifier.
+   * The type of a user identifier.
    */
-  public type ProfileId = {
-    unbox : [Word8];
+  public type UserId = {
+    unbox : [Word8]
   };
 
   /**
-   * Test profile identifiers for equality.
+   * Test user identifiers for equality.
    */
-  func eq(x : ProfileId, y : ProfileId) : Bool {
-    return Array.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {xi == yi});
+  func eq(x : UserId, y : UserId) : Bool {
+    Array.equals<Word8>(x.unbox, y.unbox, func (xi, yi) {
+      xi == yi
+    })
   };
 
   /**
-   * Create a trie key from a profile identifier.
+   * Create a trie key from a user identifier.
    */
-  func key(x : ProfileId) : Trie.Key<ProfileId> {
+  func key(x : UserId) : Trie.Key<UserId> {
     func convert(bytes : [Word8]) : [Word32] {
-      return Array.map<Word8, Word32>(Util.convertByteToWord32, bytes);
+      Array.map<Word8, Word32>(Util.convWord8ToWord32, bytes)
     };
-    return {
+    {
       key = x;
-      hash = Hash.BitVec.hashWord8s(convert(x.unbox));
-    };
+      hash = Hash.BitVec.hashWord8s(convert(x.unbox))
+    }
   };
 
   /**
@@ -52,59 +55,78 @@ actor Profile {
     lastName : [Word8];
     title : [Word8];
     company : [Word8];
-    experience : [Word8];
+    experience : [Word8]
   };
 
   /**
-   * Decode a profile or trap.
+   * Decode a profile.
    */
-  func decodeProfileOrTrap(next : () -> ?Word8) : Profile {
-
-    // Decode a first name or trap.
-    let firstNameLen = word8ToNat(Util.decodeByteOrTrap(next));
-    let firstNamePrime = Util.decodeByteArrayOrTrap(firstNameLen, next);
-
-    // Decode a last name or trap.
-    let lastNameLen = word8ToNat(Util.decodeByteOrTrap(next));
-    let lastNamePrime = Util.decodeByteArrayOrTrap(lastNameLen, next);
-
-    // Decode a title or trap.
-    let titleLen = word8ToNat(Util.decodeByteOrTrap(next));
-    let titlePrime = Util.decodeByteArrayOrTrap(titleLen, next);
-
-    // Decode a company or trap.
-    let companyLen = word8ToNat(Util.decodeByteOrTrap(next));
-    let companyPrime = Util.decodeByteArrayOrTrap(companyLen, next);
-
-    // Decode an experience or trap.
-    let experienceLen = word16ToNat(Util.decodeWord16OrTrap(next));
-    let experiencePrime = Util.decodeByteArrayOrTrap(experienceLen, next);
-
-    // Return.
-    return {
-      firstName = firstNamePrime;
-      lastName = lastNamePrime;
-      title = titlePrime;
-      company = companyPrime;
-      experience = experiencePrime;
-    };
+  func decodeProfile(next : () -> ?Word8) : Result<Profile, Text> {
+    Util.decodeWord8ArrayOfWord8SizeThen<Profile>(next, func (bytes0) {
+      Util.decodeWord8ArrayOfWord8SizeThen<Profile>(next, func (bytes1) {
+        Util.decodeWord8ArrayOfWord8SizeThen<Profile>(next, func (bytes2) {
+          Util.decodeWord8ArrayOfWord8SizeThen<Profile>(next, func (bytes3) {
+            Util.decodeWord8ArrayOfWord16SizeThen<Profile>(next, func (bytes4) {
+              #ok({
+                firstName = bytes0;
+                lastName = bytes1;
+                title = bytes2;
+                company = bytes3;
+                experience = bytes4
+              })
+            })
+          })
+        })
+      })
+    })
   };
 
   /**
    * The type of the profile database.
    */
-  type ProfileDatabase = Trie<ProfileId, Profile>;
+  type ProfileDatabase = Trie<UserId, Profile>;
 
   /**
    * Initialize the profile database.
    */
-  var profiles : ProfileDatabase = Trie.empty<ProfileId, Profile>();
+  var profiles : ProfileDatabase = Trie.empty<UserId, Profile>();
 
   /**
    * Find a profile in the profile database.
    */
-  public func find(profileId : ProfileId) : async (?Profile) {
-    return Trie.find<ProfileId, Profile>(profiles, key(profileId), eq);
+  public func find(userId : UserId) : async (?Profile) {
+    Trie.find<UserId, Profile>(profiles, key(userId), eq)
+  };
+
+  /**
+   * Insert a profile into the profile database.
+   */
+  func insert(userId : UserId, profile : Profile) {
+    profiles := Trie.insert<UserId, Profile>(
+      profiles,
+      key(userId),
+      eq,
+      profile
+    ).0
+  };
+
+  /**
+   * Delete a profile from the profile database.
+   */
+  func delete(userId : UserId) {
+    profiles := Trie.remove<UserId, Profile>(
+      profiles,
+      key(userId),
+      eq
+    ).0
+  };
+
+  /**
+   * The type of an execution report.
+   */
+  public type ExecutionReport = {
+    success : Bool;
+    message : Text
   };
 
   /**
@@ -114,51 +136,65 @@ actor Profile {
     signer : [Word8],
     signature : [Word8],
     message : [Word8]
-  ) : async Bool {
-    // let authentic = Account.authenticate(signer, signature, message);
-    // if (not authentic) {
-    //   return false;
-    // };
+  ) : async ExecutionReport {
+
+    //// Check if the message is authentic.
+    //let authentic = Account.authenticate(signer, signature, message);
+    //if (not authentic) {
+    //  return {
+    //    success = false;
+    //    message = "Authentication failure."
+    //  }
+    //};
+
+    // Create an iterator from the message.
     let stream = Iter.fromArray<Word8>(message);
     let next = stream.next;
-    let _ = Util.decodeWord64OrTrap(next);
-    let messgeType = word8ToNat(Util.decodeByteOrTrap(next));
-    switch messgeType {
 
-      // Add a profile to the profile database.
-      case 1 {
-        let profileId = {
-          unbox = signer;
+    // Define a function to process the message.
+    func go() : Result<(), Text> {
+      Util.decodeMetadataThen<()>(next, func (_, messgeType) {
+        let userId = {
+          unbox = signer
         };
-        let profile = decodeProfileOrTrap(next);
-        profiles := Trie.insert<ProfileId, Profile>(
-          profiles,
-          key(profileId),
-          eq,
-          profile
-        ).0;
-        return true;
-      };
+        switch messgeType {
 
-      // Remove a profile from the profile database.
-      case 2 {
-        let profileId = {
-          unbox = signer;
-        };
-        profiles := Trie.remove<ProfileId, Profile>(
-          profiles,
-          key(profileId),
-          eq
-        ).0;
-        return true;
-      };
+          // Insert a profile into the profile database.
+          case 1 {
+            Result.bind<Profile, (), Text>(decodeProfile(next), func (profile) {
+              insert(userId, profile);
+              #ok()
+            })
+          };
 
-      // Invalid message type.
-      case _ {
-        Prelude.printLn("invalid message type");
-        return false;
-      };
+          // Delete a profile from the profile database.
+          case 2 {
+            delete(userId);
+            #ok()
+          };
+
+          // Invalid message type!
+          case _ {
+            #err("Invalid message type!")
+          }
+        }
+      })
     };
-  };
 
-};
+    // Process the message.
+    switch (go()) {
+
+      // Success!
+      case (#ok()) {
+        success = true;
+        message = "Success!"
+      };
+
+      // Something went wrong!
+      case (#err(text)) {
+        success = false;
+        message = text
+      }
+    }
+  }
+}
