@@ -35,5 +35,5 @@ script:
 - make
 - make install
 - sudo sg adm -c 'nohup nginx -c nginx.conf -p build/nginx &'
-- wget 127.0.0.1:8000
+- wget --no-check-certificate https://127.0.0.1:8000
 - cat index.html
