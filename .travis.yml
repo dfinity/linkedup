@@ -31,8 +31,8 @@ install:
 - # Install Lua OpenSSL package.
 - travis_retry sudo apt-get install -y libssl-dev
 - travis_retry sudo luarocks install luaossl
-- # Install Lua Socket package.
-- travis_retry sudo luarocks install luasocket
+- # Install Lua Security package.
+- travis_retry sudo luarocks install luasec
 script:
 - nohup dfx start &
 - sleep 5
