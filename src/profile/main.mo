@@ -132,7 +132,7 @@ actor Profile {
   /**
    * Perform a privileged operation on the profile database.
    */
-  public func run(
+  public /* shared { caller = signer } */ func run(
     signer : [Word8],
     signature : [Word8],
     message : [Word8]

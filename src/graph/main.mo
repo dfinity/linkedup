@@ -179,7 +179,7 @@ actor Graph {
   /**
    * Perform a privileged operation on the vertex database.
    */
-  public func run(
+  public /* shared { caller = signer } */ func run(
     signer : [Word8],
     signature : [Word8],
     message : [Word8]
