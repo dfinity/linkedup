@@ -1,16 +1,9 @@
 FROM ubuntu:bionic
 
 RUN apt-get update
-RUN apt-get install -y git libssl-dev sudo wget
+RUN apt-get install -y bc curl git libssl-dev openjdk-8-jre sudo wget xxd
 
 WORKDIR /tmp
-
-# Create development group and user.
-RUN groupadd developer
-RUN useradd -d /home/developer -g developer -m developer
-RUN echo developer ALL=NOPASSWD:ALL > /etc/sudoers.d/developer
-RUN chmod 440 /etc/sudoers.d/developer
-USER developer
 
 # Install Google HTML Compressor.
 RUN wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/htmlcompressor/htmlcompressor-1.5.3.jar
@@ -28,10 +21,10 @@ RUN sudo apt-get install -y nodejs
 # Install DFINITY SDK.
 RUN wget https://sdk.dfinity.org/install.sh -O install.sh
 RUN yes Y | sh install.sh
+ENV PATH /root/bin:${PATH}
 
 # Install Nginx with Lua support.
 RUN sudo apt-get install -y nginx libnginx-mod-http-lua
-RUN sudo usermod -G adm -a developer
 
 # Install self-signed SSL certificate.
 RUN sudo openssl req \
@@ -55,5 +48,5 @@ RUN sudo luarocks install luasec
 RUN sudo luarocks install org.conman.cbor
 
 # Create workspace directory.
-RUN mkdir /home/developer/workspace
-WORKDIR /home/developer/workspace
+RUN mkdir /workspace
+WORKDIR /workspace
