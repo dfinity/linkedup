@@ -14,7 +14,7 @@ docker run \
     --publish 8000:8000 \
     --rm \
     --volume `pwd`:/workspace \
-    dfinity-lab/connect
+    dfinity-lab/connect \
     sh bootstrap.sh
 ```
 
