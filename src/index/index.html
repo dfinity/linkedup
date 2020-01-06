@@ -9,7 +9,7 @@
 		<meta content="width=device-width, initial-scale=1.0" name="viewport">
 
 		<!-- Title -->
-		<title>Connect | An open professional network.</title>
+		<title>LinkedUp | An open professional network.</title>
 
 		<!-- Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet" type="text/css">
@@ -44,16 +44,16 @@
 
 					<!-- Logo -->
 					<a class="navbar-brand" href="/">
-						<span><i class="fa fa-share-alt"></i> Connect</span>
+						<span><i class="fa fa-share-alt"></i> LinkedUp</span>
 					</a>
 
 					<!-- Toggler -->
-					<button class="navbar-toggler" data-target="#menu" data-toggle="collapse" type="button">
+					<button class="navbar-toggler" data-target="#splash-menu" data-toggle="collapse" type="button">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 
 					<!-- Menu -->
-					<div class="collapse navbar-collapse navbar-menu" id="menu">
+					<div class="collapse navbar-collapse navbar-menu" id="splash-menu">
 
 						<ul class="ml-auto navbar-nav">
 
@@ -185,36 +185,61 @@
 
 		<!-- Admin View -->
 		<div class="admin-view" style="display: none">
+
+			<!-- Navigation -->
 			<nav class="navbar navbar-expand-sm">
+
 				<div class="container">
-					<div class="collapse navbar-collapse navbar-menu">
+
+					<!-- Logo -->
+					<a class="navbar-brand" href="/">
+						<span><i class="fa fa-share-alt"></i> LinkedUp</span>
+					</a>
+
+					<!-- Toggler -->
+					<button class="navbar-toggler" data-target="#admin-menu" data-toggle="collapse" type="button">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<!-- Menu -->
+					<div class="collapse navbar-collapse navbar-menu" id="admin-menu">
 						<ul class="ml-auto navbar-nav">
 							<li class="nav-item">
-								<a class="nav-link" href="#" id="view">View</a>
+								<a class="nav-link" href="#" id="profile">Profile</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#" id="edit">Edit</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#" id="search">search</a>
+								<a class="nav-link" href="#" id="search">Search</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="connections">Connections</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="invitations">Invitations</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#" id="logout">Logout</a>
 							</li>
 						</ul>
 					</div>
+
 				</div>
+
 			</nav>
 
-			<!-- Profile View -->
-			<section class="profile-view" style="display: none">
+			<br/>
+
+			<!-- Profile -->
+			<section class="profile" style="display: none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
-							<div>
+							<form autocomplete="off" id="profile-form" role="form">
 								<div class="modal-header">
-									<h4 class="modal-title">View Your Profile Details</h4>
+									<h4 class="modal-title">Profile</h4>
 								</div>
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
@@ -230,55 +255,58 @@
 										<div class="form-control" id="last-name"></div>
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="title">Title</label>
+										<label for="title">Job Title</label>
 										<div class="form-control" id="title"></div>
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="company">Company</label>
+										<label for="company">Company Name</label>
 										<div class="form-control" id="company"></div>
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="experience">Experience</label>
+										<label for="experience">Work Experience</label>
 										<div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience"></div>
 									</div>
 								</div>
-							</div>
+								<div class="modal-footer" style="display: none">
+									<button class="btn btn-md btn-custom" type="submit">Connect</button>
+								</div>
+							</form>
 						</div>
 						<div class="col-md-2"></div>
 					</div>
 				</div>
 			</section>
 
-			<!-- Profile Edit View -->
-			<section class="profile-edit" style="display: none">
+			<!-- Edit -->
+			<section class="edit" style="display: none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
-							<form autocomplete="off" id="profile-edit-form" role="form">
+							<form autocomplete="off" id="edit-form" role="form">
 								<div class="modal-header">
-									<h4 class="modal-title">Edit Your Profile Details</h4>
+									<h4 class="modal-title">Profile Edit</h4>
 								</div>
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
 										<label for="first-name">First Name</label>
-										<input class="form-control" id="first-name" name="first-name" placeholder="Joe" type="text">
+										<input class="form-control" id="first-name" name="first-name" placeholder="Enter your first name." type="text">
 									</div>
 									<div class="form-group form-group-lg">
 										<label for="last-name">Last Name</label>
-										<input class="form-control" id="last-name" name="last-name" placeholder="Doe" type="text">
+										<input class="form-control" id="last-name" name="last-name" placeholder="Enter your last name." type="text">
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="title">Title</label>
-										<input class="form-control" id="title" name="title" placeholder="Engineer" type="text">
+										<label for="title">Job Title</label>
+										<input class="form-control" id="title" name="title" placeholder="Enter your job title." type="text">
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="company">Company</label>
-										<input class="form-control" id="company" name="company" placeholder="DFINITY" type="text">
+										<label for="company">Company Name</label>
+										<input class="form-control" id="company" name="company" placeholder="Enter your company name." type="text">
 									</div>
 									<div class="form-group form-group-lg">
-										<label for="experience">Experience</label>
-										<textarea class="form-control" id="experience" name="experience" placeholder="Describe your current position..." rows="10" type="text"></textarea>
+										<label for="experience">Work Experience</label>
+										<textarea class="form-control" id="experience" name="experience" placeholder="Describe your work experience." rows="10" type="text"></textarea>
 									</div>
 								</div>
 								<div class="modal-footer">
@@ -291,15 +319,15 @@
 				</div>
 			</section>
 
-			<!-- Profile Search View -->
-			<section class="profile-search" style="display: none">
+			<!-- Search -->
+			<section class="search" style="display: none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
-							<form autocomplete="off" id="profile-search-form" role="form">
+							<form autocomplete="off" id="search-form" role="form">
 								<div class="modal-header">
-									<h4 class="modal-title">Search For A Profile</h4>
+									<h4 class="modal-title">Profile Search</h4>
 								</div>
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
@@ -319,6 +347,47 @@
 					</div>
 				</div>
 			</section>
+
+			<!-- Connections -->
+			<section class="connections" style="display: none">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+							<div>
+								<div class="modal-header">
+									<h4 class="modal-title">Connections</h4>
+								</div>
+								<div class="modal-body">
+									<ul class="connections-list"></ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Invitations -->
+			<section class="invitations" style="display: none">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+							<div>
+								<div class="modal-header">
+									<h4 class="modal-title">Invitations</h4>
+								</div>
+								<div class="modal-body">
+									<ul class="invitations-list"></ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+			</section>
+
 		</div>
 
 		<!-- Scripts -->

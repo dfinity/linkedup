@@ -109,15 +109,45 @@ import userlib from 'ic:userlib'
 
 
 
+		function clearSplashView() {
+			$('.splash-view').slideUp(10, 'linear');
+		};
+
+		function clearAdminView() {
+			$('.admin-view').slideUp(10, 'linear');
+		};
+
+		function clearAdminSections() {
+			$('.profile').slideUp(10, 'linear');
+			$('.edit').slideUp(10, 'linear');
+			$('.search').slideUp(10, 'linear');
+			$('.connections').slideUp(10, 'linear');
+			$('.invitations').slideUp(10, 'linear');
+		};
+
+		function renderConnections() {
+			clearAdminSections();
+			$('.connections').slideDown(10, 'linear');
+			// TODO: ...
+		};
+
+		function renderInvitations() {
+			clearAdminSections();
+			$('.invitations').slideDown(10, 'linear');
+			// TODO: ...
+		};
+
+
+
+
 
 
 
 
 		function renderProfileEdit() {
-			$('.splash-view').slideUp(10, 'linear');
-			$('.profile-view').slideUp(10, 'linear');
-			$('.profile-edit').slideDown(10, 'linear');
-			$('.profile-search').slideUp(10, 'linear');
+			clearSplashView();
+			clearAdminSections();
+			$('.edit').slideDown(10, 'linear');
 			async function action() {
 				var signer = keyPair.publicKey;
 				var result = await profile.find({ "unbox": Array.from(signer) });
@@ -131,20 +161,22 @@ import userlib from 'ic:userlib'
 					};
 				};
 				let decoder = new TextDecoder();
-				$('.profile-edit').find('#first-name').val(decoder.decode(new Uint8Array(result.firstName)));
-				$('.profile-edit').find('#last-name').val(decoder.decode(new Uint8Array(result.lastName)));
-				$('.profile-edit').find('#title').val(decoder.decode(new Uint8Array(result.title)));
-				$('.profile-edit').find('#company').val(decoder.decode(new Uint8Array(result.company)));
-				$('.profile-edit').find('#experience').val(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
+				$('.edit').find('#first-name').val(decoder.decode(new Uint8Array(result.firstName)));
+				$('.edit').find('#last-name').val(decoder.decode(new Uint8Array(result.lastName)));
+				$('.edit').find('#title').val(decoder.decode(new Uint8Array(result.title)));
+				$('.edit').find('#company').val(decoder.decode(new Uint8Array(result.company)));
+				$('.edit').find('#experience').val(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
 			};
 			action();
 		};
 
 		function renderProfileView() {
 			$('.splash-view').slideUp(10, 'linear');
-			$('.profile-view').slideDown(10, 'linear');
-			$('.profile-edit').slideUp(10, 'linear');
-			$('.profile-search').slideUp(10, 'linear');
+			$('.profile').slideDown(10, 'linear');
+			$('.edit').slideUp(10, 'linear');
+			$('.connections').slideUp(10, 'linear');
+			$('.invitations').slideUp(10, 'linear');
+			$('.search').slideUp(10, 'linear');
 			async function action() {
 				var signer = keyPair.publicKey;
 				var result = await profile.find({ "unbox": Array.from(signer) });
@@ -158,24 +190,26 @@ import userlib from 'ic:userlib'
 					};
 				};
 				let decoder = new TextDecoder();
-				$('.profile-view').find('#address').html(encode(signer));
-				$('.profile-view').find('#first-name').html(decoder.decode(new Uint8Array(result.firstName)));
-				$('.profile-view').find('#last-name').html(decoder.decode(new Uint8Array(result.lastName)));
-				$('.profile-view').find('#title').html(decoder.decode(new Uint8Array(result.title)));
-				$('.profile-view').find('#company').html(decoder.decode(new Uint8Array(result.company)));
-				$('.profile-view').find('#experience').html(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
+				$('.profile').find('#address').html(encode(signer));
+				$('.profile').find('#first-name').html(decoder.decode(new Uint8Array(result.firstName)));
+				$('.profile').find('#last-name').html(decoder.decode(new Uint8Array(result.lastName)));
+				$('.profile').find('#title').html(decoder.decode(new Uint8Array(result.title)));
+				$('.profile').find('#company').html(decoder.decode(new Uint8Array(result.company)));
+				$('.profile').find('#experience').html(decoder.decode(new Uint8Array(result.experience)).replace(/\n/g, "<br />"));
 			};
 			action();
 		};
 
 		function renderProfileSearch() {
 			$('.splash-view').slideUp(10, 'linear');
-			$('.profile-view').slideUp(10, 'linear');
-			$('.profile-edit').slideUp(10, 'linear');
-			$('.profile-search').slideDown(10, 'linear');
+			$('.profile').slideUp(10, 'linear');
+			$('.edit').slideUp(10, 'linear');
+			$('.connections').slideUp(10, 'linear');
+			$('.invitations').slideUp(10, 'linear');
+			$('.search').slideDown(10, 'linear');
 		};
 
-		$('#profile-edit-form').submit(function(event) {
+		$('#edit-form').submit(function(event) {
 			event.preventDefault();
 			const button = $(this).find('button[type="submit"]');
 			disableSubmitButton(button);
@@ -221,12 +255,12 @@ import userlib from 'ic:userlib'
 			action();
 		});
 
-		$('#profile-search-form').submit(function(event) {
+		$('#search-form').submit(function(event) {
 			event.preventDefault();
 			const button = $(this).find('button[type="submit"]');
 			disableSubmitButton(button);
 			$('.search-result').slideUp(500, 'linear', function () {
-				const address = decode($('#profile-search-form').find('#address').val());
+				const address = decode($('#search-form').find('#address').val());
 				console.log(address);
 				async function action() {
 					var result = await profile.find({ "unbox": Array.from(address) });
@@ -247,7 +281,15 @@ import userlib from 'ic:userlib'
 			renderProfileEdit();
 		});
 
-		$('a#view').click(function() {
+		$('a#profile').click(function() {
+			renderProfileView();
+		});
+
+		$('a#connections').click(function() {
+			renderProfileView();
+		});
+
+		$('a#invitations').click(function() {
 			renderProfileView();
 		});
 
