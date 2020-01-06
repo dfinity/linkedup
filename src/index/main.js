@@ -63,7 +63,7 @@ import userlib from 'ic:userlib'
 			}, '')
 		}
 
-		//
+		// 
 		var words = [];
 		function resetPhrase() {
 			var arr = new Uint8Array(16);
@@ -287,6 +287,7 @@ import userlib from 'ic:userlib'
 				var seed = new Uint8Array(32);
 				seed.set(decode(english_to_key(words.join(' ').toUpperCase())));
 				keyPair = nacl.sign.keyPair.fromSeed(seed);
+				$('.admin-view').slideDown(10, 'linear');
 				renderProfileView();
 			} catch (err) {
 				const details = '<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>';
