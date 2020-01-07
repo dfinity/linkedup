@@ -184,7 +184,7 @@
 		</div>
 
 		<!-- Admin View -->
-		<div class="admin-view" style="display: none">
+		<div class="admin-view" style="display:none">
 
 			<!-- Navigation -->
 			<nav class="navbar navbar-expand-sm">
@@ -232,7 +232,7 @@
 			<br/>
 
 			<!-- Profile -->
-			<section class="profile" style="display: none">
+			<section class="profile" style="display:none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
@@ -267,7 +267,7 @@
 										<div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience"></div>
 									</div>
 								</div>
-								<div class="modal-footer" style="display: none">
+								<div class="modal-footer" style="display:none">
 									<button class="btn btn-md btn-custom" type="submit">Connect</button>
 								</div>
 							</form>
@@ -278,14 +278,14 @@
 			</section>
 
 			<!-- Edit -->
-			<section class="edit" style="display: none">
+			<section class="edit" style="display:none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
 							<form autocomplete="off" id="edit-form" role="form">
 								<div class="modal-header">
-									<h4 class="modal-title">Profile Edit</h4>
+									<h4 class="modal-title">Edit</h4>
 								</div>
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
@@ -320,16 +320,16 @@
 			</section>
 
 			<!-- Search -->
-			<section class="search" style="display: none">
+			<section class="search" style="display:none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
-							<form autocomplete="off" id="search-form" role="form">
-								<div class="modal-header">
-									<h4 class="modal-title">Profile Search</h4>
-								</div>
-								<div class="modal-body">
+							<div class="modal-header">
+								<h4 class="modal-title">Search</h4>
+							</div>
+							<div class="modal-body">
+								<form autocomplete="off" id="search-form" role="form">
 									<div class="form-group form-group-lg">
 										<label for="address">Address</label>
 										<div class="input-group input-group-md mb-3">
@@ -339,9 +339,14 @@
 											</div>
 										</div>
 									</div>
+								</form>
 								<div class="search-result"></div>
-								</div>
-							</form>
+							</div>
+							<div class="modal-footer" style="display:none">
+								<form id="connect-form" role="form">
+									<button class="btn btn-md btn-custom" type="submit">Connect</button>
+								</form>
+							</div>
 						</div>
 						<div class="col-md-2"></div>
 					</div>
@@ -349,7 +354,7 @@
 			</section>
 
 			<!-- Connections -->
-			<section class="connections" style="display: none">
+			<section class="connections" style="display:none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
@@ -369,7 +374,7 @@
 			</section>
 
 			<!-- Invitations -->
-			<section class="invitations" style="display: none">
+			<section class="invitations" style="display:none">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
