@@ -162,10 +162,10 @@ actor Graph {
   /**
    * Find the invitations of a vertex in the vertex database.
    */
-  public func invitations(userId : UserId) : async (?List<UserId>) {
-    Option.map<Vertex, List<UserId>>(func (vertex) {
+  public func invitations(userId : UserId) : async List<UserId> {
+    Option.option<Vertex, List<UserId>>(find(userId), func (vertex) {
       vertex.invitations
-    }, find(userId))
+    }, List.nil<UserId>())
   };
 
   /**
