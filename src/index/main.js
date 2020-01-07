@@ -134,26 +134,35 @@ import userlib from 'ic:userlib'
 
 
 		function clearSplashView() {
-			$('.splash-view').slideUp(100, 'linear');
+			$('.splash-view').hide();
 		};
 
 		function clearAdminView() {
-			$('.admin-view').slideUp(100, 'linear');
+			$('.admin-view').hide();
 		};
 
 		function clearAdminSections() {
-			$('.profile').slideUp(100, 'linear');
-			$('.edit').slideUp(100, 'linear');
-			$('.search').slideUp(100, 'linear');
-			$('.connections').slideUp(100, 'linear');
-			$('.invitations').slideUp(100, 'linear');
+			$('.profile').hide();
+			$('.edit').hide();
+			$('.search').hide();
+			$('.connections').hide();
+			$('.invitations').hide();
 		};
 
 		function renderProfile() {
 			clearAdminSections();
-			$('.profile').slideDown(100, 'linear');
-			async function action() {
+			$('.profile').slideDown(50, 'linear');
+			function sanitize(value) {
+				return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			};
+			function convert(value) {
 				let decoder = new TextDecoder();
+				return sanitize(decoder.decode(new Uint8Array(value)));
+			};
+			function display(id, value) {
+				$('.profile').find(id).html(value);
+			};
+			async function action() {
 				let publicKey = keyPair.publicKey;
 				var result = await profile.find({
 					'unbox': Array.from(publicKey)
@@ -168,15 +177,6 @@ import userlib from 'ic:userlib'
 					};
 				};
 				$('.profile').find('#address').html(encode(publicKey));
-				function sanitize(value) {
-					return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-				};
-				function convert(value) {
-					return sanitize(decoder.decode(new Uint8Array(value)));
-				};
-				function display(id, value) {
-					$('.profile').find(id).html(value);
-				};
 				display('#first-name', convert(result.firstName));
 				display('#last-name', convert(result.lastName));
 				display('#title', convert(result.title));
@@ -188,9 +188,15 @@ import userlib from 'ic:userlib'
 
 		function renderEdit() {
 			clearAdminSections();
-			$('.edit').slideDown(100, 'linear');
-			async function action() {
+			$('.edit').slideDown(50, 'linear');
+			function convert(value) {
 				let decoder = new TextDecoder();
+				return decoder.decode(new Uint8Array(value));
+			};
+			function display(id, value) {
+				$('.edit').find(id).val(value);
+			};
+			async function action() {
 				let publicKey = keyPair.publicKey;
 				var result = await profile.find({
 					'unbox': Array.from(publicKey)
@@ -204,12 +210,7 @@ import userlib from 'ic:userlib'
 						'experience': []
 					};
 				};
-				function convert(value) {
-					return decoder.decode(new Uint8Array(value));
-				};
-				function display(id, value) {
-					$('.edit').find(id).val(value);
-				};
+				$('.edit').find('#address').html(encode(publicKey));
 				display('#first-name', convert(result.firstName));
 				display('#last-name', convert(result.lastName));
 				display('#title', convert(result.title));
@@ -221,12 +222,12 @@ import userlib from 'ic:userlib'
 
 		function renderSearch() {
 			clearAdminSections();
-			$('.search').slideDown(100, 'linear');
+			$('.search').slideDown(50, 'linear');
 		};
 
 		function renderConnections() {
 			clearAdminSections();
-			$('.connections').slideDown(100, 'linear');
+			$('.connections').slideDown(50, 'linear');
 			async function action() {
 				let publicKey = keyPair.publicKey;
 				var connections = await graph.connections1({
@@ -248,7 +249,7 @@ import userlib from 'ic:userlib'
 
 		function renderInvitations() {
 			clearAdminSections();
-			$('.invitations').slideDown(100, 'linear');
+			$('.invitations').slideDown(50, 'linear');
 			async function action() {
 				let publicKey = keyPair.publicKey;
 				var invitations = await graph.invitations({
@@ -270,23 +271,35 @@ import userlib from 'ic:userlib'
 
 		$('#search-form').submit(function(event) {
 			event.preventDefault();
-			const button = $(this).find('button[type="submit"]');
+			let button = $(this).find('button[type="submit"]');
 			disableSubmitButton(button);
-			$('.search-result').slideUp(100, 'linear', function () {
-				let publicKey = decode($('#search-form').find('#address').val());
-				async function action() {
-					var result = await profile.find({ "unbox": Array.from(publicKey) });
-					if (result == null) {
-						$('.search-result').html('Profile not found.');
-						$('.search-result').slideDown(500, 'linear');
-					} else {
-						$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + result.firstName + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + result.lastName + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + result.title + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + result.company + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + result.experience + '</div></div>');
-						$('.search-result').slideDown(500, 'linear');
-					};
+			$('.connect').hide();
+			$('.search-result').hide();
+			function sanitize(value) {
+				return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			};
+			function convert(value) {
+				let decoder = new TextDecoder();
+				return sanitize(decoder.decode(new Uint8Array(value)));
+			};
+			async function action() {
+				let address = $('#search-form').find('#address').val();
+				let publicKey = decode(address ? address : '');
+				var result = await profile.find({
+					'unbox': Array.from(publicKey)
+				});
+				if (result == null) {
+					$('.search-result').html('Profile not found.');
+					$('.search-result').slideDown(50, 'linear');
+				} else {
+					$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + convert(result.firstName) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + convert(result.lastName) + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + convert(result.title) + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + convert(result.company) + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + convert(result.experience).replace(/\n/g, '<br/>') + '</div></div>');
+					$('.search-result').slideDown(50, 'linear');
+					$('.connect').find('input').val(address);
+					$('.connect').slideDown(50, 'linear');
 				};
-				action();
-				enableSubmitButton(button);
-			});
+			};
+			action();
+			enableSubmitButton(button);
 		});
 
 
@@ -420,8 +433,8 @@ import userlib from 'ic:userlib'
 				var seed = new Uint8Array(32);
 				seed.set(decode(english_to_key(words.join(' ').toUpperCase())));
 				keyPair = nacl.sign.keyPair.fromSeed(seed);
-				$('.splash-view').slideUp(10, 'linear');
-				$('.admin-view').slideDown(10, 'linear');
+				$('.splash-view').slideUp(0, 'linear');
+				$('.admin-view').slideDown(250, 'linear');
 				renderProfile();
 			} catch (err) {
 				const details = '<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>';

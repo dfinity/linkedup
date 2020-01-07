@@ -289,6 +289,10 @@
 								</div>
 								<div class="modal-body">
 									<div class="form-group form-group-lg">
+										<label for="address">Address</label>
+										<div class="form-control" id="address"></div>
+									</div>
+									<div class="form-group form-group-lg">
 										<label for="first-name">First Name</label>
 										<input class="form-control" id="first-name" name="first-name" placeholder="Enter your first name." type="text">
 									</div>
@@ -342,8 +346,9 @@
 								</form>
 								<div class="search-result"></div>
 							</div>
-							<div class="modal-footer" style="display:none">
+							<div class="connect modal-footer" style="display:none">
 								<form id="connect-form" role="form">
+									<input id="address" name="address" type="hidden" value="">
 									<button class="btn btn-md btn-custom" type="submit">Connect</button>
 								</form>
 							</div>
