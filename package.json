@@ -6,6 +6,6 @@
     },
     "license": "Apache 2.0 with LLVM Exception",
     "main": "webpack.config.js",
-    "name": "connect",
+    "name": "linkedup",
     "version": "1.0.0"
 }

@@ -29,8 +29,8 @@ http {
     error_log /dev/stderr;
 
     # Security settings.
-    ssl_certificate /etc/ssl/certs/connect.crt;
-    ssl_certificate_key /etc/ssl/private/connect.key;
+    ssl_certificate /etc/ssl/certs/linkedup.crt;
+    ssl_certificate_key /etc/ssl/private/linkedup.key;
 
     # Upstream settings.
     upstream ic {
