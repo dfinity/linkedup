@@ -29,14 +29,14 @@ RUN sudo apt-get install -y nginx libnginx-mod-http-lua
 # Install self-signed SSL certificate.
 RUN sudo openssl req \
     -days 365 \
-    -keyout /etc/ssl/private/connect.key \
+    -keyout /etc/ssl/private/linkedup.key \
     -newkey rsa:2048 \
     -nodes \
-    -out /etc/ssl/certs/connect.crt \
+    -out /etc/ssl/certs/linkedup.crt \
     -subj '/C=US/ST=CA/L=San Francisco/O=DFINITY USA Research, LLC/OU=IT/CN=127.0.0.1' \
     -x509
-RUN sudo chmod 640 /etc/ssl/private/connect.key
-RUN sudo chgrp adm /etc/ssl/private/connect.key
+RUN sudo chmod 640 /etc/ssl/private/linkedup.key
+RUN sudo chgrp adm /etc/ssl/private/linkedup.key
 
 # Install Lua package manager.
 RUN sudo apt-get install -y luarocks

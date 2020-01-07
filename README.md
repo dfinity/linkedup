@@ -1,6 +1,6 @@
 ## An open professional network.
 
-[![Build Status](https://travis-ci.org/dfinity-lab/connect.svg?branch=master)](https://travis-ci.org/dfinity-lab/connect?branch=master)
+[![Build Status](https://travis-ci.org/dfinity-lab/linkedup.svg?branch=master)](https://travis-ci.org/dfinity-lab/linkedup?branch=master)
 
 ### Prerequisites
 
@@ -9,12 +9,12 @@
 ### Demo
 
 ```bash
-docker build --tag dfinity-lab/connect .
+docker build --tag dfinity-lab/linkedup .
 docker run \
     --publish 8000:8000 \
     --rm \
     --volume `pwd`:/workspace \
-    dfinity-lab/connect \
+    dfinity-lab/linkedup \
     sh bootstrap.sh
 ```
 
