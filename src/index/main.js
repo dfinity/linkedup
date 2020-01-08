@@ -133,6 +133,16 @@ import userlib from 'ic:userlib'
 
 
 
+
+		function convert(value) {
+			let decoder = new TextDecoder();
+			return decoder.decode(new Uint8Array(value));
+		};
+
+		function sanitize(value) {
+			return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		};
+
 		function clearSplashView() {
 			$('.splash-view').hide();
 		};
@@ -152,13 +162,6 @@ import userlib from 'ic:userlib'
 		function renderProfile() {
 			clearAdminSections();
 			$('.profile').slideDown(50, 'linear');
-			function sanitize(value) {
-				return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			};
-			function convert(value) {
-				let decoder = new TextDecoder();
-				return sanitize(decoder.decode(new Uint8Array(value)));
-			};
 			function display(id, value) {
 				$('.profile').find(id).html(value);
 			};
@@ -177,11 +180,11 @@ import userlib from 'ic:userlib'
 					};
 				};
 				$('.profile').find('#address').html(encode(publicKey));
-				display('#first-name', convert(result.firstName));
-				display('#last-name', convert(result.lastName));
-				display('#title', convert(result.title));
-				display('#company', convert(result.company));
-				display('#experience', convert(result.experience).replace(/\n/g, '<br/>'));
+				display('#first-name', sanitize(convert(result.firstName)));
+				display('#last-name', sanitize(convert(result.lastName)));
+				display('#title', sanitize(convert(result.title)));
+				display('#company', sanitize(convert(result.company)));
+				display('#experience', sanitize(convert(result.experience)).replace(/\n/g, '<br/>'));
 			};
 			action();
 		};
@@ -189,10 +192,6 @@ import userlib from 'ic:userlib'
 		function renderEdit() {
 			clearAdminSections();
 			$('.edit').slideDown(50, 'linear');
-			function convert(value) {
-				let decoder = new TextDecoder();
-				return decoder.decode(new Uint8Array(value));
-			};
 			function display(id, value) {
 				$('.edit').find(id).val(value);
 			};
@@ -233,16 +232,14 @@ import userlib from 'ic:userlib'
 				var connections = await graph.connections1({
 					'unbox': Array.from(publicKey)
 				});
-				var item;
-				var list = [];
+				var links = '';
 				while (connections != null) {
 					// TODO: Disply connection by name with option to revoke!
 					// TODO: Link to profile view!
-					item = '<li>' + encode(connections[0].unbox) + '</li>';
-					list = list.push(item);
+					links += '<li>' + encode(connections[0].unbox) + '</li>';
 					connections = connections[1];
 				};
-				$('.connections-list').html(list);
+				$('.connections-list').html(links);
 			};
 			action();
 		};
@@ -255,16 +252,14 @@ import userlib from 'ic:userlib'
 				var invitations = await graph.invitations({
 					'unbox': Array.from(publicKey)
 				});
-				var item;
-				var list = [];
+				var links = '';
 				while (invitations != null) {
 					// TODO: Disply invitation by name with option to accept or reject!
 					// TODO: Link to profile view!
-					item = '<li>' + encode(invitations[0].unbox) + '</li>';
-					list = list.push(item);
+					links += '<li>' + encode(invitations[0].unbox) + '</li>';
 					invitations = invitations[1];
 				};
-				$('.invitations-list').html(list);
+				$('.invitations-list').html(links);
 			};
 			action();
 		};
@@ -275,13 +270,6 @@ import userlib from 'ic:userlib'
 			disableSubmitButton(button);
 			$('.connect').hide();
 			$('.search-result').hide();
-			function sanitize(value) {
-				return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			};
-			function convert(value) {
-				let decoder = new TextDecoder();
-				return sanitize(decoder.decode(new Uint8Array(value)));
-			};
 			async function action() {
 				let address = $('#search-form').find('#address').val();
 				let publicKey = decode(address ? address : '');
@@ -292,19 +280,46 @@ import userlib from 'ic:userlib'
 					$('.search-result').html('Profile not found.');
 					$('.search-result').slideDown(50, 'linear');
 				} else {
-					$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + convert(result.firstName) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + convert(result.lastName) + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + convert(result.title) + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + convert(result.company) + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + convert(result.experience).replace(/\n/g, '<br/>') + '</div></div>');
+					$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + sanitize(convert(result.firstName)) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + sanitize(convert(result.lastName)) + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + sanitize(convert(result.title)) + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + sanitize(convert(result.company)) + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + sanitize(convert(result.experience)).replace(/\n/g, '<br/>') + '</div></div>');
 					$('.search-result').slideDown(50, 'linear');
 					$('.connect').find('input').val(address);
 					$('.connect').slideDown(50, 'linear');
 				};
 			};
 			action();
-			enableSubmitButton(button);
+			button.empty();
+			button.append('Search');
+			button.prop('disabled', false);
 		});
 
-
-
-
+		$('#connect-form').submit(function(event) {
+			event.preventDefault();
+			let button = $(this).find('button[type="submit"]');
+			disableSubmitButton(button);
+			async function action() {
+				let address = $('#search-form').find('#address').val();
+				let encoder = new TextEncoder();
+				let nonce = new Uint8Array(8);
+				let messageType = new Uint8Array([3]);
+				let publicKey = decode(address);
+				var message = new Uint8Array(41);
+				message.set(nonce);
+				message.set(messageType, 8);
+				message.set(publicKey, 9);
+				let signature = nacl.sign(message, keyPair.secretKey);
+				let signer = keyPair.publicKey;
+				let result = await graph.run(
+					Array.from(signer),
+					Array.from(signature),
+					Array.from(message)
+				);
+				alert(result.message);
+			};
+			action();
+			button.empty();
+			button.append('Connect');
+			button.prop('disabled', false);
+		});
 
 
 

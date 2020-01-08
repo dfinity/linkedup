@@ -212,26 +212,30 @@ actor Graph {
 
             // Create a connection invitation.
             case 3 {
-              switch (find(toId)) {
-                case (?to) {
-                  if (elem(to.connections, fromId)) {
-                    #err("Connection already exists!")
-                  } else if (elem(to.invitations, fromId)) {
-                    #err("Connection invitation already exists!")
-                  } else {
+              if (eq(fromId, toId)) {
+                #err("Cannot self-connect!")
+              } else {
+                switch (find(toId)) {
+                  case (?to) {
+                    if (elem(to.connections, fromId)) {
+                      #err("Connection already exists!")
+                    } else if (elem(to.invitations, fromId)) {
+                      #err("Connection invitation already exists!")
+                    } else {
+                      insert(toId, {
+                        connections = to.connections;
+                        invitations = List.push<UserId>(fromId, to.invitations)
+                      });
+                      #ok()
+                    }
+                  };
+                  case _ {
                     insert(toId, {
-                      connections = to.connections;
-                      invitations = List.push<UserId>(fromId, to.invitations)
+                      connections = List.nil<UserId>();
+                      invitations = List.singleton<UserId>(fromId)
                     });
                     #ok()
                   }
-                };
-                case _ {
-                  insert(toId, {
-                    connections = List.nil<UserId>();
-                    invitations = List.singleton<UserId>(fromId)
-                  });
-                  #ok()
                 }
               }
             };
