@@ -192,6 +192,17 @@
     height: auto;
 }
 
+
+
+.btn-profile {
+text-overflow: ellipsis;
+border: 0;
+padding: 0;
+}
+.btn-profile:hover {
+    background-color: #F9F9F9;
+}
+
 .btn-accept {
     background-color: #28A745;
     border-color: #28A745;

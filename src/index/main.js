@@ -191,7 +191,7 @@ import userlib from 'ic:userlib'
 
 		function renderEdit() {
 			clearAdminSections();
-			$('.edit').show();
+			$('.edit').show().find('#first-name').focus();
 			function display(id, value) {
 				$('.edit').find(id).val(value);
 			};
@@ -221,7 +221,7 @@ import userlib from 'ic:userlib'
 
 		function renderSearch() {
 			clearAdminSections();
-			$('.search').show();
+			$('.search').show().find('#address').focus();
 		};
 
 		function renderConnections() {
@@ -232,10 +232,9 @@ import userlib from 'ic:userlib'
 				var connections = await graph.connections1({
 					'unbox': Array.from(publicKey)
 				});
-				var links = '';
+				var list = '';
 				while (connections != null) {
-					// TODO: Disply connection by name with option to revoke!
-					// TODO: Link to profile view!
+					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><form class="form-control input-group-prepend" id="profile-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn-profile" type="submit">' + address + '</button></form><form class="input-group-append" id="revoke-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-revoke" type="submit">Revoke</button></form></div></div>';
 					links += '<li>' + encode(connections[0].unbox) + '</li>';
 					connections = connections[1];
 				};
@@ -255,7 +254,7 @@ import userlib from 'ic:userlib'
 				var list = '';
 				while (invitations != null) {
 					let address = encode(invitations[0].unbox);
-					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><div class="form-control" id="address">' + address + '</div><form class="input-group-append" id="accept-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-accept" type="submit">Accept</button></form><form class="input-group-append" id="reject-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-reject" type="submit">Reject</button></form></div></div></div>';
+					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><form class="form-control input-group-prepend" id="profile-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn-profile" type="submit">' + address + '</button></form><form class="input-group-append" id="accept-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-accept" type="submit">Accept</button></form><form class="input-group-append" id="reject-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-reject" type="submit">Reject</button></form></div></div>';
 					invitations = invitations[1];
 				};
 				$('.invitations-list').html(list);
@@ -311,6 +310,38 @@ import userlib from 'ic:userlib'
 				);
 				alert(result.message);
 				enableSubmitButton(button, 'Connect');
+			};
+			action();
+		});
+
+		$(document).on('submit', '#profile-form', function(event) {
+			event.preventDefault();
+			let address = $(this).find('#address').val();
+			clearAdminSections();
+			$('.profile').show();
+			function display(id, value) {
+				$('.profile').find(id).html(value);
+			};
+			async function action() {
+				let publicKey = decode(address);
+				var result = await profile.find({
+					'unbox': Array.from(publicKey)
+				});
+				if (result == null) {
+					result = {
+						'firstName': [],
+						'lastName': [],
+						'title': [],
+						'company': [],
+						'experience': []
+					};
+				};
+				$('.profile').find('#address').html(encode(publicKey));
+				display('#first-name', sanitize(convert(result.firstName)));
+				display('#last-name', sanitize(convert(result.lastName)));
+				display('#title', sanitize(convert(result.title)));
+				display('#company', sanitize(convert(result.company)));
+				display('#experience', sanitize(convert(result.experience)).replace(/\n/g, '<br/>'));
 			};
 			action();
 		});
@@ -461,7 +492,10 @@ import userlib from 'ic:userlib'
 			location.reload();
 		});
 
-		$('#register-form').submit(function(event) {
+
+
+
+		$(document).on('submit', '#register-form', function(event) {
 			event.preventDefault();
 			const button = $(this).find('button[type="submit"]');
 			disableSubmitButton(button);
@@ -470,7 +504,7 @@ import userlib from 'ic:userlib'
 				word = '#word-' + ('00' + i.toString()).slice(-2);
 				$(word).val(words[i]);
 			}
-			$('#login').click();
+			$('#login-form').submit();
 			enableSubmitButton(button, 'Complete');
 		});
 
