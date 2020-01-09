@@ -52,15 +52,15 @@ import userlib from 'ic:userlib'
 		});
 
 		function decode(str) {
-			return new Uint8Array(str.match(/.{1,2}/g).map(function (x) {
+			return str ? new Uint8Array(str.match(/.{1,2}/g).map(function (x) {
 				return parseInt(x, 16)
-			}))
+			})) : null
 		}
 
 		function encode(bytes) {
-			return bytes.reduce(function (str, x) {
+			return bytes ? bytes.reduce(function (str, x) {
 				return str + x.toString(16).padStart(2, '0')
-			}, '')
+			}, '') : null
 		}
 
 		// 
@@ -91,9 +91,9 @@ import userlib from 'ic:userlib'
 		};
 
 		// Enable submit button.
-		function enableSubmitButton(btn) {
+		function enableSubmitButton(btn, phrase) {
 			btn.empty();
-			btn.append('<i class="fa fa-retweet"></i> Try again');
+			btn.append(phrase);
 			btn.prop('disabled', false);
 		};
 
@@ -161,7 +161,7 @@ import userlib from 'ic:userlib'
 
 		function renderProfile() {
 			clearAdminSections();
-			$('.profile').slideDown(50, 'linear');
+			$('.profile').show();
 			function display(id, value) {
 				$('.profile').find(id).html(value);
 			};
@@ -191,7 +191,7 @@ import userlib from 'ic:userlib'
 
 		function renderEdit() {
 			clearAdminSections();
-			$('.edit').slideDown(50, 'linear');
+			$('.edit').show();
 			function display(id, value) {
 				$('.edit').find(id).val(value);
 			};
@@ -221,12 +221,12 @@ import userlib from 'ic:userlib'
 
 		function renderSearch() {
 			clearAdminSections();
-			$('.search').slideDown(50, 'linear');
+			$('.search').show();
 		};
 
 		function renderConnections() {
 			clearAdminSections();
-			$('.connections').slideDown(50, 'linear');
+			$('.connections').show();
 			async function action() {
 				let publicKey = keyPair.publicKey;
 				var connections = await graph.connections1({
@@ -246,59 +246,55 @@ import userlib from 'ic:userlib'
 
 		function renderInvitations() {
 			clearAdminSections();
-			$('.invitations').slideDown(50, 'linear');
+			$('.invitations').show();
 			async function action() {
 				let publicKey = keyPair.publicKey;
 				var invitations = await graph.invitations({
 					'unbox': Array.from(publicKey)
 				});
-				var links = '';
+				var list = '';
 				while (invitations != null) {
-					// TODO: Disply invitation by name with option to accept or reject!
-					// TODO: Link to profile view!
-					links += '<li>' + encode(invitations[0].unbox) + '</li>';
+					let address = encode(invitations[0].unbox);
+					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><div class="form-control" id="address">' + address + '</div><form class="input-group-append" id="accept-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-accept" type="submit">Accept</button></form><form class="input-group-append" id="reject-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-reject" type="submit">Reject</button></form></div></div></div>';
 					invitations = invitations[1];
 				};
-				$('.invitations-list').html(links);
+				$('.invitations-list').html(list);
 			};
 			action();
 		};
 
-		$('#search-form').submit(function(event) {
+		$(document).on('submit', '#search-form', function(event) {
 			event.preventDefault();
-			let button = $(this).find('button[type="submit"]');
+			let address = $(this).find('#address').val();
+			let button = $(this).find('button');
 			disableSubmitButton(button);
-			$('.connect').hide();
 			$('.search-result').hide();
+			$('#connect-form').hide();
 			async function action() {
-				let address = $('#search-form').find('#address').val();
-				let publicKey = decode(address ? address : '');
-				var result = await profile.find({
+				let publicKey = decode(address);
+				let result = await profile.find({
 					'unbox': Array.from(publicKey)
 				});
+				var message;
 				if (result == null) {
-					$('.search-result').html('Profile not found.');
-					$('.search-result').slideDown(50, 'linear');
+					message = '<div><i class="fa fa-warning"></i> Profile not found!</div>';
 				} else {
-					$('.search-result').html('<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + sanitize(convert(result.firstName)) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + sanitize(convert(result.lastName)) + '</div></div><div class="form-group form-group-lg"><label for="title">Title</label><div class="form-control" id="title">' + sanitize(convert(result.title)) + '</div></div><div class="form-group form-group-lg"><label for="company">Company</label><div class="form-control" id="company">' + sanitize(convert(result.company)) + '</div></div><div class="form-group form-group-lg"><label for="experience">Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + sanitize(convert(result.experience)).replace(/\n/g, '<br/>') + '</div></div>');
-					$('.search-result').slideDown(50, 'linear');
-					$('.connect').find('input').val(address);
-					$('.connect').slideDown(50, 'linear');
+					message = '<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + sanitize(convert(result.firstName)) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + sanitize(convert(result.lastName)) + '</div></div><div class="form-group form-group-lg"><label for="title">Job Title</label><div class="form-control" id="title">' + sanitize(convert(result.title)) + '</div></div><div class="form-group form-group-lg"><label for="company">Company Name</label><div class="form-control" id="company">' + sanitize(convert(result.company)) + '</div></div><div class="form-group form-group-lg"><label for="experience">Work Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + sanitize(convert(result.experience)).replace(/\n/g, '<br/>') + '</div></div>';
+					$('#connect-form').find('input').val(address);
+					$('#connect-form').show();
 				};
+				$('.search-result').html(message).show();
+				enableSubmitButton(button, 'Search');
 			};
 			action();
-			button.empty();
-			button.append('Search');
-			button.prop('disabled', false);
 		});
 
-		$('#connect-form').submit(function(event) {
+		$(document).on('submit', '#connect-form', function(event) {
 			event.preventDefault();
-			let button = $(this).find('button[type="submit"]');
+			let address = $(this).find('#address').val();
+			let button = $(this).find('button');
 			disableSubmitButton(button);
 			async function action() {
-				let address = $('#search-form').find('#address').val();
-				let encoder = new TextEncoder();
 				let nonce = new Uint8Array(8);
 				let messageType = new Uint8Array([3]);
 				let publicKey = decode(address);
@@ -314,21 +310,66 @@ import userlib from 'ic:userlib'
 					Array.from(message)
 				);
 				alert(result.message);
+				enableSubmitButton(button, 'Connect');
 			};
 			action();
-			button.empty();
-			button.append('Connect');
-			button.prop('disabled', false);
 		});
 
+		$(document).on('submit', '#accept-form', function(event) {
+			event.preventDefault();
+			let address = $(this).find('#address').val();
+			let button = $(this).find('button');
+			disableSubmitButton(button);
+			async function action() {
+				let nonce = new Uint8Array(8);
+				let messageType = new Uint8Array([5]);
+				let publicKey = decode(address);
+				let test = new Uint8Array([1]);
+				var message = new Uint8Array(42);
+				message.set(nonce);
+				message.set(messageType, 8);
+				message.set(publicKey, 9);
+				message.set(test, 41);
+				let signature = nacl.sign(message, keyPair.secretKey);
+				let signer = keyPair.publicKey;
+				let result = await graph.run(
+					Array.from(signer),
+					Array.from(signature),
+					Array.from(message)
+				);
+				alert(result.message);
+				renderInvitations();
+			};
+			action();
+		});
 
-
-
-
-
-
-
-
+		$(document).on('submit', '#reject-form', function(event) {
+			event.preventDefault();
+			let address = $(this).find('#address').val();
+			let button = $(this).find('button');
+			disableSubmitButton(button);
+			async function action() {
+				let nonce = new Uint8Array(8);
+				let messageType = new Uint8Array([5]);
+				let publicKey = decode(address);
+				let test = new Uint8Array([0]);
+				var message = new Uint8Array(42);
+				message.set(nonce);
+				message.set(messageType, 8);
+				message.set(publicKey, 9);
+				message.set(test, 41);
+				let signature = nacl.sign(message, keyPair.secretKey);
+				let signer = keyPair.publicKey;
+				let result = await graph.run(
+					Array.from(signer),
+					Array.from(signature),
+					Array.from(message)
+				);
+				alert(result.message);
+				renderInvitations();
+			};
+			action();
+		});
 
 
 
@@ -389,7 +430,7 @@ import userlib from 'ic:userlib'
 				} else {
 					alert('Something went wrong! :(');
 				}
-				enableSubmitButton(button);
+				enableSubmitButton(button, 'Submit');
 			};
 			action();
 		});
@@ -430,7 +471,7 @@ import userlib from 'ic:userlib'
 				$(word).val(words[i]);
 			}
 			$('#login').click();
-			enableSubmitButton(button);
+			enableSubmitButton(button, 'Complete');
 		});
 
 		$('#login-form').submit(function(event) {
@@ -450,11 +491,11 @@ import userlib from 'ic:userlib'
 				keyPair = nacl.sign.keyPair.fromSeed(seed);
 				$('.splash-view').slideUp(0, 'linear');
 				$('.admin-view').slideDown(250, 'linear');
-				renderProfile();
+				renderEdit();
 			} catch (err) {
 				const details = '<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>';
 				response.hide().html(details).slideDown(350, 'linear', function() {
-					enableSubmitButton(button);
+					enableSubmitButton(button, 'Login');
 				});
 			}
 		});

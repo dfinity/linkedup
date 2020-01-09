@@ -188,8 +188,40 @@
 }
 
 .admin-view .btn-custom {
-    font-size: 1rem;
+    font-size: 15px;
     height: auto;
+}
+
+.btn-accept {
+    background-color: #28A745;
+    border-color: #28A745;
+    border-radius: .25rem;
+    color: #FFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    height: auto;
+    width: 100%;
+}
+
+.btn-accept:hover {
+    color: #FFF;
+}
+
+.btn-reject {
+    background-color: #DC3545;
+    border-color: #DC3545;
+    border-radius: .25rem;
+    color: #FFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    height: auto;
+    width: 100%;
+}
+
+.btn-reject:hover {
+    color: #FFF;
 }
 
 /**

@@ -237,40 +237,35 @@
 					<div class="row">
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
-							<form autocomplete="off" id="profile-form" role="form">
-								<div class="modal-header">
-									<h4 class="modal-title">Profile</h4>
+							<div class="modal-header">
+								<h4 class="modal-title">Profile</h4>
+							</div>
+							<div class="modal-body">
+								<div class="form-group form-group-lg">
+									<label for="address">Address</label>
+									<div class="form-control" id="address"></div>
 								</div>
-								<div class="modal-body">
-									<div class="form-group form-group-lg">
-										<label for="address">Address</label>
-										<div class="form-control" id="address"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="first-name">First Name</label>
-										<div class="form-control" id="first-name"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="last-name">Last Name</label>
-										<div class="form-control" id="last-name"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="title">Job Title</label>
-										<div class="form-control" id="title"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="company">Company Name</label>
-										<div class="form-control" id="company"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="experience">Work Experience</label>
-										<div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience"></div>
-									</div>
+								<div class="form-group form-group-lg">
+									<label for="first-name">First Name</label>
+									<div class="form-control" id="first-name"></div>
 								</div>
-								<div class="modal-footer" style="display:none">
-									<button class="btn btn-md btn-custom" type="submit">Connect</button>
+								<div class="form-group form-group-lg">
+									<label for="last-name">Last Name</label>
+									<div class="form-control" id="last-name"></div>
 								</div>
-							</form>
+								<div class="form-group form-group-lg">
+									<label for="title">Job Title</label>
+									<div class="form-control" id="title"></div>
+								</div>
+								<div class="form-group form-group-lg">
+									<label for="company">Company Name</label>
+									<div class="form-control" id="company"></div>
+								</div>
+								<div class="form-group form-group-lg">
+									<label for="experience">Work Experience</label>
+									<div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience"></div>
+								</div>
+							</div>
 						</div>
 						<div class="col-md-2"></div>
 					</div>
@@ -282,42 +277,40 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2"></div>
-						<div class="col-md-8">
-							<form autocomplete="off" id="edit-form" role="form">
-								<div class="modal-header">
-									<h4 class="modal-title">Edit</h4>
+						<form autocomplete="off" class="col-md-8" id="edit-form" role="form">
+							<div class="modal-header">
+								<h4 class="modal-title">Edit</h4>
+							</div>
+							<div class="modal-body">
+								<div class="form-group form-group-lg">
+									<label for="address">Address</label>
+									<div class="form-control" id="address"></div>
 								</div>
-								<div class="modal-body">
-									<div class="form-group form-group-lg">
-										<label for="address">Address</label>
-										<div class="form-control" id="address"></div>
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="first-name">First Name</label>
-										<input class="form-control" id="first-name" name="first-name" placeholder="Enter your first name." type="text">
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="last-name">Last Name</label>
-										<input class="form-control" id="last-name" name="last-name" placeholder="Enter your last name." type="text">
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="title">Job Title</label>
-										<input class="form-control" id="title" name="title" placeholder="Enter your job title." type="text">
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="company">Company Name</label>
-										<input class="form-control" id="company" name="company" placeholder="Enter your company name." type="text">
-									</div>
-									<div class="form-group form-group-lg">
-										<label for="experience">Work Experience</label>
-										<textarea class="form-control" id="experience" name="experience" placeholder="Describe your work experience." rows="10" type="text"></textarea>
-									</div>
+								<div class="form-group form-group-lg">
+									<label for="first-name">First Name</label>
+									<input class="form-control" id="first-name" name="first-name" placeholder="Enter your first name." type="text">
 								</div>
-								<div class="modal-footer">
-									<button class="btn btn-md btn-custom" type="submit">Submit</button>
+								<div class="form-group form-group-lg">
+									<label for="last-name">Last Name</label>
+									<input class="form-control" id="last-name" name="last-name" placeholder="Enter your last name." type="text">
 								</div>
-							</form>
-						</div>
+								<div class="form-group form-group-lg">
+									<label for="title">Job Title</label>
+									<input class="form-control" id="title" name="title" placeholder="Enter your job title." type="text">
+								</div>
+								<div class="form-group form-group-lg">
+									<label for="company">Company Name</label>
+									<input class="form-control" id="company" name="company" placeholder="Enter your company name." type="text">
+								</div>
+								<div class="form-group form-group-lg">
+									<label for="experience">Work Experience</label>
+									<textarea class="form-control" id="experience" name="experience" placeholder="Describe your work experience." rows="10" type="text"></textarea>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-md btn-custom" type="submit">Submit</button>
+							</div>
+						</form>
 						<div class="col-md-2"></div>
 					</div>
 				</div>
@@ -332,26 +325,22 @@
 							<div class="modal-header">
 								<h4 class="modal-title">Search</h4>
 							</div>
-							<div class="modal-body">
-								<form autocomplete="off" id="search-form" role="form">
-									<div class="form-group form-group-lg">
-										<label for="address">Address</label>
-										<div class="input-group input-group-md mb-3">
-											<input class="form-control" id="address" name="address" placeholder="Address" type="text">
-											<div class="input-group-append">
-												<button class="btn btn-md btn-custom" type="submit">Search</button>
-											</div>
+							<form autocomplete="off" class="modal-body" id="search-form" role="form">
+								<div class="form-group form-group-lg">
+									<label for="address">Address</label>
+									<div class="input-group input-group-md">
+										<input class="form-control" id="address" name="address" placeholder="Address" type="text">
+										<div class="input-group-append">
+											<button class="btn btn-md btn-custom" type="submit">Search</button>
 										</div>
 									</div>
-								</form>
+								</div>
 								<div class="search-result"></div>
-							</div>
-							<div class="connect modal-footer" style="display:none">
-								<form id="connect-form" role="form">
-									<input id="address" name="address" type="hidden" value="">
-									<button class="btn btn-md btn-custom" type="submit">Connect</button>
-								</form>
-							</div>
+							</form>
+							<form class="modal-footer" id="connect-form" role="form" style="display:none">
+								<input id="address" name="address" type="hidden" value="">
+								<button class="btn btn-md btn-custom" type="submit">Connect</button>
+							</form>
 						</div>
 						<div class="col-md-2"></div>
 					</div>
@@ -368,9 +357,7 @@
 								<div class="modal-header">
 									<h4 class="modal-title">Connections</h4>
 								</div>
-								<div class="modal-body">
-									<ul class="connections-list"></ul>
-								</div>
+								<div class="connections-list modal-body"></div>
 							</div>
 						</div>
 						<div class="col-md-2"></div>
@@ -388,9 +375,7 @@
 								<div class="modal-header">
 									<h4 class="modal-title">Invitations</h4>
 								</div>
-								<div class="modal-body">
-									<ul class="invitations-list"></ul>
-								</div>
+								<div class="invitations-list modal-body"></div>
 							</div>
 						</div>
 						<div class="col-md-2"></div>
