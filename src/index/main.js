@@ -235,7 +235,7 @@ import userlib from 'ic:userlib'
 				var list = '';
 				while (connections != null) {
 					let address = encode(connections[0].unbox);
-					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><form class="form-control input-group-prepend" id="profile-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn-profile" type="submit">' + address + '</button></form><form class="input-group-append" id="revoke-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-revoke" type="submit">Revoke</button></form></div></div>';
+					list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><form class="form-control input-group-prepend" id="profile-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn-profile" type="submit">' + address + '</button></form><form class="input-group-append" id="revoke-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-reject" type="submit">Revoke</button></form></div></div>';
 					connections = connections[1];
 				};
 				$('.connections-list').html(list);
@@ -402,23 +402,31 @@ import userlib from 'ic:userlib'
 			action();
 		});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		$(document).on('submit', '#revoke-form', function(event) {
+			event.preventDefault();
+			let address = $(this).find('#address').val();
+			let button = $(this).find('button');
+			disableSubmitButton(button);
+			async function action() {
+				let nonce = new Uint8Array(8);
+				let messageType = new Uint8Array([6]);
+				let publicKey = decode(address);
+				var message = new Uint8Array(41);
+				message.set(nonce);
+				message.set(messageType, 8);
+				message.set(publicKey, 9);
+				let signature = nacl.sign(message, keyPair.secretKey);
+				let signer = keyPair.publicKey;
+				let result = await graph.run(
+					Array.from(signer),
+					Array.from(signature),
+					Array.from(message)
+				);
+				alert(result.message);
+				renderConnections();
+			};
+			action();
+		});
 
 		$('#edit-form').submit(function(event) {
 			event.preventDefault();
