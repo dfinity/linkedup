@@ -42,6 +42,5 @@ script:
 - make
 - make install
 - nohup make run &
-- cat nohup.out
 - wget --no-check-certificate https://127.0.0.1:8000
 - cat index.html
