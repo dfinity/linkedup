@@ -37,11 +37,10 @@ Promise.all([
 	styleEl.innerHTML = css;
 
 	document.head.appendChild(styleEl);
-}).then(() => new Promise(r => setTimeout(r, 1000))).then(() => $(document).ready(function() {
+}).then(() => $(document).ready(function() {
 	// Reveal animations.
 	const wow = new WOW();
 	wow.init();
-	setTimeout(() => wow.sync(), 1000);
 
 	//
 	function renderNavbar() {
