@@ -20,7 +20,7 @@ install:
 - # Install Nginx with Lua support.
 - travis_retry sudo apt-get install -y nginx libnginx-mod-http-lua
 - sudo chown $USER /var/log/nginx/error.log
-- sudo bash -c "chown $USER /var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}""
+- sudo bash -c "chown $USER /var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}"
 - # Install self-signed SSL certificate.
 - openssl req -days 365 -keyout linkedup.key -newkey rsa:2048 -nodes -out linkedup.crt -subj '/C=US/ST=CA/L=San Francisco/O=DFINITY USA Research, LLC/OU=IT/CN=127.0.0.1' -x509
 - sudo chmod 755 /etc/ssl/private
