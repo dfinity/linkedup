@@ -1,53 +1,73 @@
-const fs = require('fs');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
+const dfxJson = require("./dfx.json");
 
-const versionsDir = path.join(process.env["HOME"], ".cache/dfinity/versions");
-const versions = fs.readdirSync(
-  path.join(process.env["HOME"], ".cache/dfinity/versions")
-);
-const specific = process.env["DFX_VERSION"];
-const latest = versions.map(function (version) {
-  const chunks = version.split('-');
-  const prefix = chunks[0].split('.').map(s => parseInt(s));
-  const suffix = chunks[1] == null ? 0 : parseInt(chunks[1]);
-  return [prefix.concat(suffix).map(n => 1000000 + n).join(), version];
-}).sort().slice(-1)[0][1];
-const version = specific ? specific : latest;
+// List of all aliases for canisters. This creates the module alias for
+// the `import ... from "ic:canisters/xyz"` where xyz is the name of a
+// canister.
+const aliases = Object.entries(dfxJson.canisters).reduce((acc, [name,]) => {
+  const outputRoot = path.join(__dirname, dfxJson.defaults.build.output, name);
 
-const sourceDir = path.join(__dirname, "src");
-const sourceRootMap = {
-  "graph": path.join(sourceDir, "graph"),
-  "index": path.join(sourceDir, "index"),
-  "profile": path.join(sourceDir, "profile"),
-};
+  return {
+    ...acc,
+    ["ic:canisters/" + name]: path.join(outputRoot, "main.js"),
+    ["ic:idl/" + name]: path.join(outputRoot, "main.did.js"),
+  };
+}, {
+  // This will later point to the userlib from npm, when we publish the userlib.
+  "ic:userlib": path.join(
+    process.env["HOME"],
+    ".cache/dfinity/versions",
+    dfxJson.dfx || process.env["DFX_VERSION"],
+    "js-user-library/dist/lib.prod.js",
+  ),
+});
 
-const targetDir = path.join(__dirname, "build");
-const targetRootMap = {
-  "graph": path.join(targetDir, "graph"),
-  "index": path.join(targetDir, "index"),
-  "profile": path.join(targetDir, "profile")
-};
+/**
+ * Generate a webpack configuration for a canister.
+ */
+function generateWebpackConfigForCanister(name, info) {
+  if (typeof info.frontend !== 'object') {
+    return;
+  }
 
-module.exports = [
-  {
-    entry: path.join(sourceRootMap["index"], "main.js"),
+  const outputRoot = path.join(__dirname, dfxJson.defaults.build.output, name);
+  const inputRoot = __dirname;
+  const entry = path.join(inputRoot, info.frontend.entrypoint);
+  const assets = info.frontend.assets;
+
+  return {
     mode: "production",
-    output: {
-      filename: "index.js",
-      path: sourceRootMap["index"]
+    entry,
+    devtool: "source-map",
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
     },
     resolve: {
-      alias: {
-        "ic:canister/graph": path.join(targetRootMap["graph"], "main.js"),
-        "ic:canister/profile": path.join(targetRootMap["profile"], "main.js"),
-        "ic:idl/graph": path.join(targetRootMap["graph"], "main.did.js"),
-        "ic:idl/profile": path.join(targetRootMap["profile"], "main.did.js"),
-        "ic:userlib": path.join(
-          versionsDir,
-          version ? version : latest,
-          "js-user-library/dist/lib.prod.js",
-        ),
-      }
-    }
-  }
+      alias: aliases,
+    },
+    output: {
+      filename: "index.js",
+      path: path.join(outputRoot, "assets"),
+    },
+    plugins: [
+      new CopyPlugin(assets.map(x => {
+        if (typeof x == "string") {
+          return { from: path.join(inputRoot, x), to: path.join(outputRoot, "assets"), flatten: true };
+        } else {
+          return { ...x, from: path.join(inputRoot, x.from), to: path.join(outputRoot, "assets", x.to || '') };
+        }
+      })),
+    ],
+  };
+}
+
+// If you have webpack configurations you want to build as part of this
+// config, add them here.
+module.exports = [
+  ...Object.entries(dfxJson.canisters).map(([name, info]) => {
+    return generateWebpackConfigForCanister(name, info);
+  }).filter(x => !!x),
 ];
