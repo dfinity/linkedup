@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 npm install
 dfx start --background
 sleep 5
