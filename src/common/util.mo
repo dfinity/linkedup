@@ -8,6 +8,7 @@
 
 import Array "mo:stdlib/array.mo";
 import Result "mo:stdlib/result.mo";
+import Nat "mo:stdlib/nat.mo";
 
 module Util {
 
@@ -17,7 +18,7 @@ module Util {
    * Convert an unsigned 8-bit integer to an unsigned 32-bit integer.
    */
   public func convWord8ToWord32(byte : Word8) : Word32 {
-    natToWord32(word8ToNat(byte))
+    Nat.toWord32(Nat.fromWord8(byte))
   };
 
   /**
@@ -27,7 +28,7 @@ module Util {
     var n = 0;
     var i = 0;
     Array.foldr<Word8, ()>(func (byte, _) {
-      n += word8ToNat(byte) * 256 ** i;
+      n += Nat.fromWord8(byte) * 256 ** i;
       i += 1
     }, (), bytes);
     n
@@ -57,7 +58,7 @@ module Util {
     n : Nat,
     next : () -> ?Word8
   ) : Result<[Word8], Text> {
-    var bytes = Array_init<Word8>(n, 0);
+    var bytes = Array.init<Word8>(n, 0);
     var i = 0;
     while (i < n) {
       switch (decodeWord8(next)) {
@@ -92,7 +93,7 @@ module Util {
     f : [Word8] -> Result<T, Text>
   ) : Result<T, Text> {
     decodeWord8Then<T>(next, func (n) {
-      decodeWord8ArrayThen<T>(word8ToNat(n), next, f)
+      decodeWord8ArrayThen<T>(Nat.fromWord8(n), next, f)
     })
   };
 
@@ -104,7 +105,7 @@ module Util {
     f : [Word8] -> Result<T, Text>
   ) : Result<T, Text> {
     decodeWord16Then<T>(next, func (n) {
-      decodeWord8ArrayThen<T>(word16ToNat(n), next, f)
+      decodeWord8ArrayThen<T>(Nat.fromWord16(n), next, f)
     })
   };
 
@@ -115,7 +116,7 @@ module Util {
     Result.mapOk<[Word8], Word16, Text>(
       decodeWord8Array(2, next),
       func (bytes) {
-        natToWord16(convWord8ArrayToNat(bytes))
+        Nat.toWord16(convWord8ArrayToNat(bytes))
       }
     )
   };
@@ -137,7 +138,7 @@ module Util {
     Result.mapOk<[Word8], Word64, Text>(
       decodeWord8Array(8, next),
       func (bytes) {
-        natToWord64(convWord8ArrayToNat(bytes))
+        Nat.toWord64(convWord8ArrayToNat(bytes))
       }
     )
   };
