@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 
 RUN apt-get update
-RUN apt-get install -y acl bc curl git libssl-dev openjdk-8-jre sudo wget xxd
+RUN apt-get install -y bc curl git libssl-dev openjdk-8-jre sudo wget xxd
 
 WORKDIR /tmp
 
