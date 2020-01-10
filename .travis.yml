@@ -38,5 +38,5 @@ install:
 script:
 - nohup sh bootstrap.sh &
 - cat nohup.out
-- wget --no-check-certificate https://127.0.0.1:8000
+- wget --no-check-certificate https://127.0.0.1:8001
 - cat index.html
