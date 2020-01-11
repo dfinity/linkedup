@@ -217,21 +217,19 @@ Promise.all([
 		$('.search-result').hide();
 		$('#connect-form').hide();
 
-		async function action() {
+		(async function () {
 			let [result] = await profile.get(userId);
 			var message;
 			if (result == null) {
 				message = '<div><i class="fa fa-warning"></i> Profile not found!</div>';
 			} else {
-				message = '<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + sanitize(convert(result.firstName)) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + sanitize(convert(result.lastName)) + '</div></div><div class="form-group form-group-lg"><label for="title">Job Title</label><div class="form-control" id="title">' + sanitize(convert(result.title)) + '</div></div><div class="form-group form-group-lg"><label for="company">Company Name</label><div class="form-control" id="company">' + sanitize(convert(result.company)) + '</div></div><div class="form-group form-group-lg"><label for="experience">Work Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + sanitize(convert(result.experience)).replace(/\n/g, '<br/>') + '</div></div>';
+				message = '<div class="form-group form-group-lg"><label for="first-name">First Name</label><div class="form-control" id="first-name">' + sanitize(result.firstName) + '</div></div><div class="form-group form-group-lg"><label for="last-name">Last Name</label><div class="form-control" id="last-name">' + sanitize(result.lastName) + '</div></div><div class="form-group form-group-lg"><label for="title">Job Title</label><div class="form-control" id="title">' + sanitize(result.title) + '</div></div><div class="form-group form-group-lg"><label for="company">Company Name</label><div class="form-control" id="company">' + sanitize(result.company) + '</div></div><div class="form-group form-group-lg"><label for="experience">Work Experience</label><div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience">' + sanitize(result.experience).replace(/\n/g, '<br/>') + '</div></div>';
 				$('#connect-form').find('input').val(address);
 				$('#connect-form').show();
 			}
-			;
 			$('.search-result').html(message).show();
 			enableSubmitButton(button, 'Search');
-		};
-		action();
+		})();
 	});
 
 	$(document).on('submit', '#connect-form', function (event) {
@@ -382,7 +380,6 @@ Promise.all([
 	});
 
 	$('#edit-form').submit(function (event) {
-		const dom = this;
 		event.preventDefault();
 		const button = $(this).find('button[type="submit"]');
 		disableSubmitButton(button);
