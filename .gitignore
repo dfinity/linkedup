@@ -1,9 +1,4 @@
-canisters/
 .idea/
 .dfx/
-build/
+canisters/
 node_modules/
-nohup.out
-src/index/index.js
-src/index/main.mo
-src/index/main.sed
