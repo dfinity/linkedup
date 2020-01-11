@@ -1,11 +1,24 @@
 {
     "author": "Enzo Haussecker",
+    "scripts": {
+        "build": "webpack"
+    },
     "devDependencies": {
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.10"
+        "webpack": "4.41.3",
+        "webpack-cli": "3.3.10",
+        "terser-webpack-plugin": "2.2.2"
     },
     "license": "Apache 2.0 with LLVM Exception",
-    "main": "webpack.config.js",
     "name": "linkedup",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "dependencies": {
+        "bootstrap": "^4.3.1",
+        "copy-webpack-plugin": "^5.1.1",
+        "jquery": "^3.4.1",
+        "jquery-backstretch": "^2.1.18",
+        "popper.js": "^1.16.0",
+        "tweetnacl": "^1.0.1",
+        "typed.js": "^2.0.11",
+        "wowjs": "^1.1.3"
+    }
 }

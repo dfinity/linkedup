@@ -4,7 +4,14 @@
             "main": "src/graph/main.mo"
         },
         "index": {
-            "main": "src/index/main.mo"
+            "main": "src/index/main.mo",
+            "frontend": {
+                "entrypoint": "src/index/main.js",
+                "assets": [
+                    "src/index/*.html",
+                    "src/index/*.css"
+                ]
+            }
         },
         "profile": {
             "main": "src/profile/main.mo"
@@ -12,7 +19,7 @@
     },
     "defaults": {
         "build": {
-            "output": "build"
+            "output": "canisters"
         },
         "start": {
             "address": "127.0.0.1",

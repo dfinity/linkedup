@@ -1,3 +1,5 @@
+canisters/
+.idea/
 .dfx/
 build/
 node_modules/

@@ -36,10 +36,17 @@ install:
 - # Navigate to workspace directory.
 - popd
 script:
+<<<<<<< HEAD
+- nohup sh bootstrap.sh &
+- cat nohup.out
+- wget --no-check-certificate https://127.0.0.1:8001
+=======
 - npm install
 - dfx start --background
 - sleep 5
-- dfx build
-- dfx canister install --all
+- make
+- make install
+- nohup make run &
 - wget --no-check-certificate https://127.0.0.1:8000
+>>>>>>> origin/master
 - cat index.html
