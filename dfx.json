@@ -4,14 +4,14 @@
             "main": "src/graph/main.mo"
         },
         "index": {
-            "main": "src/index/main.mo",
             "frontend": {
-                "entrypoint": "src/index/main.js",
                 "assets": [
                     "src/index/*.html",
                     "src/index/*.css"
-                ]
-            }
+                ],
+                "entrypoint": "src/index/main.js"
+            },
+            "main": "src/index/main.mo"
         },
         "profile": {
             "main": "src/profile/main.mo"
