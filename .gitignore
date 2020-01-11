@@ -1,4 +1,5 @@
-.idea/
 .dfx/
+.idea/
 canisters/
+crc8.pyc
 node_modules/
