@@ -96,28 +96,6 @@ Promise.all([
 		}, '') : null
 	}
 
-	//
-	var words = [];
-
-	function resetPhrase() {
-		var arr = new Uint8Array(16);
-		window.crypto.getRandomValues(arr);
-		words = key_to_english(encode(arr)).split(' ');
-	}
-
-	$('.dropdown').on('show.bs.dropdown', function () {
-		resetPhrase();
-		var accum = '';
-		for (var i = 0; i < 4; i++) {
-			accum = accum + '<div class="form-row">';
-			for (var j = 0; j < 3; j++) {
-				accum = accum + '<div class="col-lg-4 form-group form-group-lg"><div class="form-control">' + words[3 * i + j] + '</div></div>';
-			}
-			accum = accum + '</div>';
-		}
-		$('.mnemonic-seed').html(accum);
-	});
-
 	// Disable submit button.
 	function disableSubmitButton(btn) {
 		btn.prop('disabled', true);
@@ -134,7 +112,7 @@ Promise.all([
 
 
 	// Handle login form.
-	var keyPair;
+	var keyPair = JSON.parse(localStorage.getItem('dfinity-ic-user-identity'));
 
 
 	function convert(value) {
@@ -162,70 +140,26 @@ Promise.all([
 		$('.invitations').hide();
 	};
 
-	function renderProfile() {
+	function renderProfile(userId) {
 		clearAdminSections();
 		$('.profile').show();
 
-		function display(id, value) {
-			$('.profile').find(id).html(value);
-		};
-
-		async function action() {
-			let publicKey = keyPair.publicKey;
-			var result = await profile.find({
-				'unbox': Array.from(publicKey)
-			});
-			if (result == null) {
-				result = {
-					'firstName': [],
-					'lastName': [],
-					'title': [],
-					'company': [],
-					'experience': []
-				};
-			}
-			;
-			$('.profile').find('#address').html(encode(publicKey));
-			display('#first-name', sanitize(convert(result.firstName)));
-			display('#last-name', sanitize(convert(result.lastName)));
-			display('#title', sanitize(convert(result.title)));
-			display('#company', sanitize(convert(result.company)));
-			display('#experience', sanitize(convert(result.experience)).replace(/\n/g, '<br/>'));
-		};
-		action();
+		(async function () {
+			let result = {};
+			if (userId) { [result] = await profile.get(userId); }
+			updateForm(result);
+		})();		
 	};
 
-	function renderEdit() {
+	function renderEdit(userId) {
 		clearAdminSections();
 		$('.edit').show().find('#first-name').focus();
 
-		function display(id, value) {
-			$('.edit').find(id).val(value);
-		};
-
-		async function action() {
-			let publicKey = keyPair.publicKey;
-			var result = await profile.find({
-				'unbox': Array.from(publicKey)
-			});
-			if (result == null) {
-				result = {
-					'firstName': [],
-					'lastName': [],
-					'title': [],
-					'company': [],
-					'experience': []
-				};
-			}
-			;
-			$('.edit').find('#address').html(encode(publicKey));
-			display('#first-name', convert(result.firstName));
-			display('#last-name', convert(result.lastName));
-			display('#title', convert(result.title));
-			display('#company', convert(result.company));
-			display('#experience', convert(result.experience));
-		};
-		action();
+		(async function () {
+			let result = {};
+			if (userId) { [result] = await profile.get(userId); }
+			updateForm(result);
+		})();
 	};
 
 	function renderSearch() {
@@ -277,17 +211,14 @@ Promise.all([
 
 	$(document).on('submit', '#search-form', function (event) {
 		event.preventDefault();
-		let address = $(this).find('#address').val();
+		let userId = $(this).find('#address').val();
 		let button = $(this).find('button');
 		disableSubmitButton(button);
 		$('.search-result').hide();
 		$('#connect-form').hide();
 
 		async function action() {
-			let publicKey = decode(address);
-			let result = await profile.find({
-				'unbox': Array.from(publicKey)
-			});
+			let [result] = await profile.get(userId);
 			var message;
 			if (result == null) {
 				message = '<div><i class="fa fa-warning"></i> Profile not found!</div>';
@@ -451,49 +382,29 @@ Promise.all([
 	});
 
 	$('#edit-form').submit(function (event) {
+		const dom = this;
 		event.preventDefault();
 		const button = $(this).find('button[type="submit"]');
 		disableSubmitButton(button);
-		const encoder = new TextEncoder();
-		const nonce = new Uint8Array(8);
-		const messageType = new Uint8Array([1]);
-		const firstName = encoder.encode($(this).find('#first-name').val());
-		const firstNameLen = firstName.length;
-		const lastName = encoder.encode($(this).find('#last-name').val());
-		const lastNameLen = lastName.length;
-		const title = encoder.encode($(this).find('#title').val());
-		const titleLen = title.length;
-		const company = encoder.encode($(this).find('#company').val());
-		const companyLen = company.length;
-		const experience = encoder.encode($(this).find('#experience').val());
-		const experienceLen = experience.length;
-		var message = new Uint8Array(15 + firstNameLen + lastNameLen + titleLen + companyLen + experienceLen);
-		message.set(nonce);
-		message.set(messageType, 8);
-		message.set(new Uint8Array([firstNameLen]), 9);
-		message.set(firstName, 10);
-		message.set(new Uint8Array([lastNameLen]), 10 + firstNameLen);
-		message.set(lastName, 11 + firstNameLen);
-		message.set(new Uint8Array([titleLen]), 11 + firstNameLen + lastNameLen);
-		message.set(title, 12 + firstNameLen + lastNameLen);
-		message.set(new Uint8Array([companyLen]), 12 + firstNameLen + lastNameLen + titleLen);
-		message.set(company, 13 + firstNameLen + lastNameLen + titleLen);
-		console.log(experienceLen);
-		message.set(new Uint8Array([experienceLen / 256]), 13 + firstNameLen + lastNameLen + titleLen + companyLen);
-		message.set(new Uint8Array([experienceLen % 256]), 14 + firstNameLen + lastNameLen + titleLen + companyLen);
-		message.set(experience, 15 + firstNameLen + lastNameLen + titleLen + companyLen);
-		const signature = nacl.sign(message, keyPair.secretKey);
-		const signer = keyPair.publicKey;
+
+		const firstName = $(this).find('#first-name').val();
+		const lastName = $(this).find('#last-name').val();
+		const title = $(this).find('#title').val();
+		const company = $(this).find('#company').val();
+		const experience = $(this).find('#experience').val();
 
 		async function action() {
-			const success = await profile.run(Array.from(signer), Array.from(signature), Array.from(message));
-			if (success) {
-				renderProfile();
-			} else {
-				alert('Something went wrong! :(');
-			}
+			const userId = await profile.set({
+				id: 0,
+				firstName,
+				lastName,
+				title,
+				company,
+				experience
+			});
+			renderProfile(userId);
 			enableSubmitButton(button, 'Submit');
-		};
+		}
 		action();
 	});
 
@@ -522,47 +433,24 @@ Promise.all([
 		location.reload();
 	});
 
-
-	$(document).on('submit', '#register-form', function (event) {
-		event.preventDefault();
-		const button = $(this).find('button[type="submit"]');
-		disableSubmitButton(button);
-		var word;
-		for (var i = 0; i < 12; i++) {
-			word = '#word-' + ('00' + i.toString()).slice(-2);
-			$(word).val(words[i]);
-		}
-		$('#login-form').submit();
-		enableSubmitButton(button, 'Complete');
-	});
-
-	$('#login-form').submit(function (event) {
-		event.preventDefault();
-		const button = $(this).find('button[type="submit"]');
-		disableSubmitButton(button);
-		const response = $(this).find('.response');
-		var word;
-		var words = [];
-		for (var i = 0; i < 12; i++) {
-			word = '#word-' + ('00' + i.toString()).slice(-2);
-			words.push($(word).val());
-		}
-		try {
-			var seed = new Uint8Array(32);
-			seed.set(decode(english_to_key(words.join(' ').toUpperCase())));
-			keyPair = nacl.sign.keyPair.fromSeed(seed);
-			$('.splash-view').slideUp(0, 'linear');
-			$('.admin-view').slideDown(250, 'linear');
-			renderEdit();
-		} catch (err) {
-			const details = '<div><i class="fa fa-warning"></i> ' + err.toString() + '</div>';
-			response.hide().html(details).slideDown(350, 'linear', function () {
-				enableSubmitButton(button, 'Login');
-			});
-		}
+	$('a#login').click(function () {
+		$('.splash-view').slideUp(0, 'linear');
+		$('.admin-view').slideDown(250, 'linear');
+		renderEdit();
 	});
 
 	$(".preloader-canvas").fadeOut(1000, "linear");
 
-}));
+	const updateById = (selector, text) =>
+		document.querySelector(selector).innerHTML = text;
 
+	const updateForm = model => {
+		const { id, firstName, lastName, title, company, experience } = model;
+		updateById('#address', id);
+		updateById('#first-name', firstName);
+		updateById('#last-name', lastName);
+		updateById('#title', title);
+		updateById('#company', company);
+		updateById('#experience', experience);
+	};
+}));
