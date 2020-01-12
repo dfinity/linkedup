@@ -7,3 +7,4 @@ nohup.out
 src/index/index.js
 src/index/main.mo
 src/index/main.sed
+.DS_Store
