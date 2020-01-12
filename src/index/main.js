@@ -211,14 +211,15 @@ Promise.all([
 
 	$(document).on('submit', '#search-form', function (event) {
 		event.preventDefault();
-		let userId = $(this).find('#address').val();
+		let term = $(this).find('#address').val();
 		let button = $(this).find('button');
 		disableSubmitButton(button);
 		$('.search-result').hide();
 		$('#connect-form').hide();
 
 		(async function () {
-			let [result] = await profile.get(userId);
+			let [result] = await profile.search(term);
+			result = result[0];
 			var message;
 			if (result == null) {
 				message = '<div><i class="fa fa-warning"></i> Profile not found!</div>';

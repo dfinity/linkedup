@@ -17,11 +17,15 @@ actor Profile {
 
   public shared { caller } func set (profile : Profile) : async PrincipalId {
     let userId : PrincipalId = hashBlob(caller);
-    ignore directory.set(userId, profile);
+    directory.set(userId, profile);
     userId
   };
 
-  public query func get ( userId : PrincipalId ) : async ?Profile {
+  public query func get (userId : PrincipalId) : async ?Profile {
     directory.get(userId)
+  };
+
+  public query func search (term : Text) : async [Profile] {
+  	directory.search(term)
   };
 };
