@@ -26,6 +26,6 @@ actor Profile {
   };
 
   public query func search (term : Text) : async [Profile] {
-  	directory.search(term)
+    directory.search(term)
   };
 };
