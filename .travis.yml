@@ -5,7 +5,7 @@ install:
 - sudo sh /tmp/install-node.sh
 - travis_retry sudo apt-get install -y nodejs
 - travis_retry wget https://sdk.dfinity.org/install.sh -O /tmp/install-sdk.sh
-- yes Y | sh /tmp/install-sdk.sh
+- DFX_VERSION=0.4.12 sh -c 'yes Y | sh /tmp/install-sdk.sh'
 - export PATH=/home/$USER/bin:$PATH
 script:
 - sh bootstrap.sh

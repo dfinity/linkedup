@@ -19,7 +19,7 @@ RUN sudo apt-get install -y nodejs
 
 # Install DFINITY SDK.
 RUN wget https://sdk.dfinity.org/install.sh -O /tmp/install-sdk.sh
-RUN yes Y | sh /tmp/install-sdk.sh
+RUN DFX_VERSION=0.4.12 sh -c 'yes Y | sh /tmp/install-sdk.sh'
 ENV PATH /home/developer/bin:${PATH}
 
 # Create workspace directory.
