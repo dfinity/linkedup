@@ -1,6 +1,6 @@
 #!/bin/sh
 npm install
 dfx start --background
-sleep 1
+sleep 5
 dfx build
 dfx canister install --all
