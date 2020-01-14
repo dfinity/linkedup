@@ -17,9 +17,9 @@ docker run \
     dfinity-lab/linkedup sh bootstrap.sh
 ```
 
-Open the canister in your web browser.
+Open the canister frontend in your web browser.
 ```bash
-ID=$(xxd -p canisters/index/_canister.id)
+ID=$(xxd -p canisters/profile/_canister.id)
 CRC=$(python -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest())")
-xdg-open "http://127.0.0.1:8000/?canisterId=$ID$CRC"
+xdg-open "http://127.0.0.1:8000/?canisterId=ic:$ID$CRC"
 ```
