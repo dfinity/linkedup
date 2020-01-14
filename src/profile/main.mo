@@ -6,6 +6,8 @@
  * Stability  : Experimental
  */
 
+import Blob "mo:stdlib/blob.mo";
+
 import Directory "./directory.mo";
 import Types "./types.mo";
 
@@ -16,7 +18,7 @@ actor Profile {
   var directory : Directory.Directory = Directory.Directory();
 
   public shared { caller } func set (profile : Profile) : async PrincipalId {
-    let userId : PrincipalId = hashBlob(caller);
+    let userId : PrincipalId = Blob.hash(caller);
     directory.set(userId, profile);
     userId
   };
