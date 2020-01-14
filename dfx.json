@@ -3,18 +3,15 @@
         "graph": {
             "main": "src/graph/main.mo"
         },
-        "index": {
-            "frontend": {
-                "assets": [
-                    "src/index/*.html",
-                    "src/index/*.css"
-                ],
-                "entrypoint": "src/index/main.js"
-            },
-            "main": "src/index/main.mo"
-        },
         "profile": {
-            "main": "src/profile/main.mo"
+            "main": "src/profile/main.mo",
+            "frontend": {
+                "entrypoint": "src/profile/public/main.js",
+                "assets": [
+                    "src/profile/public/*.html",
+                    "src/profile/public/*.css"
+                ]
+            }
         }
     },
     "defaults": {
