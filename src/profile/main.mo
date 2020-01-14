@@ -7,6 +7,7 @@
  */
 
 import Blob "mo:stdlib/blob.mo";
+import Graph "canister:graph";
 
 import Directory "./directory.mo";
 import Types "./types.mo";
@@ -29,5 +30,10 @@ actor Profile {
 
   public query func search (term : Text) : async [Profile] {
     directory.search(term)
+  };
+
+  public func healthcheck () : async Bool {
+    let isGraphAlive : Bool = await Graph.healthcheck();
+    return true and isGraphAlive;
   };
 };

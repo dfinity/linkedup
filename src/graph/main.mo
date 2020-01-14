@@ -22,6 +22,10 @@ actor Graph {
   type Result<Ok, Err> = Result.Result<Ok, Err>;
   type Trie<Key, Value> = Trie.Trie<Key, Value>;
 
+  public func healthcheck () : async Bool {
+    true
+  };
+
   /**
    * The type of a user identifier.
    */
