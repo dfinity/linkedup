@@ -19,8 +19,8 @@
             "output": "canisters"
         },
         "start": {
-            "address": "127.0.0.1",
-            "port": 8001
+            "address": "0.0.0.0",
+            "port": 8000
         }
     },
     "version": 1

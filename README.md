@@ -8,14 +8,18 @@
 
 ### Demo
 
+Build and run the container.
 ```bash
-docker build --tag dfinity-lab/linkedup .
+docker build --no-cache --tag dfinity-lab/linkedup .
 docker run \
     --publish 8000:8000 \
-    --rm \
     --volume `pwd`:/workspace \
-    dfinity-lab/linkedup \
-    sh bootstrap.sh
+    dfinity-lab/linkedup sh bootstrap.sh
 ```
 
-Open [`https://127.0.0.1:8000`](https://127.0.0.1:8000) in your web browser.
+Open the canister in your web browser.
+```bash
+ID=$(xxd -p canisters/index/_canister.id)
+CRC=$(python -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest())")
+xdg-open "http://127.0.0.1:8000/?canisterId=$ID$CRC"
+```
