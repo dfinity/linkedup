@@ -1,4 +1,5 @@
 import Array "mo:stdlib/array.mo";
+import Blob "mo:stdlib/blob.mo";
 import HashMap "mo:stdlib/hashMap.mo";
 import Hash "mo:stdlib/hash.mo";
 import Iter "mo:stdlib/iter.mo";
@@ -11,6 +12,10 @@ module {
   type PrincipalId = Types.PrincipalId;
 
   public class Directory () {
+    // @TODO: Key on blob instead of hashed blob
+    // func blobEq (x : Blob, y : Blob) : Bool { x == y };
+    // let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, blobEq, Blob.hash);
+
     func passthrough (hash : PrincipalId) : PrincipalId { hash };
     let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough);
 
@@ -31,6 +36,7 @@ module {
     };
 
     public func search (term : Text) : [Profile] {
+      // @TODO: Use HashMap.mapFilter (stanleygjones)
       var profiles : [Profile] = [];
       for ((id, profile) in hashMap.iter()) {
         let fullName = profile.firstName # " " # profile.lastName;

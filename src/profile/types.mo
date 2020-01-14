@@ -2,6 +2,7 @@ import Hash "mo:stdlib/hash.mo";
 
 module {
   public type PrincipalId = Hash.Hash;
+  // public type PrincipalId = Blob;
 
   public type Profile = {
     id : PrincipalId;
