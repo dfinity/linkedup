@@ -145,7 +145,7 @@ Promise.all([
 			let result = {};
 			if (userId) { [result] = await profile.get(userId); }
 			updateForm(result);
-		})();		
+		})();
 	};
 
 	function renderEdit(userId) {

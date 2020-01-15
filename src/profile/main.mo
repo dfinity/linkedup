@@ -17,23 +17,37 @@ type PrincipalId = Types.PrincipalId;
 
 actor Profile {
   var directory : Directory.Directory = Directory.Directory();
+  directory.seed();
+
+  public func healthcheck () : async Bool {
+    let isGraphAlive : Bool = await Graph.healthcheck();
+    true and isGraphAlive
+  };
+
+  // Profiles
 
   public shared { caller } func set (profile : Profile) : async PrincipalId {
     let userId : PrincipalId = Blob.hash(caller);
-    directory.set(userId, profile);
+    directory.updateOne(userId, profile);
     userId
   };
 
   public query func get (userId : PrincipalId) : async ?Profile {
-    directory.get(userId)
+    directory.findOne(userId)
   };
 
   public query func search (term : Text) : async [Profile] {
-    directory.search(term)
+    directory.findBy(term)
   };
 
-  public func healthcheck () : async Bool {
-    let isGraphAlive : Bool = await Graph.healthcheck();
-    return true and isGraphAlive;
-  };
+  // Connections
+
+  // public shared { caller } func connect (userId : PrincipalId) : async () {
+  //   await Graph.connect(Blob.hash(caller), userId);
+  // };
+
+  // public query func getConnections (userId : PrincipalId) : async [Profile] {
+  //   let profileIds = await Graph.getConnections(userId);
+  //   directory.findMany(profileIds)
+  // };
 };

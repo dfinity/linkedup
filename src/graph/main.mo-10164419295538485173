@@ -23,6 +23,11 @@ type Entry = Types.Entry;
 type PrincipalId = Types.PrincipalId;
 
 actor Graph {
+            public query func __dfx_asset_path(path: Text): async Text {
+              
+              return "";
+            };
+        
 
   type List<T> = List.List<T>;
   type Result<Ok, Err> = Result.Result<Ok, Err>;
@@ -31,8 +36,6 @@ actor Graph {
   var entries : Entries.Entries = Entries.Entries();
 
   public func healthcheck () : async Bool { true };
-
-  // Connections
 
   public func connect (caller : PrincipalId, userId : PrincipalId) : async () {
     entries.addConnection(caller, userId);
