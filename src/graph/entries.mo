@@ -11,24 +11,25 @@ import Types "./types.mo";
 
 module {
   type Entry = Types.Entry;
-  type PrincipalId = Types.PrincipalId;
+  type EntryId = Types.EntryId;
 
   public class Entries () {
 
-    func passthrough (hash : PrincipalId) : PrincipalId { hash };
-    let hashMap = HashMap.HashMap<PrincipalId, Entry>(1, Hash.Hash.hashEq, passthrough);
+    func natEq (x : Nat32, y : Nat32) : Bool { x == y };
+    func hashEntryId (x : EntryId) : Hash.Hash { Nat.toWord32(Nat.fromNat32(x)) };
+    let hashMap = HashMap.HashMap<EntryId, Entry>(1, natEq, hashEntryId);
 
-    public func addConnection (fromUser : PrincipalId, toUser : PrincipalId) : () {
+    public func addConnection (fromUser : EntryId, toUser : EntryId) : () {
       var existing = Option.unwrap<Entry>(hashMap.get(fromUser));
       let updated : Entry = {
         id = existing.id;
-        connections = Array.append<PrincipalId>(existing.connections, [toUser]);
+        connections = Array.append<EntryId>(existing.connections, [toUser]);
         invitations = existing.invitations;
       };
       ignore hashMap.set(fromUser, updated);
     };
 
-    public func getConnections (userId : PrincipalId) : [PrincipalId] {
+    public func getConnections (userId : EntryId) : [EntryId] {
       let entry = Option.unwrap<Entry>(hashMap.get(userId));
       entry.connections
     };

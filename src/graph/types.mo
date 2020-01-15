@@ -1,11 +1,11 @@
 import Hash "mo:stdlib/hash.mo";
 
 module {
-  public type PrincipalId = Hash.Hash;
+  public type EntryId = Nat32;
 
   public type Entry = {
-    id : PrincipalId;
-    connections : [PrincipalId];
-    invitations : [PrincipalId];
+    id : EntryId;
+    connections : [EntryId];
+    invitations : [EntryId];
   };
 };

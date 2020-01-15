@@ -81,8 +81,10 @@ module {
       if (seeded) { return; };
 
       let table : [[Text]] = [
+        ["Dominic", "Williams", "Founder & Chief Scientist", "DFINITY", "Working to reinvent the Internet as a shared supercomputer"],
+        ["Diego", "Prats", "Director de Producto", "DFINITY", "Building a public computing platform to rival AWS, Azure, and Google Cloud."],
         ["Stanley", "Jones", "Engineering Manager", "DFINITY", "Making it fun and easy to build apps for the Internet Computer"],
-        ["Dominic", "Williams", "Founder & Chief Scientist", "DFINITY", "Working to reinvent the Internet as a shared supercomputer"]
+        ["Olive", "Menjo", "Senior Dog", "DFINITY", "Dog stuff"]
       ];
 
       let profiles : [Profile] = Array.mapWithIndex<[Text], Profile>(makeProfile, table);

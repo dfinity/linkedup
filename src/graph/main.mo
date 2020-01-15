@@ -20,7 +20,7 @@ import Entries "./entries.mo";
 import Types "./types.mo";
 
 type Entry = Types.Entry;
-type PrincipalId = Types.PrincipalId;
+type EntryId = Types.EntryId;
 
 actor Graph {
 
@@ -34,11 +34,11 @@ actor Graph {
 
   // Connections
 
-  public func connect (caller : PrincipalId, userId : PrincipalId) : async () {
+  public func connect (caller : Nat32, userId : Nat32) : async () {
     entries.addConnection(caller, userId);
   };
 
-  public func getConnections (userId : PrincipalId) : async [PrincipalId] {
+  public func getConnections (userId : EntryId) : async [EntryId] {
     entries.getConnections(userId)
   };
 

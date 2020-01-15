@@ -389,6 +389,7 @@ Promise.all([
 		const experience = $(this).find('#experience').val();
 
 		async function action() {
+			debugger;
 			const userId = await profile.set({
 				id: 0,
 				firstName,
