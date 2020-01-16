@@ -14,15 +14,11 @@ module {
   type PrincipalId = Types.PrincipalId;
 
   public class Directory () {
-    // @TODO: Key on blob instead of hashed blob
-    // func blobEq (x : Blob, y : Blob) : Bool { x == y };
-    // let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, blobEq, Blob.hash);
-
     func passthrough (hash : PrincipalId) : PrincipalId { hash };
     let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough);
     var seeded = false;
 
-    public func updateOne (userId : PrincipalId, _profile : Profile) : () {
+    public func updateOne (userId : PrincipalId, _profile : Profile) : Profile {
       let profile : Profile = {
         id = userId;
         firstName = _profile.firstName;
@@ -32,6 +28,7 @@ module {
         experience = _profile.experience;
       };
       ignore hashMap.set(userId, profile);
+      profile
     };
 
     public func findOne (userId : PrincipalId) : ?Profile {

@@ -23,22 +23,23 @@ actor Profile {
   var directory : Directory.Directory = Directory.Directory();
   directory.seed();
 
-  public func healthcheck () : async Bool {
-    let isGraphAlive : Bool = await Graph.healthcheck();
-    true and isGraphAlive
-  };
+  public func healthcheck () : async Bool { true };
 
   // Profiles
 
-  public shared { caller } func set (profile : Profile) : async PrincipalId {
-    let userId : PrincipalId = Blob.hash(caller);
-    directory.updateOne(userId, profile);
-    userId
+  public shared context func set (profile : Profile) : async Profile {
+    if (hasAccess(getUserId(context)), profile)) {
+      directory.updateOne(profile.id, profile)
+    };
+    profile
   };
 
-  public shared { caller } func setMany (profiles : [Profile]) : async () {
-    if (not isAdmin(Blob.hash(caller))) { return; };
-    for (profile in profiles.vals()) { directory.updateOne(profile.id, profile); };
+  public shared context func setMany (profiles : [Profile]) : async () {
+    if (isAdmin(getUserId(context))) {
+      for (profile in profiles.vals()) {
+        directory.updateOne(profile.id, profile);
+      };
+    };
   };
 
   public query func get (userId : PrincipalId) : async ?Profile {
@@ -51,7 +52,7 @@ actor Profile {
 
   // Connections
 
-  public shared { caller } func connect (userId : PrincipalId) : async () {
+  public shared context func connect (userId : PrincipalId) : async () {
     await Graph.connect(toEntryId(Blob.hash(caller)), toEntryId(userId));
   };
 
@@ -68,8 +69,15 @@ actor Profile {
 
   let adminIds : [PrincipalId] = [];
 
+  func getUserId (context : Object) : PrincipalId { Blob.hash(context.caller) };
+
+  // @TODO: use Array.includes
   func isAdmin (userId : PrincipalId) : Bool {
     func identity (x : PrincipalId) : Bool { x == userId };
     Option.isSome<PrincipalId>(Array.find<PrincipalId>(identity, adminIds))
+  };
+
+  func hasAccess (userId : PrincipalId, profile : Profile) : Bool {
+    userId == profile.id or isAdmin(userId)
   };
 };
