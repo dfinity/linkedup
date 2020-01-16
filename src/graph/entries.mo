@@ -20,13 +20,21 @@ module {
     let hashMap = HashMap.HashMap<EntryId, Entry>(1, natEq, hashEntryId);
 
     public func addConnection (fromUser : EntryId, toUser : EntryId) : () {
-      var existing = Option.unwrap<Entry>(hashMap.get(fromUser));
+      let entry = getEntry(fromUser);
       let updated : Entry = {
-        id = existing.id;
-        connections = Array.append<EntryId>(existing.connections, [toUser]);
-        invitations = existing.invitations;
+        id = entry.id;
+        connections = Array.append<EntryId>(entry.connections, [toUser]);
+        invitations = entry.invitations;
       };
       ignore hashMap.set(fromUser, updated);
+    };
+
+    func getEntry (entryId : EntryId) : Entry {
+      let existing = hashMap.get(entryId);
+      switch (existing) {
+        case (?existing) { existing };
+        case (null) { { id = entryId; connections = []; invitations = []; } };
+      };
     };
 
     public func getConnections (userId : EntryId) : [EntryId] {
