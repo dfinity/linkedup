@@ -16,6 +16,7 @@ import Graph "canister:graph";
 import Directory "./directory.mo";
 import Types "./types.mo";
 
+type NewProfile = Types.NewProfile;
 type Profile = Types.Profile;
 type PrincipalId = Types.PrincipalId;
 
@@ -23,15 +24,23 @@ actor Profile {
   var directory : Directory.Directory = Directory.Directory();
   directory.seed();
 
-  public func healthcheck () : async Bool { true };
+  public func healthcheck () : async Bool {
+    let isGraphAlive : Bool = await Graph.healthcheck();
+    true and isGraphAlive
+  };
 
   // Profiles
 
-  public shared { caller } func set (profile : Profile) : async Profile {
+  public shared { caller } func create (profile : NewProfile) : async PrincipalId {
+    let newUserId = getUserId(caller);
+    directory.createOne(newUserId, profile);
+    newUserId
+  };
+
+  public shared { caller } func update (profile : Profile) : async () {
     if (hasAccess(getUserId(caller), profile)) {
       directory.updateOne(profile.id, profile);
     };
-    profile
   };
 
   public shared { caller } func setMany (profiles : [Profile]) : async () {

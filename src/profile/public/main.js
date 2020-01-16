@@ -1,13 +1,14 @@
 // This need to be done so that Backstretch can have a reference to jQuery.
 // Backstretch is a UMD, while we rely on AMD here.
 import * as $ from 'jquery';
+import * as nacl from 'tweetnacl';
+import { WOW } from 'wowjs';
+import Typed from 'typed.js';
+
 window.$ = window.jQuery = $;
 
 import graph from 'ic:canisters/graph';
 import profile from 'ic:canisters/profile';
-import * as nacl from 'tweetnacl';
-import { WOW } from 'wowjs';
-import Typed from 'typed.js';
 
 require('popper.js');
 require('bootstrap');
@@ -389,15 +390,14 @@ Promise.all([
 		const experience = $(this).find('#experience').val();
 
 		async function action() {
-			debugger;
-			const userId = await profile.set({
-				id: 0,
+			const userId = await profile.create({
 				firstName,
 				lastName,
 				title,
 				company,
 				experience
 			});
+			console.log(userId);
 			renderProfile(userId);
 			enableSubmitButton(button, 'Submit');
 		}

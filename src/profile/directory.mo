@@ -10,6 +10,7 @@ import Option "mo:stdlib/option.mo";
 import Types "./types.mo";
 
 module {
+  type NewProfile = Types.NewProfile;
   type Profile = Types.Profile;
   type PrincipalId = Types.PrincipalId;
 
@@ -18,7 +19,7 @@ module {
     let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough);
     var seeded = false;
 
-    public func updateOne (userId : PrincipalId, _profile : Profile) : () {
+    public func createOne (userId : PrincipalId, _profile : NewProfile) : () {
       let profile : Profile = {
         id = userId;
         firstName = _profile.firstName;
@@ -27,6 +28,10 @@ module {
         company = _profile.company;
         experience = _profile.experience;
       };
+      ignore hashMap.set(userId, profile);
+    };
+
+    public func updateOne (userId : PrincipalId, profile : Profile) : () {
       ignore hashMap.set(userId, profile);
     };
 
