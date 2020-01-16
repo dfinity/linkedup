@@ -27,15 +27,15 @@ actor Profile {
 
   // Profiles
 
-  public shared context func set (profile : Profile) : async Profile {
-    if (hasAccess(getUserId(context)), profile)) {
-      directory.updateOne(profile.id, profile)
+  public shared { caller } func set (profile : Profile) : async Profile {
+    if (hasAccess(getUserId(caller), profile)) {
+      directory.updateOne(profile.id, profile);
     };
     profile
   };
 
-  public shared context func setMany (profiles : [Profile]) : async () {
-    if (isAdmin(getUserId(context))) {
+  public shared { caller } func setMany (profiles : [Profile]) : async () {
+    if (isAdmin(getUserId(caller))) {
       for (profile in profiles.vals()) {
         directory.updateOne(profile.id, profile);
       };
@@ -52,7 +52,7 @@ actor Profile {
 
   // Connections
 
-  public shared context func connect (userId : PrincipalId) : async () {
+  public shared { caller } func connect (userId : PrincipalId) : async () {
     await Graph.connect(toEntryId(Blob.hash(caller)), toEntryId(userId));
   };
 
@@ -69,7 +69,7 @@ actor Profile {
 
   let adminIds : [PrincipalId] = [];
 
-  func getUserId (context : Object) : PrincipalId { Blob.hash(context.caller) };
+  func getUserId (caller : Blob) : PrincipalId { Blob.hash(caller) };
 
   // @TODO: use Array.includes
   func isAdmin (userId : PrincipalId) : Bool {

@@ -18,7 +18,7 @@ module {
     let hashMap = HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough);
     var seeded = false;
 
-    public func updateOne (userId : PrincipalId, _profile : Profile) : Profile {
+    public func updateOne (userId : PrincipalId, _profile : Profile) : () {
       let profile : Profile = {
         id = userId;
         firstName = _profile.firstName;
@@ -28,7 +28,6 @@ module {
         experience = _profile.experience;
       };
       ignore hashMap.set(userId, profile);
-      profile
     };
 
     public func findOne (userId : PrincipalId) : ?Profile {
