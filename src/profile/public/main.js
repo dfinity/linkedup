@@ -1,41 +1,26 @@
-// This need to be done so that Backstretch can have a reference to jQuery.
-// Backstretch is a UMD, while we rely on AMD here.
 import * as $ from 'jquery';
 import * as nacl from 'tweetnacl';
 import { WOW } from 'wowjs';
 import Typed from 'typed.js';
-
-window.$ = window.jQuery = $;
+import 'bootstrap';
 
 import graph from 'ic:canisters/graph';
 import profile from 'ic:canisters/profile';
 
-require('popper.js');
-require('bootstrap');
+import { profileTemplate } from './templates';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
-// Requires are sequential, imports are resolved before javascript is executed.
-// Because this plugin requires window.jQuery to be something (set above), we
-// need use a require() here.
-require('jquery-backstretch');
+window.$ = window.jQuery = $;
 
-Promise.all([
-	profile.__getAsset("index.html"),
-	profile.__getAsset("index.css"),
-]).then(([htmlBytes, cssBytes]) => {
-	// Replace the app tag with HTML from index.html.
-	const html = new TextDecoder().decode(htmlBytes);
-	const el = new DOMParser().parseFromString(html, "text/html");
-	document.body.replaceChild(el.firstElementChild, document.getElementById('app'));
-
-	// Add a <style> tag with the CSS.
-	const css = new TextDecoder().decode(cssBytes);
-	const styleEl = document.createElement('style');
-	styleEl.type = 'text/css';
-	// This is required for IE8 and below.
-	styleEl.innerHTML = css;
-
-	document.head.appendChild(styleEl);
-}).then(() => $(document).ready(function() {
+profile.__getAsset("index.html")
+	.then(htmlBytes => {
+		// Replace the app tag with HTML from index.html.
+		const html = new TextDecoder().decode(htmlBytes);
+		const el = new DOMParser().parseFromString(html, "text/html");
+		document.body.replaceChild(el.firstElementChild, document.getElementById('app'));
+	})
+	.then(() => $(document).ready(function() {
 	// Reveal animations.
 	const wow = new WOW();
 	wow.init();
@@ -64,8 +49,6 @@ Promise.all([
 	$(window).resize(function () {
 		renderIntro();
 	});
-	$('.intro').backstretch('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/handshake.jpg');
-	$('.backstretch > img').after('<span class="dim"></span>');
 
 	//
 	const typed = new Typed('#typed', {
@@ -149,6 +132,16 @@ Promise.all([
 		})();
 	};
 
+	function renderOwn() {
+		clearAdminSections();
+		$('.profile').show();
+
+		(async function () {
+			const [result] = await profile.getOwn();
+			updateForm(result);
+		})();
+	}
+
 	function renderEdit(userId) {
 		clearAdminSections();
 		$('.edit').show().find('#first-name').focus();
@@ -177,6 +170,7 @@ Promise.all([
 			var list = '';
 			while (connections != null) {
 				let address = encode(connections[0].unbox);
+				list += profileTemplate({ firstName: 'Moo' });
 				list += '<div class="form-group form-group-lg"><div class="input-group input-group-md"><form class="form-control input-group-prepend" id="profile-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn-profile" type="submit">' + address + '</button></form><form class="input-group-append" id="revoke-form" role="form"><input id="address" name="address" type="hidden" value="' + address + '"><button class="btn btn-md btn-reject" type="submit">Revoke</button></form></div></div>';
 				connections = connections[1];
 			}
@@ -397,7 +391,6 @@ Promise.all([
 				company,
 				experience
 			});
-			console.log(userId);
 			renderProfile(userId);
 			enableSubmitButton(button, 'Submit');
 		}
@@ -410,7 +403,7 @@ Promise.all([
 	});
 
 	$('a#profile').click(function () {
-		renderProfile();
+		renderOwn();
 	});
 
 	$('a#connections').click(function () {
@@ -432,7 +425,7 @@ Promise.all([
 	$('a#login').click(function () {
 		$('.splash-view').slideUp(0, 'linear');
 		$('.admin-view').slideDown(250, 'linear');
-		renderEdit();
+		renderOwn();
 	});
 
 	$(".preloader-canvas").fadeOut(1000, "linear");

@@ -254,7 +254,9 @@ padding: 0;
 	-moz-justify-content: center;
 	-ms-justify-content: center;
 	-o-justify-content: center;
-	-webkit-justify-content: center;
+    -webkit-justify-content: center;
+    background: url('https://enzohaussecker.s3-us-west-2.amazonaws.com/images/handshake.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .dim {

@@ -51,6 +51,10 @@ actor Profile {
     };
   };
 
+  public shared query { caller } func getOwn () : async ?Profile {
+    directory.findOne(getUserId(caller))
+  };
+
   public query func get (userId : PrincipalId) : async ?Profile {
     directory.findOne(userId)
   };
