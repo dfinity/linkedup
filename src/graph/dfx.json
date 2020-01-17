@@ -1,0 +1,13 @@
+{
+    "canisters": {
+        "graph": {
+            "main": "main.mo"
+        }
+    },
+    "defaults": {
+        "build": {
+            "output": "../../build"
+        }
+    },
+    "version": 1
+}

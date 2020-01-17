@@ -34,11 +34,13 @@ all: nginx
 
 .PHONY: graph
 graph:
-	$(DFX) build $@
+	cd $(SOURCE)/$@
+	$(DFX) build --skip-frontend
 
 .PHONY: profile
 profile:
-	$(DFX) build $@
+	cd $(SOURCE)/$@
+	$(DFX) build --skip-frontend
 
 $(SOURCE)/index/index.js: graph profile
 	$(NODE) node_modules/webpack-cli/bin/cli.js
@@ -59,7 +61,8 @@ $(SOURCE)/index/main.mo: $(SOURCE)/index/main.sed
 
 .PHONY: index
 index: $(SOURCE)/index/main.mo
-	$(DFX) build $@
+	cd $(SOURCE)/$@
+	$(DFX) build --skip-frontend
 
 $(TARGET)/nginx:
 	mkdir -p $@
@@ -70,13 +73,19 @@ $(TARGET)/nginx/index.lua: $(TARGET)/nginx
 .ONESHELL:
 $(TARGET)/nginx/nginx.conf: $(TARGET)/nginx index
 	ID=$$($(call canister_id, $(TARGET)/index/_canister.id))
-	sed -e "s/___ID___/$$ID/g" $(SOURCE)/nginx/nginx.template > $@
+	CRC=$$(python -c "import crc8;h=crc8.crc8();h.update('$$ID'.decode('hex'));print(h.hexdigest())")
+	sed -e "s/___ID___/$$ID$$CRC/g" $(SOURCE)/nginx/nginx.template > $@
 
 .PHONY: nginx
 nginx: $(TARGET)/nginx/index.lua $(TARGET)/nginx/nginx.conf
 
 .PHONY: install
 install:
+	cd $(SOURCE)/profile
+	$(DFX) canister install --all
+	cd ../graph
+	$(DFX) canister install --all
+	cd ../index
 	$(DFX) canister install --all
 
 .PHONY: run

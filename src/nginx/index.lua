@@ -6,33 +6,15 @@
 -- Stability  : Experimental
 ]]
 
-local bignum = require 'openssl.bignum'
 local cbor = require 'org.conman.cbor'
 local hex = require 'hex'
 local https = require 'ssl.https'
 local ltn12 = require 'ltn12'
 local rand = require 'openssl.rand'
 
-local function bignum_to_cbor(n)	
-  local ref = ''
-  if n >= bignum.new('0')
-  then
-    ref = string.char(0x1B)
-  else
-    ref = string.char(0x3B)
-    n = bignum.new('-1') - n
-  end
-  local bin = n:tobin()
-  local len = string.len(bin)
-  local pad = string.rep(string.char(0x00), 8 - len)
-  return ref .. pad .. bin
-end
-
-bignum.interpose('__tocbor', bignum_to_cbor)
-
 local ic_message = {
   arg = hex.decode('4449444C0000'),
-  canister_id = bignum.new(ngx.var.canister_id),
+  canister_id = hex.decode(ngx.var.canister_id),
   method_name = ngx.var.method_name,
   nonce = rand.bytes(32),
   request_type = 'query'
@@ -91,6 +73,9 @@ local function get_content_type()
   else return 'application/cbor'
   end
 end
+
+ngx.say(response_body)
+ngx.exit(200)
 
 if ok and status_code == 200
 then
