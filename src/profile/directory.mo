@@ -27,6 +27,8 @@ module {
         title = _profile.title;
         company = _profile.company;
         experience = _profile.experience;
+        education = _profile.education;
+        imgUrl = _profile.imgUrl;
       };
       ignore hashMap.set(userId, profile);
     };
@@ -82,12 +84,42 @@ module {
       if (seeded) { return; };
 
       let table : [[Text]] = [
-        ["Dominic", "Williams", "Founder & Chief Scientist", "DFINITY", "Working to reinvent the Internet as a shared supercomputer"],
-        ["Diego", "Prats", "Director de Producto", "DFINITY", "Building a public computing platform to rival AWS, Azure, and Google Cloud."],
-        ["Stanley", "Jones", "Engineering Manager", "DFINITY", "Making it fun and easy to build apps for the Internet Computer"],
-        ["Ryan", "Newman", "Director of Talent", "DFINITY", "The children are our future. Teach them well and let them lead the way."],
-        ["Ryan", "Stout", "Software Engineering", "DFINITY", "Ryan Newman ate my lunch again"],
-        ["Olive", "Menjo", "Senior Dog", "DFINITY", "Dog stuff"]
+        [
+          "Dominic",
+          "Williams",
+          "Founder & Chief Scientist",
+          "DFINITY",
+          "**President & Chief Scientist**, DFINITY  \nJan 2015 – Present  \nPalo Alto, CA\n\n**President & CTO**, String Labs, Inc  \nJun 2015 – Feb 2018  \nPalo Alto, CA",
+          "**King's College London**  \nBA, Computer Science",
+          "https://media-exp1.licdn.com/dms/image/C5603AQHdxGV6zMbg-A/profile-displayphoto-shrink_800_800/0?e=1585180800&v=beta&t=Tnsg560fWry_85AVz6MSkeUqOisiSi0e47Hl5T0Yzxk"
+        ],
+        [
+          "Diego",
+          "Prats",
+          "Director de Producto",
+          "DFINITY",
+          "**Director of Product**, DFINITY  \nMay 2019 – Present  \nPalo Alto, CA\n\n**VP Product Engineering**, Overnight  \nFeb 2016 – Aug 2018  \nLos Angeles, CA",
+          "**Harvard University**  \nBA, Economics",
+          "https://media-exp1.licdn.com/dms/image/C5603AQEsCX2F2XWSAA/profile-displayphoto-shrink_800_800/0?e=1585180800&v=beta&t=fyvnlBegGsbZSiZcWarxNTBRimRk3vfVTHWb8MH-HLU"
+        ],
+        [
+          "Jan",
+          "Camenisch",
+          "VP of Research",
+          "DFINITY",
+          "**VP of Research**, DFINITY  \nSep 2018 – Present  \nZurich, CH\n\n**Principal Research Staff Member**, IBM Research  \nJul 1999 – Aug 2018  \nZurich, CH",
+          "**ETH Zurich**  \nPhD, Computer Science / Cryptography",
+          "https://media-exp1.licdn.com/dms/image/C5603AQFQTQN-Vnp7Lw/profile-displayphoto-shrink_800_800/0?e=1585180800&v=beta&t=_riz0HNQ0NlhTeg3iVcoHjo9oeTM87CrmqTj3ASv518"
+        ],
+        [
+          "Barack",
+          "Obama",
+          "President (Retired)",
+          "United States of America",
+          "**President**, USA  \nJan 2009 – Jan 2017  \nWashington, DC",
+          "**Harvard University**  \nJD, Law",
+          "https://media-exp1.licdn.com/dms/image/C4E03AQF2C6iUecWOnQ/profile-displayphoto-shrink_800_800/0?e=1585180800&v=beta&t=HlFVhKOrVV5QK8AMZb_IDNPSi8oExM9lNIqAoTQ5HKo"
+        ]
       ];
 
       let profiles : [Profile] = Array.mapWithIndex<[Text], Profile>(makeProfile, table);
@@ -104,6 +136,8 @@ module {
           title = row[2];
           company = row[3];
           experience = row[4];
+          education = row[5];
+          imgUrl = row[6];
         };
         profile
     };

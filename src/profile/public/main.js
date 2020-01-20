@@ -3,25 +3,19 @@ import { WOW } from 'wowjs';
 import Typed from 'typed.js';
 import 'bootstrap';
 
-import graph from 'ic:canisters/graph';
 import profile from 'ic:canisters/profile';
 
-import { profileTemplate, searchResultTmpl } from './templates';
+import { ownProfilePageTmpl, profilePageTmpl, searchResultsPageTmpl } from './templates';
+import { injectHtml } from './utils';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css/animate.min.css';
-// import 'font-awesome/css/font-awesome.min.css';
 import './index.css';
 
 window.$ = window.jQuery = $;
 
 profile.__getAsset("index.html")
-  .then(htmlBytes => {
-    // Replace the app tag with HTML from index.html.
-    const html = new TextDecoder().decode(htmlBytes);
-    const el = new DOMParser().parseFromString(html, "text/html");
-    document.body.replaceChild(el.firstElementChild, document.getElementById('app'));
-  })
+  .then(injectHtml)
   .then(() => $(document).ready(function() {
   // Reveal animations.
   const wow = new WOW();
@@ -52,8 +46,7 @@ profile.__getAsset("index.html")
     renderIntro();
   });
 
-  //
-  const typed = new Typed('#typed', {
+  new Typed('#typed', {
     cursorChar: '_',
     strings: [
       'n&nbsp;autonomous',
@@ -66,18 +59,6 @@ profile.__getAsset("index.html")
     backDelay: 3000,
     loop: true
   });
-
-  function decode(str) {
-    return str ? new Uint8Array(str.match(/.{1,2}/g).map(function (x) {
-      return parseInt(x, 16)
-    })) : null
-  }
-
-  function encode(bytes) {
-    return bytes ? bytes.reduce(function (str, x) {
-      return str + x.toString(16).padStart(2, '0')
-    }, '') : null
-  }
 
   // Disable submit button.
   function disableSubmitButton(btn) {
@@ -93,28 +74,6 @@ profile.__getAsset("index.html")
     btn.prop('disabled', false);
   };
 
-
-  // Handle login form.
-  var keyPair = JSON.parse(localStorage.getItem('dfinity-ic-user-identity'));
-
-
-  function convert(value) {
-    let decoder = new TextDecoder();
-    return decoder.decode(new Uint8Array(value));
-  };
-
-  function sanitize(value) {
-    return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  };
-
-  function clearSplashView() {
-    $('.splash-view').hide();
-  };
-
-  function clearAdminView() {
-    $('.admin-view').hide();
-  };
-
   function clearAdminSections() {
     $('.profile').hide();
     $('.edit').hide();
@@ -122,26 +81,33 @@ profile.__getAsset("index.html")
     $('.connections').hide();
   };
 
-  function renderProfile(userId) {
+  function renderOwnProfile() {
     clearAdminSections();
-    $('.profile').show();
-
     (async function () {
-      let result = {};
-      if (userId) { [result] = await profile.get(userId); }
-      updateForm(result);
-    })();
-  };
-
-  function renderOwn() {
-    clearAdminSections();
-    $('.profile').show();
-
-    (async function () {
-      const [result] = await profile.getOwn();
-      updateForm(result);
+      try {
+        const [data] = await profile.getOwn();
+        const connections = await profile.getOwnConnections();
+        data.connections = connections;
+        $('.profile').html(ownProfilePageTmpl(data)).show();
+      } catch (err) {
+        console.error(err);
+      }
     })();
   }
+
+  function renderProfile(userId) {
+    clearAdminSections();
+    (async function () {
+      try {
+        const [data] = await profile.get(userId);
+        const connections = await profile.getConnections(userId);
+        data.connections = connections;
+        $('.profile').html(profilePageTmpl(data)).show();
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  };
 
   function renderEdit(userId) {
     clearAdminSections();
@@ -154,9 +120,17 @@ profile.__getAsset("index.html")
     })();
   };
 
-  function renderSearch() {
+  function renderSearch(term) {
     clearAdminSections();
-    $('.search').show().find('#address').focus();
+
+    (async function () {
+      try {
+        const [results] = await profile.search(term);
+        $('.search').html(searchResultsPageTmpl(results)).show();
+      } catch (err) {
+        console.error(err);
+      }
+    })();
   };
 
   function renderConnections(userId) {
@@ -177,63 +151,6 @@ profile.__getAsset("index.html")
     })();
   };
 
-  $(document).on('submit', '#search-form', function (event) {
-    event.preventDefault();
-    let term = $(this).find('#address').val();
-    let button = $(this).find('button');
-    disableSubmitButton(button);
-    $('.search-result').hide();
-    $('#connect-form').hide();
-
-    (async function () {
-      let [profiles] = await profile.search(term);
-      console.log(profiles);
-      let message;
-      if (profiles.length) {
-        message = profiles.map(profile => searchResultTmpl(profile));
-      } else {
-        message = '<div><i class="fa fa-warning"></i> Profile not found!</div>';
-      }
-      $('.search-result').html(message).show();
-      enableSubmitButton(button, 'Search');
-    })();
-  });
-
-  $(document).on('submit', '#profile-form', function (event) {
-    event.preventDefault();
-    let address = $(this).find('#address').val();
-    clearAdminSections();
-    $('.profile').show();
-
-    function display(id, value) {
-      $('.profile').find(id).html(value);
-    };
-
-    async function action() {
-      let publicKey = decode(address);
-      var result = await profile.find({
-        'unbox': Array.from(publicKey)
-      });
-      if (result == null) {
-        result = {
-          'firstName': [],
-          'lastName': [],
-          'title': [],
-          'company': [],
-          'experience': []
-        };
-      }
-      ;
-      $('.profile').find('#address').html(encode(publicKey));
-      display('#first-name', sanitize(convert(result.firstName)));
-      display('#last-name', sanitize(convert(result.lastName)));
-      display('#title', sanitize(convert(result.title)));
-      display('#company', sanitize(convert(result.company)));
-      display('#experience', sanitize(convert(result.experience)).replace(/\n/g, '<br/>'));
-    };
-    action();
-  });
-
   $('#edit-form').submit(function (event) {
     event.preventDefault();
     const button = $(this).find('button[type="submit"]');
@@ -244,6 +161,8 @@ profile.__getAsset("index.html")
     const title = $(this).find('#title').val();
     const company = $(this).find('#company').val();
     const experience = $(this).find('#experience').val();
+    const education = $(this).find('#education').val();
+    const imgUrl = $(this).find('#imgUrl').val();
 
     async function action() {
       const userId = await profile.create({
@@ -251,9 +170,11 @@ profile.__getAsset("index.html")
         lastName,
         title,
         company,
-        experience
+        experience,
+        education,
+        imgUrl,
       });
-      renderProfile(userId);
+      renderOwnProfile();
       enableSubmitButton(button, 'Submit');
     }
     action();
@@ -265,25 +186,17 @@ profile.__getAsset("index.html")
   });
 
   $('a#profile').click(function () {
-    renderOwn();
+    renderOwnProfile();
   });
 
   $('a#connections').click(function () {
     renderConnections();
   });
 
-  $('a#search').click(function () {
-    renderSearch();
-  });
-
-  $('a#logout').click(function () {
-    location.reload();
-  });
-
   $('a#login').click(function () {
     $('.splash-view').slideUp(0, 'linear');
     $('.admin-view').slideDown(250, 'linear');
-    renderOwn();
+    renderOwnProfile();
   });
 
   $(".preloader-canvas").fadeOut(1000, "linear");
@@ -303,13 +216,29 @@ profile.__getAsset("index.html")
 
   // Actions
 
+  const showEdit = () => {
+    renderEdit();
+  };
+
   const connectWith = userId => {
     try { profile.connect(parseInt(userId, 10)); }
     catch (err) { console.error(err); }
   };
 
+  const showProfile = userId => {
+    renderProfile(parseInt(userId, 10));
+  };
+
+  const search = () => {
+    const searchInputEl = document.getElementById('search');
+    renderSearch(searchInputEl.value);
+  };
+
   window.actions = {
-    connectWith
+    connectWith,
+    showProfile,
+    search,
+    showEdit,
   };
 
 }));

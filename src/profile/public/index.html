@@ -1,69 +1,38 @@
 <html>
-
-  <!-- Header -->
   <head>
-
-    <!-- Metadata -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Title -->
     <title>LinkedUp | An open professional network.</title>
-
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400" rel="stylesheet" type="text/css">
-
   </head>
-
-  <!-- Body -->
-  <body>
-
-    <!-- Splash View -->
+  <body class="lu">
     <div class="splash-view">
-
-      <!-- Preloader -->
       <div class="preloader-canvas">
         <div class="preloader-image"></div>
       </div>
 
-      <!-- Navigation -->
       <nav class="fixed-top navbar navbar-custom navbar-expand-sm">
-
         <div class="container">
-
-          <!-- Logo -->
           <a class="navbar-brand" href="/">
-            <span><i class="fa fa-share-alt"></i> LinkedUp</span>
+            <div class="lu_logo">Linked<span>up</span></div>
           </a>
 
-          <!-- Toggler -->
           <button class="navbar-toggler" data-target="#splash-menu" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <!-- Menu -->
           <div class="collapse navbar-collapse navbar-menu" id="splash-menu">
-
             <ul class="ml-auto navbar-nav">
-
-              <!-- Login Link -->
               <li class="dropdown dropdown-custom nav-item">
-
                 <a class="nav-link" data-dismiss="dropdown" data-target="#login-form" data-toggle="dropdown" href="#" id="login">Login</a>
-
               </li>
-
             </ul>
-
           </div>
-
         </div>
-
       </nav>
 
-      <!-- Intro -->
       <section class="intro">
         <div class="container">
           <div class="callout wow fadeInUp" data-wow-delay="1s">
@@ -82,9 +51,8 @@
 
         <div class="container">
 
-          <!-- Logo -->
           <a class="navbar-brand" href="/">
-            <span><i class="fa fa-share-alt"></i> LinkedUp</span>
+            <div class="lu_logo">Linked<span>up</span></div>
           </a>
 
           <!-- Toggler -->
@@ -96,13 +64,16 @@
           <div class="collapse navbar-collapse navbar-menu" id="admin-menu">
             <ul class="ml-auto navbar-nav">
               <li class="nav-item">
+                <div class="lu_search-bar">
+                  <input class="lu_search-input" id="search" placeholder="First or Last Name" />
+                  <button class="lu_search-button" onclick="actions.search()">Search</button>
+                </div>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="#" id="profile">Profile</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" id="edit">Edit</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" id="search">Search</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" id="connections">Connections</a>
@@ -116,46 +87,7 @@
 
       <br/>
 
-      <!-- Profile -->
-      <section class="profile" style="display:none">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-              <div class="modal-header">
-                <h4 class="modal-title">Profile</h4>
-              </div>
-              <div class="modal-body">
-                <div class="form-group form-group-lg">
-                  <label for="address">Address</label>
-                  <div class="form-control" id="address"></div>
-                </div>
-                <div class="form-group form-group-lg">
-                  <label for="first-name">First Name</label>
-                  <div class="form-control" id="first-name"></div>
-                </div>
-                <div class="form-group form-group-lg">
-                  <label for="last-name">Last Name</label>
-                  <div class="form-control" id="last-name"></div>
-                </div>
-                <div class="form-group form-group-lg">
-                  <label for="title">Job Title</label>
-                  <div class="form-control" id="title"></div>
-                </div>
-                <div class="form-group form-group-lg">
-                  <label for="company">Company Name</label>
-                  <div class="form-control" id="company"></div>
-                </div>
-                <div class="form-group form-group-lg">
-                  <label for="experience">Work Experience</label>
-                  <div class="form-control" style="height: auto; min-height: calc(1.5em + .75rem + 2px)" id="experience"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-2"></div>
-          </div>
-        </div>
-      </section>
+      <section class="profile" style="display:none"></section>
 
       <!-- Edit -->
       <section class="edit" style="display:none">
@@ -167,10 +99,6 @@
                 <h4 class="modal-title">Edit</h4>
               </div>
               <div class="modal-body">
-                <div class="form-group form-group-lg">
-                  <label for="address">Address</label>
-                  <div class="form-control" id="address"></div>
-                </div>
                 <div class="form-group form-group-lg">
                   <label for="first-name">First Name</label>
                   <input class="form-control" id="first-name" name="first-name" placeholder="Enter your first name." type="text">
@@ -191,6 +119,14 @@
                   <label for="experience">Work Experience</label>
                   <textarea class="form-control" id="experience" name="experience" placeholder="Describe your work experience." rows="10" type="text"></textarea>
                 </div>
+                <div class="form-group form-group-lg">
+                  <label for="education">Education Experience</label>
+                  <textarea class="form-control" id="education" name="education" placeholder="Describe your education." rows="10" type="text"></textarea>
+                </div>
+                <div class="form-group form-group-lg">
+                  <label for="imgUrl">Avatar URL</label>
+                  <input class="form-control" id="imgUrl" name="imgUrl" placeholder="Include a URL of your avatar." rows="10" type="text" />
+                </div>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-md btn-custom" type="submit">Submit</button>
@@ -202,35 +138,7 @@
       </section>
 
       <!-- Search -->
-      <section class="search" style="display:none">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-              <div class="modal-header">
-                <h4 class="modal-title">Search</h4>
-              </div>
-              <form autocomplete="off" class="modal-body" id="search-form" role="form">
-                <div class="form-group form-group-lg">
-                  <label for="address">Name</label>
-                  <div class="input-group input-group-md">
-                    <input class="form-control" id="address" name="address" placeholder="Address" type="text">
-                    <div class="input-group-append">
-                      <button class="btn btn-md btn-custom" type="submit">Search</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="search-result"></div>
-              </form>
-              <form class="modal-footer" id="connect-form" role="form" style="display:none">
-                <input id="address" name="address" type="hidden" value="">
-                <button class="btn btn-md btn-custom" type="submit">Connect</button>
-              </form>
-            </div>
-            <div class="col-md-2"></div>
-          </div>
-        </div>
-      </section>
+      <section class="search" style="display:none"></section>
 
       <!-- Connections -->
       <section class="connections" style="display:none">

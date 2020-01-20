@@ -7,6 +7,7 @@
         "font-awesome": "^4.7.0",
         "jquery": "^3.4.1",
         "popper.js": "^1.16.0",
+        "showdown": "^1.9.1",
         "tweetnacl": "^1.0.1",
         "typed.js": "^2.0.11",
         "wowjs": "^1.1.3"

@@ -9,6 +9,8 @@ module {
     title : Text;
     company : Text;
     experience : Text;
+    education : Text;
+    imgUrl : Text;
   };
 
   public type Profile = {
@@ -18,5 +20,7 @@ module {
     title : Text;
     company : Text;
     experience : Text;
+    education : Text;
+    imgUrl : Text;
   };
 };

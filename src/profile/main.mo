@@ -48,16 +48,35 @@ actor Profile {
     };
   };
 
-  public shared query { caller } func getOwn () : async ?Profile {
-    directory.findOne(getUserId(caller))
+  public shared query { caller } func getOwn () : async Profile {
+    getProfile(getUserId(caller))
   };
 
-  public query func get (userId : PrincipalId) : async ?Profile {
-    directory.findOne(userId)
+  public query func get (userId : PrincipalId) : async Profile {
+    getProfile(userId)
   };
 
   public query func search (term : Text) : async [Profile] {
     directory.findBy(term)
+  };
+
+  func getProfile (userId : PrincipalId) : Profile {
+    let existing = directory.findOne(userId);
+    switch (existing) {
+      case (?existing) { existing };
+      case (null) {
+        {
+          id = userId;
+          firstName = "";
+          lastName = "";
+          title = "";
+          company = "";
+          experience = "";
+          education = "";
+          imgUrl = "";
+        }
+      };
+    };
   };
 
   // Connections
