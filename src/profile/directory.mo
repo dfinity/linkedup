@@ -85,6 +85,8 @@ module {
         ["Dominic", "Williams", "Founder & Chief Scientist", "DFINITY", "Working to reinvent the Internet as a shared supercomputer"],
         ["Diego", "Prats", "Director de Producto", "DFINITY", "Building a public computing platform to rival AWS, Azure, and Google Cloud."],
         ["Stanley", "Jones", "Engineering Manager", "DFINITY", "Making it fun and easy to build apps for the Internet Computer"],
+        ["Ryan", "Newman", "Director of Talent", "DFINITY", "The children are our future. Teach them well and let them lead the way."],
+        ["Ryan", "Stout", "Software Engineering", "DFINITY", "Ryan Newman ate my lunch again"],
         ["Olive", "Menjo", "Senior Dog", "DFINITY", "Dog stuff"]
       ];
 

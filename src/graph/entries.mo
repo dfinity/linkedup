@@ -38,7 +38,7 @@ module {
     };
 
     public func getConnections (userId : EntryId) : [EntryId] {
-      let entry = Option.unwrap<Entry>(hashMap.get(userId));
+      let entry = getEntry(userId);
       entry.connections
     };
   };

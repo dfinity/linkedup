@@ -66,10 +66,16 @@ actor Profile {
   // Connections
 
   public shared { caller } func connect (userId : PrincipalId) : async () {
-    await Graph.connect(toEntryId(Blob.hash(caller)), toEntryId(userId));
+    await Graph.connect(toEntryId(getUserId(caller)), toEntryId(userId));
   };
 
-  public query func getConnections (userId : PrincipalId) : async [Profile] {
+  public shared { caller } func getOwnConnections () : async [Profile] {
+    let entryIds = await Graph.getConnections(toEntryId(getUserId(caller)));
+    let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
+    directory.findMany(profileIds)
+  };
+
+  public func getConnections (userId : PrincipalId) : async [Profile] {
     let entryIds = await Graph.getConnections(toEntryId(userId));
     let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
     directory.findMany(profileIds)

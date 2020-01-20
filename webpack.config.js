@@ -62,7 +62,10 @@ function generateWebpackConfigForCanister(name, info) {
       })),
     ],
     module: {
-      rules: [{ test: /\.css$/, use: ['style-loader', 'css-loader'] }]
+      rules: [{
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }]
     }
   };
 }
