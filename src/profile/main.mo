@@ -24,10 +24,7 @@ actor Profile {
   var directory : Directory.Directory = Directory.Directory();
   directory.seed();
 
-  public func healthcheck () : async Bool {
-    let isGraphAlive : Bool = await Graph.healthcheck();
-    true and isGraphAlive
-  };
+  public func healthcheck () : async Bool { true };
 
   // Profiles
 
@@ -71,12 +68,15 @@ actor Profile {
 
   public shared { caller } func getOwnConnections () : async [Profile] {
     let entryIds = await Graph.getConnections(toEntryId(getUserId(caller)));
-    let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
-    directory.findMany(profileIds)
+    getConnectionProfiles(entryIds)
   };
 
   public func getConnections (userId : PrincipalId) : async [Profile] {
     let entryIds = await Graph.getConnections(toEntryId(userId));
+    getConnectionProfiles(entryIds)
+  };
+
+  func getConnectionProfiles (entryIds : [Nat32]) : [Profile] {
     let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
     directory.findMany(profileIds)
   };
