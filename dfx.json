@@ -19,8 +19,8 @@
             "output": "canisters"
         },
         "start": {
-            "address": "127.0.0.1",
-            "port": 8000
+            "address": "10.11.18.1",
+            "port": 8080
         }
     },
     "dfx": "0.4.12"
