@@ -1,27 +1,16 @@
-/**
- * File       : main.mo
- * Copyright  : 2019 Enzo Haussecker
- * License    : Apache 2.0 with LLVM Exception
- * Maintainer : Enzo Haussecker <enzo@dfinity.org>
- * Stability  : Experimental
- */
-
-import Array "mo:stdlib/array.mo";
-import Blob "mo:stdlib/blob.mo";
-import Nat "mo:stdlib/nat.mo";
-import Option "mo:stdlib/option.mo";
-
+// Make the Graph app's public methods available locally
 import Graph "canister:graph";
 
-import Directory "./directory.mo";
+import Database "./database.mo";
 import Types "./types.mo";
+import Utils "./utils.mo";
 
 type NewProfile = Types.NewProfile;
 type Profile = Types.Profile;
 type PrincipalId = Types.PrincipalId;
 
 actor Profile {
-  var directory : Directory.Directory = Directory.Directory();
+  var directory : Database.Directory = Database.Directory();
   directory.seed();
 
   public func healthcheck () : async Bool { true };
@@ -29,93 +18,52 @@ actor Profile {
   // Profiles
 
   public shared { caller } func create (profile : NewProfile) : async PrincipalId {
-    let newUserId = getUserId(caller);
+    let newUserId = Utils.getUserId(caller);
     directory.createOne(newUserId, profile);
     newUserId
   };
 
   public shared { caller } func update (profile : Profile) : async () {
-    if (hasAccess(getUserId(caller), profile)) {
+    if (Utils.hasAccess(Utils.getUserId(caller), profile)) {
       directory.updateOne(profile.id, profile);
     };
   };
 
-  public shared { caller } func setMany (profiles : [Profile]) : async () {
-    if (isAdmin(getUserId(caller))) {
-      for (profile in profiles.vals()) {
-        directory.updateOne(profile.id, profile);
-      };
-    };
-  };
-
   public shared query { caller } func getOwn () : async Profile {
-    getProfile(getUserId(caller))
+    Utils.getProfile(directory, Utils.getUserId(caller))
   };
 
   public query func get (userId : PrincipalId) : async Profile {
-    getProfile(userId)
+    Utils.getProfile(directory, userId)
   };
 
   public query func search (term : Text) : async [Profile] {
     directory.findBy(term)
   };
 
-  func getProfile (userId : PrincipalId) : Profile {
-    let existing = directory.findOne(userId);
-    switch (existing) {
-      case (?existing) { existing };
-      case (null) {
-        {
-          id = userId;
-          firstName = "";
-          lastName = "";
-          title = "";
-          company = "";
-          experience = "";
-          education = "";
-          imgUrl = "";
-        }
-      };
-    };
-  };
-
   // Connections
 
   public shared { caller } func connect (userId : PrincipalId) : async () {
-    await Graph.connect(toEntryId(getUserId(caller)), toEntryId(userId));
+    let callerId : PrincipalId = Utils.getUserId(caller);
+    // Call Graph's public methods without an API
+    await Graph.connect(Utils.toEntryId(callerId), Utils.toEntryId(userId));
   };
 
   public shared { caller } func getOwnConnections () : async [Profile] {
-    let entryIds = await Graph.getConnections(toEntryId(getUserId(caller)));
-    getConnectionProfiles(entryIds)
+    let callerId : PrincipalId = Utils.getUserId(caller);
+    let entryIds = await Graph.getConnections(Utils.toEntryId(callerId));
+    Utils.getConnectionProfiles(directory, entryIds)
   };
 
   public func getConnections (userId : PrincipalId) : async [Profile] {
-    let entryIds = await Graph.getConnections(toEntryId(userId));
-    getConnectionProfiles(entryIds)
+    let entryIds = await Graph.getConnections(Utils.toEntryId(userId));
+    Utils.getConnectionProfiles(directory, entryIds)
   };
 
-  func getConnectionProfiles (entryIds : [Nat32]) : [Profile] {
-    let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
-    directory.findMany(profileIds)
+  public shared { caller } func isConnected  (userId : PrincipalId) : async Bool {
+    let callerId : PrincipalId = Utils.getUserId(caller);
+    let entryIds = await Graph.getConnections(Utils.toEntryId(callerId));
+    Utils.includes(Utils.toEntryId(userId), entryIds)
   };
 
-  func toEntryId (userId : PrincipalId) : Nat32 { Nat.toNat32(Nat.fromWord32(userId)) };
-  func fromEntryId (entryId : Nat32) : PrincipalId { Nat.toWord32(Nat.fromNat32(entryId)) };
-
-  // Authorization
-
-  let adminIds : [PrincipalId] = [];
-
-  func getUserId (caller : Blob) : PrincipalId { Blob.hash(caller) };
-
-  // @TODO: use Array.includes
-  func isAdmin (userId : PrincipalId) : Bool {
-    func identity (x : PrincipalId) : Bool { x == userId };
-    Option.isSome<PrincipalId>(Array.find<PrincipalId>(identity, adminIds))
-  };
-
-  func hasAccess (userId : PrincipalId, profile : Profile) : Bool {
-    userId == profile.id or isAdmin(userId)
-  };
 };

@@ -831,7 +831,16 @@ padding: 0;
     }
 }
 
-
+.footer {
+    height: 50px;
+    padding: 1em 0;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    text-align: center;
+    background: #292a2e;
+    color: #999;
+}
 
 
 

@@ -3,6 +3,7 @@ import { WOW } from 'wowjs';
 import Typed from 'typed.js';
 import 'bootstrap';
 
+// Make the Profile app's public methods available locally
 import profile from 'ic:canisters/profile';
 
 import { ownProfilePageTmpl, profilePageTmpl, searchResultsPageTmpl } from './templates';
@@ -86,8 +87,9 @@ profile.__getAsset("index.html")
     (async function () {
       try {
         const [data] = await profile.getOwn();
-        const connections = await profile.getOwnConnections();
-        data.connections = connections;
+        data.connections = [];
+        $('.profile').html(ownProfilePageTmpl(data)).show();
+        data.connections = await profile.getOwnConnections();
         $('.profile').html(ownProfilePageTmpl(data)).show();
       } catch (err) {
         console.error(err);
@@ -99,10 +101,19 @@ profile.__getAsset("index.html")
     clearAdminSections();
     (async function () {
       try {
-        const [data] = await profile.get(userId);
-        const connections = await profile.getConnections(userId);
-        data.connections = connections;
+        let [data] = await profile.get(userId);
+        data.connections = [];
+        data.isConnected = true;
         $('.profile').html(profilePageTmpl(data)).show();
+        Promise.all([
+          profile.isConnected(userId),
+          profile.getConnections(userId),
+        ])
+        .then(([isConnected, connections]) => {
+          data.isConnected = isConnected;
+          data.connections = connections;
+          $('.profile').html(profilePageTmpl(data)).show();
+        });
       } catch (err) {
         console.error(err);
       }
@@ -165,6 +176,7 @@ profile.__getAsset("index.html")
     const imgUrl = $(this).find('#imgUrl').val();
 
     async function action() {
+      // Call Profile's public methods without an API
       const userId = await profile.create({
         firstName,
         lastName,
@@ -221,8 +233,12 @@ profile.__getAsset("index.html")
   };
 
   const connectWith = userId => {
-    try { profile.connect(parseInt(userId, 10)); }
-    catch (err) { console.error(err); }
+    try {
+      profile.connect(parseInt(userId, 10));
+      renderOwnProfile();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const showProfile = userId => {
