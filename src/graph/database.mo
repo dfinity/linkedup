@@ -1,13 +1,12 @@
-import Array "mo:stdlib/array.mo";
-import Blob "mo:stdlib/blob.mo";
-import HashMap "mo:stdlib/hashMap.mo";
-import Hash "mo:stdlib/hash.mo";
-import Iter "mo:stdlib/iter.mo";
-import List "mo:stdlib/list.mo";
-import Nat "mo:stdlib/nat.mo";
-import Option "mo:stdlib/option.mo";
+import Array "mo:stdlib/array";
+import HashMap "mo:stdlib/hashMap";
+import Hash "mo:stdlib/hash";
+import Iter "mo:stdlib/iter";
+import List "mo:stdlib/list";
+import Nat "mo:stdlib/nat";
+import Option "mo:stdlib/option";
 
-import Types "./types.mo";
+import Types "./types";
 
 module {
   type Entry = Types.Entry;
@@ -19,7 +18,7 @@ module {
     func hashEntryId (x : EntryId) : Hash.Hash { Nat.toWord32(Nat.fromNat32(x)) };
     let hashMap = HashMap.HashMap<EntryId, Entry>(1, natEq, hashEntryId);
 
-    public func addConnection (fromUser : EntryId, toUser : EntryId) : () {
+    public func addConnection (fromUser : EntryId, toUser : EntryId) {
       let entry = getEntry(fromUser);
       let updated : Entry = {
         id = entry.id;

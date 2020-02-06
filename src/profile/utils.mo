@@ -1,10 +1,10 @@
-import Array "mo:stdlib/array.mo";
-import Blob "mo:stdlib/blob.mo";
-import Nat "mo:stdlib/nat.mo";
-import Option "mo:stdlib/option.mo";
+import Array "mo:stdlib/array";
+import Principal "mo:stdlib/principalId";
+import Nat "mo:stdlib/nat";
+import Option "mo:stdlib/option";
 
-import Database "./database.mo";
-import Types "./types.mo";
+import Database "./database";
+import Types "./types";
 
 module {
   type NewProfile = Types.NewProfile;
@@ -53,7 +53,7 @@ module {
 
   let adminIds : [PrincipalId] = [];
 
-  public func getUserId (caller : Blob) : PrincipalId { Blob.hash(caller) };
+  public func getUserId (caller : Principal) : PrincipalId { Principal.hash(caller) };
 
   public func isAdmin (userId : PrincipalId) : Bool {
     func identity (x : PrincipalId) : Bool { x == userId };

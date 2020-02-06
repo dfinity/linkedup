@@ -1,11 +1,11 @@
-import Array "mo:stdlib/array.mo";
-import HashMap "mo:stdlib/hashMap.mo";
-import Hash "mo:stdlib/hash.mo";
-import Iter "mo:stdlib/iter.mo";
-import Nat "mo:stdlib/nat.mo";
-import Option "mo:stdlib/option.mo";
+import Array "mo:stdlib/array";
+import HashMap "mo:stdlib/hashMap";
+import Hash "mo:stdlib/hash";
+import Iter "mo:stdlib/iter";
+import Nat "mo:stdlib/nat";
+import Option "mo:stdlib/option";
 
-import Types "./types.mo";
+import Types "./types";
 
 module {
   type NewProfile = Types.NewProfile;
@@ -17,11 +17,11 @@ module {
     let hashMap : HashMap.HashMap<PrincipalId, Profile> = init();
     var seeded = false;
 
-    public func createOne (userId : PrincipalId, _profile : NewProfile) : () {
+    public func createOne (userId : PrincipalId, _profile : NewProfile) {
       ignore hashMap.set(userId, makeProfile(userId, _profile));
     };
 
-    public func updateOne (userId : PrincipalId, profile : Profile) : () {
+    public func updateOne (userId : PrincipalId, profile : Profile) {
       ignore hashMap.set(userId, profile);
     };
 
@@ -82,7 +82,7 @@ module {
       false
     };
 
-    public func seed () : () {
+    public func seed () {
       if (seeded) { return; };
 
       let realPeople : [[Text]] = [

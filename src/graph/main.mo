@@ -1,5 +1,5 @@
-import Database "./database.mo";
-import Types "./types.mo";
+import Database "./database";
+import Types "./types";
 
 type Entry = Types.Entry;
 type EntryId = Types.EntryId;

@@ -1,4 +1,4 @@
-import Hash "mo:stdlib/hash.mo";
+import Hash "mo:stdlib/hash";
 
 module {
   public type EntryId = Nat32;
