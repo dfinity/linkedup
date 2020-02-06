@@ -12,31 +12,31 @@ module {
   type Profile = Types.Profile;
   type PrincipalId = Types.PrincipalId;
 
-  public class Directory () {
+  public class Directory() {
     // The "database" is just a local hash map
     let hashMap : HashMap.HashMap<PrincipalId, Profile> = init();
     var seeded = false;
 
-    public func createOne (userId : PrincipalId, _profile : NewProfile) {
+    public func createOne(userId : PrincipalId, _profile : NewProfile) {
       ignore hashMap.set(userId, makeProfile(userId, _profile));
     };
 
-    public func updateOne (userId : PrincipalId, profile : Profile) {
+    public func updateOne(userId : PrincipalId, profile : Profile) {
       ignore hashMap.set(userId, profile);
     };
 
-    public func findOne (userId : PrincipalId) : ?Profile {
+    public func findOne(userId : PrincipalId) : ?Profile {
       hashMap.get(userId)
     };
 
-    public func findMany (userIds : [PrincipalId]) : [Profile] {
-      func getProfile (userId : PrincipalId) : Profile {
+    public func findMany(userIds : [PrincipalId]) : [Profile] {
+      func getProfile(userId : PrincipalId) : Profile {
         Option.unwrap<Profile>(hashMap.get(userId))
       };
       Array.map<PrincipalId, Profile>(getProfile, userIds)
     };
 
-    public func findBy (term : Text) : [Profile] {
+    public func findBy(term : Text) : [Profile] {
       var profiles : [Profile] = [];
       for ((id, profile) in hashMap.iter()) {
         let fullName = profile.firstName # " " # profile.lastName;
@@ -62,7 +62,7 @@ module {
       }
     };
 
-    func includesText (string : Text, term : Text) : Bool {
+    func includesText(string : Text, term : Text) : Bool {
       let stringArray = Iter.toArray<Char>(string.chars());
       let termArray = Iter.toArray<Char>(term.chars());
 
@@ -82,7 +82,7 @@ module {
       false
     };
 
-    public func seed () {
+    public func seed() {
       if (seeded) { return; };
 
       let realPeople : [[Text]] = [
@@ -116,7 +116,7 @@ module {
         [
           "Barack",
           "Obama",
-          "President (Retired)",
+          "President(Retired)",
           "United States of America",
           "**President**, USA  \nJan 2009 – Jan 2017  \nWashington, DC",
           "**Harvard University**  \nJD, Law",
@@ -245,7 +245,7 @@ module {
       seeded := true;
     };
 
-    func realProfile (row : [Text], index : Nat) : Profile {
+    func realProfile(row : [Text], index : Nat) : Profile {
       {
         id = Nat.toWord32(1000 + index);
         firstName = row[0];
@@ -258,7 +258,7 @@ module {
       }
     };
 
-    func mockProfile (row : [Text], index : Nat) : Profile {
+    func mockProfile(row : [Text], index : Nat) : Profile {
       {
         id = Nat.toWord32(2000 + index);
         firstName = row[0];
@@ -272,8 +272,8 @@ module {
     };
   };
 
-  func init () : HashMap.HashMap<PrincipalId, Profile> {
-    func passthrough (hash : PrincipalId) : PrincipalId { hash };
+  func init() : HashMap.HashMap<PrincipalId, Profile> {
+    func passthrough(hash : PrincipalId) : PrincipalId { hash };
     HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough)
   };
 };

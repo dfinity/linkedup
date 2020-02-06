@@ -12,13 +12,13 @@ module {
   type Entry = Types.Entry;
   type EntryId = Types.EntryId;
 
-  public class Entries () {
+  public class Entries() {
 
-    func natEq (x : Nat32, y : Nat32) : Bool { x == y };
-    func hashEntryId (x : EntryId) : Hash.Hash { Nat.toWord32(Nat.fromNat32(x)) };
+    func natEq(x : Nat32, y : Nat32) : Bool { x == y };
+    func hashEntryId(x : EntryId) : Hash.Hash { Nat.toWord32(Nat.fromNat32(x)) };
     let hashMap = HashMap.HashMap<EntryId, Entry>(1, natEq, hashEntryId);
 
-    public func addConnection (fromUser : EntryId, toUser : EntryId) {
+    public func addConnection(fromUser : EntryId, toUser : EntryId) {
       let entry = getEntry(fromUser);
       let updated : Entry = {
         id = entry.id;
@@ -28,7 +28,7 @@ module {
       ignore hashMap.set(fromUser, updated);
     };
 
-    func getEntry (entryId : EntryId) : Entry {
+    func getEntry(entryId : EntryId) : Entry {
       let existing = hashMap.get(entryId);
       switch (existing) {
         case (?existing) { existing };
@@ -36,7 +36,7 @@ module {
       };
     };
 
-    public func getConnections (userId : EntryId) : [EntryId] {
+    public func getConnections(userId : EntryId) : [EntryId] {
       let entry = getEntry(userId);
       entry.connections
     };
