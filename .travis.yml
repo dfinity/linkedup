@@ -9,7 +9,7 @@ install:
 - export PATH=/home/$USER/bin:$PATH
 script:
 - sh bootstrap.sh
-- ID=$(xxd -p canisters/index/_canister.id)
+- ID=$(xxd -p canisters/profile/_canister.id)
 - CRC=$(python -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest())")
 - wget -O index.html http://127.0.0.1:8000/?canisterId=ic:$ID$CRC
 - cat index.html
