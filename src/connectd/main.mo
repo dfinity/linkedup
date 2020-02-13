@@ -1,23 +1,18 @@
-import Database "./database";
+import Digraph "./digraph";
 import Types "./types";
 
-type Entry = Types.Entry;
-type EntryId = Types.EntryId;
+type Vertex = Types.Vertex;
 
-actor Graph {
-  var entries : Database.Entries = Database.Entries();
+actor Connectd {
+  var graph : Digraph.Digraph = Digraph.Digraph();
 
   public func healthcheck() : async Bool { true };
 
-  // Connections
-
-  // "public" makes this method available as Graph.connect
-  public func connect(caller : Nat32, userId : Nat32) : async () {
-    entries.addConnection(caller, userId);
+  public func connect(userA : Vertex, userB : Vertex) : async () {
+    graph.addEdge(userA, userB);
   };
 
-  public func getConnections(userId : EntryId) : async [EntryId] {
-    entries.getConnections(userId)
+  public func getConnections(user : Vertex) : async [Vertex] {
+    graph.getAdjacent(user)
   };
-
 };
