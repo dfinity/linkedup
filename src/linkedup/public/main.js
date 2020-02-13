@@ -4,7 +4,7 @@ import Typed from 'typed.js';
 import 'bootstrap';
 
 // Make the Profile app's public methods available locally
-import profile from 'ic:canisters/profile';
+import profile from 'ic:canisters/linkedup';
 
 import { ownProfilePageTmpl, profilePageTmpl, searchResultsPageTmpl } from './templates';
 import { injectHtml } from './utils';

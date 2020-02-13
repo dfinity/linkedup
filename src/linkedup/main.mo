@@ -1,5 +1,5 @@
 // Make the Graph app's public methods available locally
-import Graph "canister:graph";
+import Graph "canister:connectd";
 
 import Database "./database";
 import Types "./types";
