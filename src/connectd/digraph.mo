@@ -1,10 +1,9 @@
 import Array "mo:stdlib/array";
 import Iter "mo:stdlib/iter";
-
-import Types "./types";
+import Principal "mo:stdlib/principalId";
 
 module {
-  type Vertex = Types.Vertex;
+  type Vertex = Principal;
 
   public class Digraph() {
 

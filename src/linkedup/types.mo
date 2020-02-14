@@ -1,8 +1,7 @@
 import Hash "mo:stdlib/hash";
+import Principal "mo:stdlib/principalId";
 
 module {
-  public type PrincipalId = Hash.Hash;
-
   public type NewProfile = {
     firstName : Text;
     lastName : Text;
@@ -14,7 +13,7 @@ module {
   };
 
   public type Profile = {
-    id : PrincipalId;
+    id : Principal;
     firstName : Text;
     lastName : Text;
     title : Text;

@@ -11,6 +11,13 @@ type NewProfile = Types.NewProfile;
 type Profile = Types.Profile;
 
 actor Profile {
+            public query func __dfx_asset_path(path: Text): async Text {
+              switch path {
+                
+                case _ {assert false; ""}
+              }
+            };
+        
   var directory : Database.Directory = Database.Directory();
 
   public func healthcheck () : async Bool { true };
