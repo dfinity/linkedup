@@ -34,7 +34,6 @@ module {
     directory.findMany(entryIds)
   };
 
-
   public func includes(x : Principal, xs : [Principal]) : Bool {
     func isX(y : Principal) : Bool { x == y };
     switch (Array.find<Principal>(isX, xs)) {

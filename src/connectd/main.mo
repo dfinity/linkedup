@@ -13,4 +13,8 @@ actor Connectd {
   public func getConnections(user : Principal) : async [Principal] {
     graph.getAdjacent(user)
   };
+
+  public func hasConnection(userA : Principal, userB : Principal) : async Bool {
+    graph.hasEdge(userA, userB)
+  };
 };

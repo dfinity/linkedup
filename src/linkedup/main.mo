@@ -54,8 +54,7 @@ actor Profile {
   };
 
   public shared(msg) func isConnected  (userId : Principal) : async Bool {
-    let entryIds = await Connectd.getConnections(msg.caller);
-    Utils.includes(userId, entryIds)
+    await Connectd.hasConnection(msg.caller, userId)
   };
 
 };

@@ -28,5 +28,11 @@ module {
       adjacencyList
     };
 
+    public func hasEdge(fromVertex : Vertex, toVertex : Vertex) : Bool {
+      for ((from, to) in Iter.fromArray<(Vertex, Vertex)>(edgeList)) {
+        if (from == fromVertex and to == toVertex) { return true; }
+      };
+      false
+    };
   };
 };
