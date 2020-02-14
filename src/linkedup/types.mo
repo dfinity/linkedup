@@ -1,4 +1,3 @@
-import Hash "mo:stdlib/hash";
 import Principal "mo:stdlib/principalId";
 
 module {

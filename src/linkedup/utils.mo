@@ -1,8 +1,6 @@
 import Array "mo:stdlib/array";
 import Principal "mo:stdlib/principalId";
-import Nat "mo:stdlib/nat";
 import Option "mo:stdlib/option";
-
 import Database "./database";
 import Types "./types";
 

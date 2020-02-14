@@ -1,8 +1,5 @@
 import Principal "mo:stdlib/principalId";
-
-// Make the Connectd app's public methods available locally
 import Connectd "canister:connectd";
-
 import Database "./database";
 import Types "./types";
 import Utils "./utils";
