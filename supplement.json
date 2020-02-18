@@ -1,0 +1,19 @@
+[
+  {
+    "animate.css": "^3.7.2",
+    "bootstrap": "^4.3.1",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.2",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0",
+    "showdown": "^1.9.1",
+    "style-loader": "^1.1.2",
+    "terser-webpack-plugin": "2.2.2",
+    "tweetnacl": "^1.0.1",
+    "typed.js": "^2.0.11",
+    "webpack": "4.41.3",
+    "webpack-cli": "3.3.10",
+    "wowjs": "^1.1.3"
+  }
+]
