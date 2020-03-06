@@ -274,6 +274,6 @@ module {
 
   func init() : HashMap.HashMap<PrincipalId, Profile> {
     func passthrough(hash : PrincipalId) : PrincipalId { hash };
-    HashMap.HashMap<PrincipalId, Profile>(1, Hash.Hash.hashEq, passthrough)
+    HashMap.HashMap<PrincipalId, Profile>(1, Hash.hashEq, passthrough)
   };
 };
