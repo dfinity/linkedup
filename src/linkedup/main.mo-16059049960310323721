@@ -1,5 +1,5 @@
 // Make the Graph app's public methods available locally
-import Graph "canister:graph";
+import Graph "canister:connectd";
 
 import Database "./database";
 import Types "./types";
@@ -10,6 +10,13 @@ type Profile = Types.Profile;
 type PrincipalId = Types.PrincipalId;
 
 actor Profile {
+            public query func __dfx_asset_path(path: Text): async Text {
+              switch path {
+                
+                case _ {assert false; ""}
+              }
+            };
+        
   var directory : Database.Directory = Database.Directory();
   directory.seed();
 

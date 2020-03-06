@@ -1,15 +1,15 @@
 {
     "canisters": {
-        "graph": {
-            "main": "src/graph/main.mo"
+        "connectd": {
+            "main": "src/connectd/main.mo"
         },
-        "profile": {
-            "main": "src/profile/main.mo",
+        "linkedup": {
+            "main": "src/linkedup/main.mo",
             "frontend": {
-                "entrypoint": "src/profile/public/main.js",
+                "entrypoint": "src/linkedup/public/main.js",
                 "assets": [
-                    "src/profile/public/*.html",
-                    "src/profile/public/*.css"
+                    "src/linkedup/public/*.html",
+                    "src/linkedup/public/*.css"
                 ]
             }
         }

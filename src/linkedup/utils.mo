@@ -57,7 +57,7 @@ module {
 
   public func isAdmin(userId : PrincipalId) : Bool {
     func identity(x : PrincipalId) : Bool { x == userId };
-    Option.isSome<PrincipalId>(Array.find<PrincipalId>(identity, adminIds))
+    Option.isSome(Array.find<PrincipalId>(identity, adminIds))
   };
 
   public func hasAccess(userId : PrincipalId, profile : Profile) : Bool {
