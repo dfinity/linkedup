@@ -4,22 +4,40 @@
 
 ### Prerequisites
 
-- [Docker](https://docker.com)
+You have downloaded and installed the SDK as described in [Getting started](https://sdk.dfinity.org/developers-guide/getting-started.html).
 
 ### Demo
 
-Build and run the container.
-```bash
-docker build --no-cache --tag dfinity-lab/linkedup .
-docker run \
-    --publish 8000:8000 \
-    --volume `pwd`:/workspace \
-    dfinity-lab/linkedup sh bootstrap.sh
-```
+1. Clone the repository.
 
-Open the canister frontend in your web browser.
-```bash
-ID=$(xxd -u -p canisters/profile/_canister.id)
-CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest())")
-xdg-open "http://127.0.0.1:8000/?canisterId=ic:$ID$CRC"
-```
+1. Install `node.js` modules by running the following command:
+
+    ```bash
+    npm install
+    ```
+1. Start a local internet computer.
+
+    ```bash
+    dfx start
+    ```
+
+1. Open a new terminal, then execute the following commands:
+
+    ```bash
+    dfx build
+    dfx canister install --all
+    ```
+    
+1. Open a web browser and navigate to the URL for the canister frontend by specifying the host, port number, and canister identifier for the profile canister.
+
+    For example, if using the default host and port number and the `dfx canister install` command returns:
+
+    ```bash
+    Installing code for canister profile, with canister_id ic:5173CDC10071D7DC0B
+    ```
+
+    You would use the following URL:
+
+    ```bash
+    http://localhost:8000/?canisterId=ic:5173CDC10071D7DC0B
+    ```
