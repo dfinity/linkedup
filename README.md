@@ -10,7 +10,7 @@ You have downloaded and installed the SDK as described in [Getting started](http
 
 1. Clone the repository.
 
-1. Install `node.js` modules by running the following command:
+1. Install `node.js` modules by running the following command (only needed the first time):
 
     ```bash
     npm install
