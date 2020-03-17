@@ -1,5 +1,5 @@
-// Make the Graph app's public methods available locally
-import Graph "canister:connectd";
+// Make the Connectd app's public methods available locally
+import Connectd "canister:connectd";
 
 import Database "./database";
 import Types "./types";
@@ -9,7 +9,7 @@ type NewProfile = Types.NewProfile;
 type Profile = Types.Profile;
 type PrincipalId = Types.PrincipalId;
 
-actor Profile {
+actor LinkedUp {
   var directory : Database.Directory = Database.Directory();
   directory.seed();
 
@@ -45,24 +45,24 @@ actor Profile {
 
   public shared(msg) func connect (userId : PrincipalId) : async () {
     let callerId : PrincipalId = Utils.getUserId(msg.caller);
-    // Call Graph's public methods without an API
-    await Graph.connect(Utils.toEntryId(callerId), Utils.toEntryId(userId));
+    // Call Connectd's public methods without an API
+    await Connectd.connect(Utils.toEntryId(callerId), Utils.toEntryId(userId));
   };
 
   public shared(msg) func getOwnConnections () : async [Profile] {
     let callerId : PrincipalId = Utils.getUserId(msg.caller);
-    let entryIds = await Graph.getConnections(Utils.toEntryId(callerId));
+    let entryIds = await Connectd.getConnections(Utils.toEntryId(callerId));
     Utils.getConnectionProfiles(directory, entryIds)
   };
 
   public func getConnections (userId : PrincipalId) : async [Profile] {
-    let entryIds = await Graph.getConnections(Utils.toEntryId(userId));
+    let entryIds = await Connectd.getConnections(Utils.toEntryId(userId));
     Utils.getConnectionProfiles(directory, entryIds)
   };
 
   public shared(msg) func isConnected  (userId : PrincipalId) : async Bool {
     let callerId : PrincipalId = Utils.getUserId(msg.caller);
-    let entryIds = await Graph.getConnections(Utils.toEntryId(callerId));
+    let entryIds = await Connectd.getConnections(Utils.toEntryId(callerId));
     Utils.includes(Utils.toEntryId(userId), entryIds)
   };
 
