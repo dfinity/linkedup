@@ -13,6 +13,10 @@
     font-size: 1rem;
 }
 
+.lu section.edit {
+    margin-bottom: 50px;
+}
+
 .lu_button {
     color: white;
     background: #292a2e;

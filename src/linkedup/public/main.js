@@ -86,7 +86,7 @@ profile.__getAsset("index.html")
     clearAdminSections();
     (async function () {
       try {
-        const [data] = await profile.getOwn();
+        const data = await profile.getOwn();
         data.connections = [];
         $('.profile').html(ownProfilePageTmpl(data)).show();
         data.connections = await profile.getOwnConnections();
@@ -101,7 +101,7 @@ profile.__getAsset("index.html")
     clearAdminSections();
     (async function () {
       try {
-        let [data] = await profile.get(userId);
+        let data = await profile.get(userId);
         data.connections = [];
         data.isConnected = true;
         $('.profile').html(profilePageTmpl(data)).show();
@@ -126,7 +126,7 @@ profile.__getAsset("index.html")
 
     (async function () {
       let result = {};
-      if (userId) { [result] = await profile.get(userId); }
+      if (userId) { result = await profile.get(userId); }
       updateForm(result);
     })();
   };
@@ -136,7 +136,7 @@ profile.__getAsset("index.html")
 
     (async function () {
       try {
-        const [results] = await profile.search(term);
+        const results = await profile.search(term);
         $('.search').html(searchResultsPageTmpl(results)).show();
       } catch (err) {
         console.error(err);

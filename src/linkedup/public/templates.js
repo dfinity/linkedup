@@ -66,7 +66,7 @@ const profileTmpl = data => `
   </div>
 `;
 
-const connectionsTmpl = data => data.connections.length
+const connectionsTmpl = data => (data && data.connections.length)
   ? data.connections.map(connectionTmpl).join('')
   : "No connections";
 
@@ -91,7 +91,7 @@ export const searchResultsPageTmpl = data => `
   </div>
 `;
 
-const searchResultsTmpl = data => data.length
+const searchResultsTmpl = data => (data && data.length)
   ? data.map(searchResultTmpl).join('')
   : "No results";
 
