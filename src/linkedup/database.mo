@@ -41,7 +41,7 @@ module {
       for ((id, profile) in hashMap.iter()) {
         let fullName = profile.firstName # " " # profile.lastName;
         if (includesText(fullName, term)) {
-          profiles:= Array.append<Profile>(profiles, [profile]);
+          profiles := Array.append<Profile>(profiles, [profile]);
         };
       };
       profiles
@@ -76,7 +76,7 @@ module {
           if (j == termArray.len()) { return true; }
         } else {
           i += 1;
-          j:= 0;
+          j := 0;
         }
       };
       false
