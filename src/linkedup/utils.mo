@@ -1,7 +1,5 @@
 import Array "mo:stdlib/array";
-import Nat "mo:stdlib/nat";
 import Option "mo:stdlib/option";
-
 import Database "./database";
 import Types "./types";
 
