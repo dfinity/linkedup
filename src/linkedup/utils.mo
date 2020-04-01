@@ -1,5 +1,4 @@
 import Array "mo:stdlib/array";
-import Principal "mo:stdlib/principalId";
 import Nat "mo:stdlib/nat";
 import Option "mo:stdlib/option";
 
@@ -9,10 +8,10 @@ import Types "./types";
 module {
   type NewProfile = Types.NewProfile;
   type Profile = Types.Profile;
-  type PrincipalId = Types.PrincipalId;
+  type UserId = Types.UserId;
 
   // Profiles
-  public func getProfile(directory : Database.Directory, userId : PrincipalId) : Profile {
+  public func getProfile(directory: Database.Directory, userId: UserId): Profile {
     let existing = directory.findOne(userId);
     switch (existing) {
       case (?existing) { existing };
@@ -33,17 +32,9 @@ module {
 
   // Connections
 
-  public func getConnectionProfiles(directory : Database.Directory, entryIds : [Nat32]) : [Profile] {
-    let profileIds = Array.map<Nat32, PrincipalId>(fromEntryId, entryIds);
-    directory.findMany(profileIds)
-  };
-
-  public func toEntryId(userId : PrincipalId) : Nat32 { Nat.toNat32(Nat.fromWord32(userId)) };
-  public func fromEntryId(entryId : Nat32) : PrincipalId { Nat.toWord32(Nat.fromNat32(entryId)) };
-
-  public func includes(x : Nat32, xs : [Nat32]) : Bool {
-    func isX(y : Nat32) : Bool { x == y };
-    switch (Array.find<Nat32>(isX, xs)) {
+  public func includes(x: UserId, xs: [UserId]): Bool {
+    func isX(y: UserId): Bool { x == y };
+    switch (Array.find<UserId>(isX, xs)) {
       case (null) { false };
       case (_) { true };
     };
@@ -51,16 +42,14 @@ module {
 
   // Authorization
 
-  let adminIds : [PrincipalId] = [];
+  let adminIds: [UserId] = [];
 
-  public func getUserId(caller : Principal) : PrincipalId { Principal.hash(caller) };
-
-  public func isAdmin(userId : PrincipalId) : Bool {
-    func identity(x : PrincipalId) : Bool { x == userId };
-    Option.isSome(Array.find<PrincipalId>(identity, adminIds))
+  public func isAdmin(userId: UserId): Bool {
+    func identity(x: UserId): Bool { x == userId };
+    Option.isSome(Array.find<UserId>(identity, adminIds))
   };
 
-  public func hasAccess(userId : PrincipalId, profile : Profile) : Bool {
+  public func hasAccess(userId: UserId, profile: Profile): Bool {
     userId == profile.id or isAdmin(userId)
   };
 };
