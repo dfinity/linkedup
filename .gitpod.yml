@@ -1,0 +1,25 @@
+tasks:
+  - init: npm install && pip install crc8
+    command:
+      gp await-port 8000 &&
+      dfx build &&
+      dfx canister install --all &&
+      ID=$(xxd -u -p canisters/logo/_canister.id) &&
+      CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest().upper())") &&
+      gp preview $(gp url 8080)/?canisterId=ic:$ID$CRC
+  - command: dfx replica --port 8000
+    name: replica
+    openMode: tab-after
+  - command: gp await-port 8000 && dfx bootstrap --port 8080 --providers http://127.0.0.1:8000/api
+    name: bootstrap
+    openMode: tab-after
+image:
+  file: .gitpod.Dockerfile
+ports:
+  - port: 8080
+    onOpen: ignore
+  - port: 8000
+    onOpen: ignore
+vscode:
+  extensions:
+    - dfinity-foundation.vscode-motoko@0.2.0:mQSIC9ZHkr0i991VNjeCWw==
