@@ -1,11 +1,11 @@
 tasks:
   - init: npm install && pip install crc8
-    command:
-      gp await-port 8000 &&
-      dfx build &&
-      dfx canister install --all &&
-      ID=$(xxd -u -p canisters/linkedup/_canister.id) &&
-      CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest().upper())") &&
+    command: |
+      gp await-port 8000
+      dfx build
+      dfx canister install --all
+      ID=$(xxd -u -p canisters/linkedup/_canister.id)
+      CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest().upper())")
       gp preview $(gp url 8080)/?canisterId=ic:$ID$CRC
   - command: dfx replica --port 8000
     name: replica
