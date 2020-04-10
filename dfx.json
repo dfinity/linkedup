@@ -1,26 +1,24 @@
 {
-    "canisters": {
-        "connectd": {
-            "main": "src/connectd/main.mo"
-        },
-        "linkedup": {
-            "main": "src/linkedup/main.mo",
-            "frontend": {
-                "entrypoint": "src/linkedup/public/main.js",
-                "assets": [
-                    "src/linkedup/public/*.html",
-                    "src/linkedup/public/*.css"
-                ]
-            }
-        }
+  "canisters": {
+    "connectd": {
+      "main": "src/connectd/main.mo"
     },
-    "defaults": {
-        "build": {
-            "output": "canisters"
-        },
-        "start": {
-            "address": "127.0.0.1",
-            "port": 8000
-        }
+    "linkedup": {
+      "main": "src/linkedup/main.mo",
+      "frontend": {
+        "entrypoint": "src/linkedup/public/main.js",
+        "assets": ["src/linkedup/public/*.html", "src/linkedup/public/*.css"]
+      }
     }
+  },
+  "defaults": {
+    "build": {
+      "output": "canisters"
+    },
+    "start": {
+      "address": "127.0.0.1",
+      "port": 8000
+    }
+  },
+  "dfx": "0.5.5"
 }
