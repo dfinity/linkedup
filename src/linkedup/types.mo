@@ -1,26 +1,26 @@
-import Hash "mo:stdlib/hash";
+import Principal "mo:stdlib/principalId";
 
 module {
-  public type PrincipalId = Hash.Hash;
+  public type UserId = Principal;
 
   public type NewProfile = {
-    firstName : Text;
-    lastName : Text;
-    title : Text;
-    company : Text;
-    experience : Text;
-    education : Text;
-    imgUrl : Text;
+    firstName: Text;
+    lastName: Text;
+    title: Text;
+    company: Text;
+    experience: Text;
+    education: Text;
+    imgUrl: Text;
   };
 
   public type Profile = {
-    id : PrincipalId;
-    firstName : Text;
-    lastName : Text;
-    title : Text;
-    company : Text;
-    experience : Text;
-    education : Text;
-    imgUrl : Text;
+    id: UserId;
+    firstName: Text;
+    lastName: Text;
+    title: Text;
+    company: Text;
+    experience: Text;
+    education: Text;
+    imgUrl: Text;
   };
 };
