@@ -1,69 +1,59 @@
 // Make the Connectd app's public methods available locally
 import Connectd "canister:connectd";
-
 import Database "./database";
 import Types "./types";
 import Utils "./utils";
 
 type NewProfile = Types.NewProfile;
 type Profile = Types.Profile;
-type PrincipalId = Types.PrincipalId;
+type UserId = Types.UserId;
 
 actor LinkedUp {
-  var directory : Database.Directory = Database.Directory();
-  directory.seed();
+  var directory: Database.Directory = Database.Directory();
 
-  public func healthcheck () : async Bool { true };
+  // Healthcheck
+
+  public func healthcheck(): async Bool { true };
 
   // Profiles
 
-  public shared(msg) func create (profile : NewProfile) : async PrincipalId {
-    let newUserId = Utils.getUserId(msg.caller);
-    directory.createOne(newUserId, profile);
-    newUserId
+  public shared(msg) func create(profile: NewProfile): async () {
+    directory.createOne(msg.caller, profile);
   };
 
-  public shared(msg) func update (profile : Profile) : async () {
-    if (Utils.hasAccess(Utils.getUserId(msg.caller), profile)) {
+  public shared(msg) func update(profile: Profile): async () {
+    if(Utils.hasAccess(msg.caller, profile)) {
       directory.updateOne(profile.id, profile);
     };
   };
 
-  public shared query(msg) func getOwn () : async Profile {
-    Utils.getProfile(directory, Utils.getUserId(msg.caller))
-  };
-
-  public query func get (userId : PrincipalId) : async Profile {
+  public query func get(userId: UserId): async Profile {
     Utils.getProfile(directory, userId)
   };
 
-  public query func search (term : Text) : async [Profile] {
+  public query func search(term: Text): async [Profile] {
     directory.findBy(term)
   };
 
   // Connections
 
-  public shared(msg) func connect (userId : PrincipalId) : async () {
-    let callerId : PrincipalId = Utils.getUserId(msg.caller);
+  public shared(msg) func connect(userId: UserId): async () {
     // Call Connectd's public methods without an API
-    await Connectd.connect(Utils.toEntryId(callerId), Utils.toEntryId(userId));
+    await Connectd.connect(msg.caller, userId);
   };
 
-  public shared(msg) func getOwnConnections () : async [Profile] {
-    let callerId : PrincipalId = Utils.getUserId(msg.caller);
-    let entryIds = await Connectd.getConnections(Utils.toEntryId(callerId));
-    Utils.getConnectionProfiles(directory, entryIds)
+  public func getConnections(userId: UserId): async [Profile] {
+    let userIds = await Connectd.getConnections(userId);
+    directory.findMany(userIds)
   };
 
-  public func getConnections (userId : PrincipalId) : async [Profile] {
-    let entryIds = await Connectd.getConnections(Utils.toEntryId(userId));
-    Utils.getConnectionProfiles(directory, entryIds)
+  public shared(msg) func isConnected(userId: UserId): async Bool {
+    let userIds = await Connectd.getConnections(msg.caller);
+    Utils.includes(userId, userIds)
   };
 
-  public shared(msg) func isConnected  (userId : PrincipalId) : async Bool {
-    let callerId : PrincipalId = Utils.getUserId(msg.caller);
-    let entryIds = await Connectd.getConnections(Utils.toEntryId(callerId));
-    Utils.includes(Utils.toEntryId(userId), entryIds)
-  };
+  // User Auth
+
+  public shared query(msg) func getOwnId(): async UserId { msg.caller }
 
 };
