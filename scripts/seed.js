@@ -45,9 +45,7 @@ const getActor = (
   const canisterId = getCanisterId(canisterName);
   const httpAgent = new HttpAgent({ fetch, host });
   httpAgent.addTransform(makeNonceTransform());
-  if (keypair) {
-    httpAgent.addTransform(makeAuthTransform(keypair));
-  }
+  httpAgent.addTransform(makeAuthTransform(keypair));
   return makeActorFactory(candid)({ canisterId, httpAgent });
 };
 
