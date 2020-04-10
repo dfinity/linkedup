@@ -7,11 +7,14 @@ const { Crypto } = require("node-webcrypto-ossl");
 
 global.crypto = new Crypto();
 
-const config = require("../dfx.json");
+const {
+  defaults: { build, start },
+  dfx,
+} = require("../dfx.json");
 const userLib = require(path.join(
   os.homedir(),
   "/.cache/dfinity/versions/",
-  config.dfx,
+  dfx,
   "/js-user-library/src"
 ));
 const {
@@ -38,7 +41,7 @@ const main = async () => {
 
 const getActor = (
   canisterName,
-  host = "http://localhost:8000",
+  host = `http://${start.address}:${start.port}`,
   keypair = generateKeyPair()
 ) => {
   const candid = eval(getCandid(canisterName));
@@ -50,7 +53,7 @@ const getActor = (
 };
 
 const getCanisterPath = (canisterName) =>
-  path.join(__dirname, "../canisters/", canisterName);
+  path.join(__dirname, "..", build.output, canisterName);
 
 const getCandid = (canisterName) =>
   fs
