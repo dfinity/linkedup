@@ -33,8 +33,8 @@ const main = async () => {
   const profiles = require("./data");
   profiles.forEach(async (profile) => {
     const linkedup = await getActor("linkedup");
-    const userId = await linkedup.create(profile);
-    console.log("...profile added", userId);
+    await linkedup.create(profile);
+    console.log("...profile added");
   });
 };
 
