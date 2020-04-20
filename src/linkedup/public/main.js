@@ -9,7 +9,7 @@ import linkedup from "ic:canisters/linkedup";
 import {
   ownProfilePageTmpl,
   profilePageTmpl,
-  searchResultsPageTmpl
+  searchResultsPageTmpl,
 } from "./templates";
 import { injectHtml } from "./utils";
 
@@ -23,10 +23,16 @@ linkedup
   .__getAsset("index.html")
   .then(injectHtml)
   .then(() =>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Reveal animations.
       const wow = new WOW();
       wow.init();
+
+      const state = {
+        connection: [],
+        profile: {},
+        results: [],
+      };
 
       //
       function renderNavbar() {
@@ -39,7 +45,7 @@ linkedup
       }
 
       renderNavbar();
-      $(window).resize(function() {
+      $(window).resize(function () {
         renderNavbar();
       });
 
@@ -49,7 +55,7 @@ linkedup
         $(".intro").css("height", windowHeight);
       }
       renderIntro();
-      $(window).resize(function() {
+      $(window).resize(function () {
         renderIntro();
       });
 
@@ -59,12 +65,12 @@ linkedup
           "n&nbsp;autonomous",
           "&nbsp;transparent",
           "n&nbsp;unstoppable",
-          "&nbsp;tamperproof"
+          "&nbsp;tamperproof",
         ],
         typeSpeed: 50,
         backSpeed: 25,
         backDelay: 3000,
-        loop: true
+        loop: true,
       });
 
       // Disable submit button.
@@ -90,18 +96,15 @@ linkedup
 
       function renderOwnProfile() {
         clearAdminSections();
-        (async function() {
+        (async function () {
           try {
             const ownId = await linkedup.getOwnId();
             const data = await linkedup.get(ownId);
             data.connections = [];
-            $(".profile")
-              .html(ownProfilePageTmpl(data))
-              .show();
+            $(".profile").html(ownProfilePageTmpl(data)).show();
             data.connections = await linkedup.getConnections(ownId);
-            $(".profile")
-              .html(ownProfilePageTmpl(data))
-              .show();
+            state.connections = data.connections;
+            $(".profile").html(ownProfilePageTmpl(data)).show();
           } catch (err) {
             console.error(err);
           }
@@ -110,23 +113,20 @@ linkedup
 
       function renderProfile(userId) {
         clearAdminSections();
-        (async function() {
+        (async function () {
           try {
             let data = await linkedup.get(userId);
+            state.profile = data;
             data.connections = [];
             data.isConnected = true;
-            $(".profile")
-              .html(profilePageTmpl(data))
-              .show();
+            $(".profile").html(profilePageTmpl(data)).show();
             Promise.all([
               linkedup.isConnected(userId),
-              linkedup.getConnections(userId)
+              linkedup.getConnections(userId),
             ]).then(([isConnected, connections]) => {
               data.isConnected = isConnected;
               data.connections = connections;
-              $(".profile")
-                .html(profilePageTmpl(data))
-                .show();
+              $(".profile").html(profilePageTmpl(data)).show();
             });
           } catch (err) {
             console.error(err);
@@ -136,12 +136,9 @@ linkedup
 
       function renderEdit(userId) {
         clearAdminSections();
-        $(".edit")
-          .show()
-          .find("#first-name")
-          .focus();
+        $(".edit").show().find("#first-name").focus();
 
-        (async function() {
+        (async function () {
           let result = {};
           if (userId) {
             result = await linkedup.get(userId);
@@ -153,12 +150,11 @@ linkedup
       function renderSearch(term) {
         clearAdminSections();
 
-        (async function() {
+        (async function () {
           try {
             const results = await linkedup.search(term);
-            $(".search")
-              .html(searchResultsPageTmpl(results))
-              .show();
+            state.results = results;
+            $(".search").html(searchResultsPageTmpl(results)).show();
           } catch (err) {
             console.error(err);
           }
@@ -169,14 +165,14 @@ linkedup
         clearAdminSections();
         $(".connections").show();
 
-        (async function() {
+        (async function () {
           const ownId = linkedup.getOwnId();
           let connections = userId
             ? await linkedup.getConnections(userId)
             : await linkedup.getConnections(ownId);
           let message;
           if (connections.length) {
-            message = connections.map(profile => searchResultTmpl(profile));
+            message = connections.map((profile) => searchResultTmpl(profile));
           } else {
             message = "<div>You don't have any connections yet.";
           }
@@ -184,32 +180,18 @@ linkedup
         })();
       }
 
-      $("#edit-form").submit(function(event) {
+      $("#edit-form").submit(function (event) {
         event.preventDefault();
         const button = $(this).find('button[type="submit"]');
         disableSubmitButton(button);
 
-        const firstName = $(this)
-          .find("#first-name")
-          .val();
-        const lastName = $(this)
-          .find("#last-name")
-          .val();
-        const title = $(this)
-          .find("#title")
-          .val();
-        const company = $(this)
-          .find("#company")
-          .val();
-        const experience = $(this)
-          .find("#experience")
-          .val();
-        const education = $(this)
-          .find("#education")
-          .val();
-        const imgUrl = $(this)
-          .find("#imgUrl")
-          .val();
+        const firstName = $(this).find("#first-name").val();
+        const lastName = $(this).find("#last-name").val();
+        const title = $(this).find("#title").val();
+        const company = $(this).find("#company").val();
+        const experience = $(this).find("#experience").val();
+        const education = $(this).find("#education").val();
+        const imgUrl = $(this).find("#imgUrl").val();
 
         async function action() {
           // Call Profile's public methods without an API
@@ -220,7 +202,7 @@ linkedup
             company,
             experience,
             education,
-            imgUrl
+            imgUrl,
           });
           renderOwnProfile();
           enableSubmitButton(button, "Submit");
@@ -228,19 +210,19 @@ linkedup
         action();
       });
 
-      $("a#edit").click(function() {
+      $("a#edit").click(function () {
         renderEdit();
       });
 
-      $("a#profile").click(function() {
+      $("a#profile").click(function () {
         renderOwnProfile();
       });
 
-      $("a#connections").click(function() {
+      $("a#connections").click(function () {
         renderConnections();
       });
 
-      $("a#login").click(function() {
+      $("a#login").click(function () {
         $(".splash-view").slideUp(0, "linear");
         $(".admin-view").slideDown(250, "linear");
         renderOwnProfile();
@@ -251,7 +233,7 @@ linkedup
       const updateById = (selector, text) =>
         (document.querySelector(selector).innerHTML = text);
 
-      const updateForm = model => {
+      const updateForm = (model) => {
         const { id, firstName, lastName, title, company, experience } = model;
         updateById("#address", id);
         updateById("#first-name", firstName);
@@ -267,17 +249,19 @@ linkedup
         renderEdit();
       };
 
-      const connectWith = userId => {
+      const connectWith = (userId) => {
         try {
-          linkedup.connect(parseInt(userId, 10));
+          const profile = state.profile;
+          linkedup.connect(profile.id);
           renderOwnProfile();
         } catch (err) {
           console.error(err);
         }
       };
 
-      const showProfile = userId => {
-        renderProfile(parseInt(userId, 10));
+      const showProfile = (index) => {
+        const profile = state.results[index];
+        renderProfile(profile.id);
       };
 
       const search = () => {
@@ -289,7 +273,7 @@ linkedup
         connectWith,
         showProfile,
         search,
-        showEdit
+        showEdit,
       };
     })
   );
