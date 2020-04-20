@@ -1,5 +1,5 @@
-import Hash "mo:stdlib/hash";
+import Principal "mo:stdlib/principalId";
 
 module {
-  public type Vertex = Nat32;
+  public type Vertex = Principal;
 };

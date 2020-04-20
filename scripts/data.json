@@ -1,0 +1,47 @@
+[
+  {
+    "firstName": "Dominic",
+    "lastName": "Williams",
+    "title": "Founder & Chief Scientist",
+    "company": "DFINITY",
+    "experience": "**President & Chief Scientist**, DFINITY  \nJan 2015 – Present  \nPalo Alto, CA\n\n**President & CTO**, String Labs, Inc  \nJun 2015 – Feb 2018  \nPalo Alto, CA",
+    "education": "**King's College London**  \nBA, Computer Science",
+    "imgUrl": "https://media-exp1.licdn.com/dms/image/C5603AQHdxGV6zMbg-A/profile-displayphoto-shrink_200_200/0?e=1592438400&v=beta&t=NlR0J9mgJXd3SO6K3YJ6xBC_wCip20u5THPNKu6ImYQ"
+  },
+  {
+    "firstName": "Diego",
+    "lastName": "Prats",
+    "title": "Director of Product",
+    "company": "DFINITY",
+    "experience": "**Director of Product**, DFINITY  \nMay 2019 – Present  \nPalo Alto, CA\n\n**VP Product Engineering**, Overnight  \nFeb 2016 – Aug 2018  \nLos Angeles, CA",
+    "education": "**Harvard University**  \nBA, Economics",
+    "imgUrl": "https://media-exp1.licdn.com/dms/image/C5603AQEsCX2F2XWSAA/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=08fKIYkruMVDaPNw8-CCfq0wN1bVob2Qh2JEznlYOtk"
+  },
+  {
+    "firstName": "Jan",
+    "lastName": "Camenisch",
+    "title": "VP of Research",
+    "company": "DFINITY",
+    "experience": "**VP of Research**, DFINITY  \nSep 2018 – Present  \nZurich, CH\n\n**Principal Research Staff Member**, IBM Research  \nJul 1999 – Aug 2018  \nZurich, CH",
+    "education": "**ETH Zurich**  \nPhD, Computer Science / Cryptography",
+    "imgUrl": "https://media-exp1.licdn.com/dms/image/C5603AQFQTQN-Vnp7Lw/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=8UVQh47rotPeOjtCUIxgIYhGhVv3UAVEK88ABMu995E"
+  },
+  {
+    "firstName": "Sanam",
+    "lastName": "Saaber",
+    "title": "General Counsel",
+    "company": "DFINITY",
+    "experience": "**General Counsel**, DFINITY  \nMay 2019 – Present  \nPalo Alto, CA\n\n**VP Legal**, Box  \nOct 2012 – May 2019",
+    "education": "**University of California, Davis**  \nJD, Law",
+    "imgUrl": "https://media-exp1.licdn.com/dms/image/C5603AQFLtjzidPnwDQ/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=kGOwN2qSwtZZTvBi-j8MSf2B6vlnWb7VSVNjBzWEQJc"
+  },
+  {
+    "firstName": "Barack",
+    "lastName": "Obama",
+    "title": "President (Retired)",
+    "company": "United States of America",
+    "experience": "**President**, USA  \nJan 2009 – Jan 2017  \nWashington, DC",
+    "education": "**Harvard University**  \nJD, Law",
+    "imgUrl": "https://media-exp1.licdn.com/dms/image/C4E03AQF2C6iUecWOnQ/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=JhULFt2tNvW8DE4WGYzrubm1OQzkk4oPdigVEQmD7tU"
+  }
+]
