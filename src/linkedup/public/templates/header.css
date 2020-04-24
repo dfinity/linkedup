@@ -1,0 +1,38 @@
+header {
+  padding: 2em;
+  background: none;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+header .logo {
+  font-weight: bold;
+  font-size: 32px;
+  text-decoration: none;
+  color: white;
+}
+
+header .logo span {
+  background: var(--accent-color);
+  border-radius: 5px;
+}
+
+header nav {
+  float: right;
+  text-transform: uppercase;
+}
+
+header nav ul {
+  list-style: none;
+  margin: 0;
+}
+
+header nav li {
+  display: inline-block;
+  margin: 1em 0 0 2em;
+}
+
+header nav li a {
+  cursor: pointer;
+}

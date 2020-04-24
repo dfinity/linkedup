@@ -1,0 +1,10 @@
+footer {
+  line-height: 2rem;
+  font-size: 0.75em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: var(--dark-color);
+  color: var(--light-color);
+}

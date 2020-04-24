@@ -1,0 +1,47 @@
+:root {
+  --dark-color: #292a2e;
+  --light-color: #caccd1;
+  --accent-color: #f90;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: calc(100vh - 2em);
+  color: var(--dark-color);
+  background: linear-gradient(var(--dark-color), var(--light-color));
+  font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+section {
+  padding-bottom: 2em;
+}
+
+section.hidden {
+  display: none !important;
+}
+
+section:not(#landingPage) {
+  margin: 2em auto;
+  max-width: 900px;
+}
+
+h4 {
+  text-transform: uppercase;
+  margin: 0 0 1em;
+}
+
+button {
+  border: 0;
+  color: white;
+  background: var(--dark-color);
+  padding: 1em;
+  border-radius: 1em;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+button:hover {
+  color: var(--dark-color);
+  background: var(--accent-color);
+}

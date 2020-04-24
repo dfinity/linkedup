@@ -1,0 +1,29 @@
+section#landingPage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 2em);
+  background: url("https://enzohaussecker.s3-us-west-2.amazonaws.com/images/handshake.jpg")
+    no-repeat center center fixed;
+  background-size: cover;
+}
+
+section#landingPage p {
+  color: rgba(255, 255, 255, 0);
+  text-align: center;
+  margin: 50vh;
+  font: 3em bold;
+  animation: slideup 3s forwards;
+}
+
+@keyframes slideup {
+  from {
+    padding-top: 1em;
+    color: rgba(255, 255, 255, 0);
+  }
+  to {
+    padding-top: 0;
+    color: rgba(255, 255, 255, 1);
+  }
+}

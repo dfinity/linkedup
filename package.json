@@ -1,16 +1,7 @@
 {
   "author": "Enzo Haussecker",
   "dependencies": {
-    "animate.css": "^3.7.2",
-    "bootstrap": "^4.4.1",
-    "copy-webpack-plugin": "^5.1.1",
-    "font-awesome": "^4.7.0",
-    "jquery": "^3.5.0",
-    "popper.js": "^1.16.1",
-    "showdown": "^1.9.1",
-    "tweetnacl": "^1.0.3",
-    "typed.js": "^2.0.11",
-    "wowjs": "^1.1.3"
+    "copy-webpack-plugin": "^5.1.1"
   },
   "devDependencies": {
     "css-loader": "^3.5.2",

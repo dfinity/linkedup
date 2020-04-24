@@ -1,0 +1,64 @@
+section#showProfile {
+  display: grid;
+  column-gap: 1em;
+  grid-template-columns: 600px 300px;
+}
+
+section#showProfile div {
+  position: relative;
+}
+
+section#showProfile button {
+  position: absolute;
+  top: 4em;
+  right: 1em;
+}
+
+.profile {
+  background: linear-gradient(var(--light-color), white);
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.profile .avatar {
+  float: left;
+  margin: -1em 1em 100% -1em;
+  height: 150px;
+  width: 150px;
+  border-radius: 1em 0 0 0;
+}
+
+.profile h4 {
+  color: var(--light-color);
+}
+
+.connection,
+.searchResult {
+  display: block;
+  clear: left;
+  border-radius: 1em;
+  height: 75px;
+  background: linear-gradient(var(--light-color), white);
+}
+
+.connection .avatar,
+.searchResult .avatar {
+  float: left;
+  height: 75px;
+  width: 75px;
+  border-radius: 1em 0 0 1em;
+  margin: 0 1em 1em 0;
+}
+
+.connection h5,
+.searchResult h5 {
+  margin: 0;
+  padding: 0.5em;
+  font-size: 1em;
+}
+
+.connection p,
+.searchResult p {
+  margin: 0;
+  font-size: 0.75em;
+}

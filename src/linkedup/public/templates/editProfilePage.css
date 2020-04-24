@@ -1,0 +1,18 @@
+form {
+  background: var(--light-color);
+  padding: 1em;
+  border-radius: 1em;
+}
+form label {
+  display: block;
+  margin: 0.5em 0;
+}
+
+form input,
+form textarea {
+  width: calc(100% - 2em);
+  border-radius: 0.5em;
+  border: 0;
+  padding: 1em;
+  font-size: 1em;
+}
