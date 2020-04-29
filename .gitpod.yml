@@ -4,7 +4,7 @@ tasks:
       gp await-port 8000
       dfx build
       dfx canister install --all
-      ID=$(xxd -u -p canisters/logo/_canister.id)
+      ID=$(xxd -u -p canisters/linkedup/_canister.id)
       CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest().upper())")
       gp preview $(gp url 8000)/?canisterId=ic:$ID$CRC
   - command: dfx start
