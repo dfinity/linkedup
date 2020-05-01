@@ -1,5 +1,5 @@
-import Array "mo:base/array";
-import Iter "mo:base/iter";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
 import Types "./types";
 
 module {

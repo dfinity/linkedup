@@ -1,5 +1,5 @@
-import Array "mo:base/array";
-import Option "mo:base/option";
+import Array "mo:base/Array";
+import Option "mo:base/Option";
 import Database "./database";
 import Types "./types";
 

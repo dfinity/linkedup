@@ -1,4 +1,4 @@
-import Principal "mo:base/principalId";
+import Principal "mo:base/Principal";
 
 module {
   public type UserId = Principal;
