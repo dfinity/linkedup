@@ -1,9 +1,8 @@
 {
-  "author": "Enzo Haussecker",
-  "dependencies": {
-    "copy-webpack-plugin": "^5.1.1"
-  },
+  "author": "DFINITY Foundation",
+  "dependencies": {},
   "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.5.2",
     "node-crc": "^1.3.0",
     "node-fetch": "^2.6.0",

@@ -1,9 +1,10 @@
 // Make the LinkedUp app's public methods available locally
 import linkedup from "ic:canisters/linkedup";
 
+import App from "./templates/App";
 import createActions from "./actions";
-import App from "./templates/app";
-import { createStore, injectHtml } from "./utils";
+import createStore from "./store";
+import { injectHtml } from "./utils";
 
 linkedup
   .__getAsset("index.html")

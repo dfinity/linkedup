@@ -1,10 +1,11 @@
-import { Component, showPage, deepEquals } from "../utils";
+import Component from "./Component";
 import header from "./header";
 import landingPage from "./landingPage";
 import showProfilePage from "./showProfilePage";
 import editProfilePage from "./editProfilePage";
 import searchResultsPage from "./searchResultsPage";
 import footer from "./footer";
+import { showPage } from "../utils";
 import "./app.css";
 
 class App extends Component {
