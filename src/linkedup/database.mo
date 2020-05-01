@@ -1,8 +1,8 @@
-import Array "mo:stdlib/array";
-import HashMap "mo:stdlib/hashMap";
-import Iter "mo:stdlib/iter";
-import Option "mo:stdlib/option";
-import Principal "mo:stdlib/principalId";
+import Array "mo:base/Array";
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
+import Option "mo:base/Option";
+import Principal "mo:base/Principal";
 import Types "./types";
 
 module {

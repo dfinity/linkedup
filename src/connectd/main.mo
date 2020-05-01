@@ -1,4 +1,4 @@
-import Digraph "./digraph";
+import Digraph "./Digraph";
 import Types "./types";
 
 type Vertex = Types.Vertex;

@@ -1,4 +1,4 @@
-import Principal "mo:stdlib/principalId";
+import Principal "mo:base/Principal";
 
 module {
   public type Vertex = Principal;
