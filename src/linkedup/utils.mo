@@ -1,5 +1,5 @@
-import Array "mo:stdlib/array";
-import Option "mo:stdlib/option";
+import Array "mo:base/Array";
+import Option "mo:base/Option";
 import Database "./database";
 import Types "./types";
 
