@@ -1,31 +1,24 @@
-import "./header.css";
+import "../styles/header.css";
 
-const header = ({ page }) => `
-  <a class="logo" href="/">Linked<span>up</span></a>
-  ${
-    page === "searchResults"
-      ? `<input id="search" type="search" onkeyup="actions.search(event)" />`
-      : ""
-  }
-  <nav>
-    <ul>
-    ${
-      page === "landingPage"
-        ? navTmpl({ action: "goProfile()", label: "Login" })
-        : navItems.map(navTmpl).join("")
-    }
-    </ul>
-  </nav>
-`;
-
-const navTmpl = ({ action, label }) =>
-  `<li><a onclick="actions.${action}">${label}</a></li>`;
-
-const navItems = [
-  { action: "goProfile()", label: "Profile" },
-  { action: "go('searchResults')", label: "Search" },
-  { action: "goProfile()", label: "Connections" },
-  { action: "goProfile()", label: "Invites" },
-];
+const header = ({ page }) => {
+  const isSearchPage = page === "searchResults";
+  const isLandingPage = page === "landingPage";
+  return `
+    <a class="logo" href="/">Linked<span>up</span></a>
+    ${isSearchPage ? `<input id="search" type="search" />` : ""}
+    <nav>
+      <ul>
+      ${
+        isLandingPage
+          ? `<li><a href="#profile">Login</a></li>`
+          : `<li><a href="#profile">Profile</a></li>
+             <li><a href="#search">Search</a></li>
+             <li><a href="#profile">Connections</a></li>
+             <li><a href="#profile">Invites</a></li>`
+      }
+      </ul>
+    </nav>
+  `;
+};
 
 export default header;

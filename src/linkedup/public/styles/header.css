@@ -34,5 +34,6 @@ header nav li {
 }
 
 header nav li a {
-  cursor: pointer;
+  text-decoration: none;
+  color: var(--light-color);
 }

@@ -7,38 +7,17 @@ export const injectHtml = (htmlBytes) => {
   );
 };
 
-export const updateById = (selector, text) =>
-  (document.querySelector(selector).innerHTML = text);
+export const render = (id, html) =>
+  (document.querySelector(id).innerHTML = html);
 
-export const showPage = (pageId) => {
+export const renderAll = (elements) =>
+  Object.entries(elements).forEach(([id, html]) => render(id, html));
+
+export const show = (sectionId) =>
   document.querySelectorAll("section").forEach((section) => {
-    if (section.id === pageId) {
+    if (section.id === sectionId.replace("#", "")) {
       section.classList.remove("hidden");
     } else {
       section.classList.add("hidden");
     }
   });
-};
-
-export const idToString = (id) => JSON.stringify(id);
-
-export const deepEquals = (obj1, obj2) => idToString(obj1) === idToString(obj2);
-
-export class Component {
-  constructor(selector = "", template = () => {}) {
-    this.selector = selector;
-    this.template = template;
-    this.state = {};
-  }
-
-  update(newState) {
-    if (!deepEquals(this.state, newState)) {
-      this.state = { ...newState };
-      this.render();
-    }
-  }
-
-  render() {
-    updateById(this.selector, this.template(this.state));
-  }
-}

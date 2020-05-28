@@ -31,7 +31,8 @@ h4 {
   margin: 0 0 1em;
 }
 
-button {
+button,
+a.button {
   border: 0;
   color: white;
   background: var(--dark-color);
@@ -41,7 +42,8 @@ button {
   font-weight: bold;
 }
 
-button:hover {
+button:hover,
+a.button:hover {
   color: var(--dark-color);
   background: var(--accent-color);
 }

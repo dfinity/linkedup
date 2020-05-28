@@ -1,4 +1,4 @@
-import "./searchResultsPage.css";
+import "../styles/searchResultsPage.css";
 
 const searchResultsPage = ({ results }) => `
   <h4>Search Results</h4>

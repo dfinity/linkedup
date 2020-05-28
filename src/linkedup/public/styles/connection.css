@@ -1,0 +1,26 @@
+.connection {
+  display: block;
+  clear: left;
+  border-radius: 1em;
+  height: 75px;
+  background: linear-gradient(var(--light-color), white);
+}
+
+.connection .avatar {
+  float: left;
+  height: 75px;
+  width: 75px;
+  border-radius: 1em 0 0 1em;
+  margin: 0 1em 1em 0;
+}
+
+.connection h5 {
+  margin: 0;
+  padding: 0.5em;
+  font-size: 1em;
+}
+
+.connection p {
+  margin: 0;
+  font-size: 0.75em;
+}

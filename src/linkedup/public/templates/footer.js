@@ -1,7 +1,5 @@
-import "./footer.css";
+import "../styles/footer.css";
 
-const footer = () => `
-  &copy; ${new Date().getFullYear()} DFINITY
-`;
+const footer = () => `&copy; ${new Date().getFullYear()} DFINITY`;
 
 export default footer;

@@ -1,0 +1,25 @@
+.loading {
+  height: 100%;
+  width: 100%;
+}
+
+.loading:after {
+  content: " ";
+  display: block;
+  width: 2em;
+  height: 2em;
+  margin: auto;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

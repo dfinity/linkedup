@@ -1,8 +1,6 @@
-import "./editProfilePage.css";
-
-const editProfilePage = ({ profile }) => `
+const editProfile = ({ profile = {} }) => `
   <h4>Editing Profile</h4>
-  <form id="editProfileForm" onsubmit="actions.saveProfile(event)">
+  <form id="editProfileForm">
     ${formFields.map(fieldTmpl(profile)).join("")}
     <button type="submit">Save</button>
   </form>
@@ -13,8 +11,10 @@ const fieldTmpl = (profile) => ({ label, name, type }) => `
     <label for="${name}">${label}</label>
     ${
       type === "textarea"
-        ? `<textarea name="${name}" id="${name}">${profile[name]}</textarea>`
-        : `<input name="${name}" id="${name}" value="${profile[name]}" />`
+        ? `<textarea name="${name}" id="${name}">
+          ${profile[name] || ""}
+          </textarea>`
+        : `<input name="${name}" id="${name}" value="${profile[name] || ""}" />`
     }
   </p>
 `;
@@ -29,4 +29,4 @@ const formFields = [
   { name: "imgUrl", label: "Image URL" },
 ];
 
-export default editProfilePage;
+export default editProfile;
