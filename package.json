@@ -13,6 +13,7 @@
     "wowjs": "^1.1.3"
   },
   "devDependencies": {
+    "@dfinity/agent": "~/.cache/dfinity/versions/0.5.9/js-user-library",
     "css-loader": "^3.5.2",
     "node-crc": "^1.3.0",
     "node-fetch": "^2.6.0",
@@ -25,7 +26,7 @@
   "license": "Apache 2.0 with LLVM Exception",
   "name": "linkedup",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --display-error-details",
     "seed": "node scripts/seed"
   },
   "version": "1.0.0"

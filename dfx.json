@@ -1,24 +1,33 @@
 {
   "canisters": {
     "connectd": {
-      "main": "src/connectd/main.mo"
+      "main": "src/connectd/main.mo",
+      "type": "motoko"
     },
     "linkedup": {
       "main": "src/linkedup/main.mo",
+      "type": "motoko"
+    },
+    "linkedup_ui": {
+      "dependencies": ["linkedup"],
       "frontend": {
-        "entrypoint": "src/linkedup/public/main.js",
-        "assets": ["src/linkedup/public/*.html", "src/linkedup/public/*.css"]
-      }
+        "entrypoint": "src/linkedup_ui/public/index.js",
+        "output": "canisters/linkedup_ui/assets"
+      },
+      "source": ["src/linkedup_ui/assets"],
+      "type": "assets"
     }
   },
   "defaults": {
     "build": {
-      "output": "canisters"
+      "output": "canisters/",
+      "packtool": ""
     },
     "start": {
       "address": "127.0.0.1",
       "port": 8000
     }
   },
-  "dfx": "0.5.7"
+  "dfx": "0.5.9",
+  "version": 1
 }
