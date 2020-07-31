@@ -15,7 +15,7 @@ In the LinkedUp sample application, there are two canisters:
 
 Before building the sample application, verify the following:
 
-* You have downloaded and installed the {sdk-short-name} package as described in [Download and install](http://sdl.dfinity.org/docs/quickstart/quickstart.html#download-and-install).
+* You have downloaded and installed the {sdk-short-name} package as described in [Download and install](https://sdk.dfinity.org/docs/quickstart/quickstart.html#download-and-install).
 * You have stopped any {IC} network processes running on the local computer.
 
 ## Demo
