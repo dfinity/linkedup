@@ -1,10 +1,11 @@
-import * as $ from "jquery";
+import $ from "jquery";
 import { WOW } from "wowjs";
 import Typed from "typed.js";
 import "bootstrap";
 
 // Make the LinkedUp app's public methods available locally
 import linkedup from "ic:canisters/linkedup";
+import linkedup_assets from "ic:canisters/linkedup_assets";
 
 import {
   ownProfilePageTmpl,
@@ -19,8 +20,8 @@ import "./index.css";
 
 window.$ = window.jQuery = $;
 
-linkedup
-  .__getAsset("index.html")
+linkedup_assets
+  .retrieve("index.html")
   .then(injectHtml)
   .then(() =>
     $(document).ready(function () {

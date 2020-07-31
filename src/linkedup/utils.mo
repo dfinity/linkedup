@@ -32,7 +32,7 @@ module {
 
   public func includes(x: UserId, xs: [UserId]): Bool {
     func isX(y: UserId): Bool { x == y };
-    switch (Array.find<UserId>(isX, xs)) {
+    switch (Array.find<UserId>(xs, isX)) {
       case (null) { false };
       case (_) { true };
     };
@@ -44,7 +44,7 @@ module {
 
   public func isAdmin(userId: UserId): Bool {
     func identity(x: UserId): Bool { x == userId };
-    Option.isSome(Array.find<UserId>(identity, adminIds))
+    Option.isSome(Array.find<UserId>(adminIds,identity))
   };
 
   public func hasAccess(userId: UserId, profile: Profile): Bool {

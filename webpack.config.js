@@ -7,21 +7,17 @@ const dfxJson = require("./dfx.json");
 // the `import ... from "ic:canisters/xyz"` where xyz is the name of a
 // canister.
 const aliases = Object.entries(dfxJson.canisters).reduce((acc, [name,]) => {
-  const outputRoot = path.join(__dirname, dfxJson.defaults.build.output, name);
+
+  // Get the network name, or `local` by default.
+  const networkName = process.env['DFX_NETWORK'] || 'local';
+  const outputRoot = path.join(__dirname, '.dfx', networkName, 'canisters', name);
 
   return {
     ...acc,
-    ["ic:canisters/" + name]: path.join(outputRoot, "main.js"),
-    ["ic:idl/" + name]: path.join(outputRoot, "main.did.js"),
+    ['ic:canisters/' + name]: path.join(outputRoot, name + '.js'),
+    ['ic:idl/' + name]: path.join(outputRoot, name + '.did.js'),
   };
 }, {
-  // This will later point to the userlib from npm, when we publish the userlib.
-  "ic:userlib": path.join(
-    process.env["HOME"],
-    ".cache/dfinity/versions",
-    dfxJson.dfx || process.env["DFX_VERSION"],
-    "js-user-library/dist/lib.prod.js",
-  ),
 });
 
 /**
@@ -52,15 +48,7 @@ function generateWebpackConfigForCanister(name, info) {
       filename: "index.js",
       path: path.join(outputRoot, "assets"),
     },
-    plugins: [
-      new CopyPlugin(assets.map(x => {
-        if (typeof x == "string") {
-          return { from: path.join(inputRoot, x), to: path.join(outputRoot, "assets"), flatten: true };
-        } else {
-          return { ...x, from: path.join(inputRoot, x.from), to: path.join(outputRoot, "assets", x.to || '') };
-        }
-      })),
-    ],
+    plugins: [],
     module: {
       rules: [{
         test: /\.css$/,
