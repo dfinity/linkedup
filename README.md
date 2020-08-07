@@ -22,59 +22,50 @@ Before building the sample application, verify the following:
 
 1. Clone the `linkedup` repository.
 
-1. Change to the local `linkedup` working directory.
+2. Change to the local `linkedup` working directory.
 
     ```bash
     cd linkedup
     ```
 
-1. Install the required node modules (only needed the first time).
+3. Install the required node modules (only needed the first time).
 
     ```bash
     npm install
     ```
 
-1. Open the `dfx.json` file in a text editor and verify the `dfx` setting has same the version number as the `dfx` executable you have installed. 
+4. Open the `dfx.json` file in a text editor and verify the `dfx` setting has same the version number as the `dfx` executable you have installed. 
 
-1. Start the replica.
+5. Start the replica.
 
     ```bash
     dfx start --background
     ```
 
-1. Register unique canister identifiers for the `linkedup` project by running the following command:
+6. Register unique canister identifiers for the `linkedup` project by running the following command:
 
     ```bash
     dfx canister create --all
     ```
 
-1. Build the application by running the following command:
+7. Build the application by running the following command:
 
     ```bash
     dfx build
     ```
 
-1. Deploy the application on the local network by running the following command:
+8. Deploy the application on the local network by running the following command:
 
     ```bash
     dfx canister install --all
     ```
 
-1. Copy the canister identifier for the `linkedup_assets` canister.
+9. Copy the canister identifier for the `linkedup_assets` canister.
 
-1. Open the `linkedup_assets` canister frontend in your web browser.
+10. Open the `linkedup_assets` canister frontend in your web browser.
 
     For example, if using the default localhost address and port number, the URL looks similar to this:
 
     ```bash
     http://localhost:8000/?canisterId=7kncf-oidaa-aaaaa-aaaaa-aaaaa-aaaaa-aaaaa-q
     ```
-
-<!-- OBSOLETE COMMANDS
-
-```bash
-ID=$(xxd -u -p canisters/linkedup/_canister.id)
-CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest().upper())")
-xdg-open "http://127.0.0.1:8000/?canisterId=ic:$ID$CRC"
-```
--->

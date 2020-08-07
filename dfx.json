@@ -4,20 +4,39 @@
       "main": "src/connectd/main.mo"
     },
     "linkedup": {
-      "main": "src/linkedup/main.mo",
+      "main": "src/linkedup/main.mo"
+    },
+    "linkedup_assets": {
+      "dependencies": ["linkedup"],
       "frontend": {
-        "entrypoint": "src/linkedup/public/main.js",
-        "assets": ["src/linkedup/public/*.html", "src/linkedup/public/*.css"]
-      }
+        "entrypoint": "src/linkedup/public/main.js"
+      },
+      "type": "assets",
+      "source": [
+        "src/linkedup/public",
+        "dist/linkedup_assets"
+      ]
     }
   },
   "defaults": {
     "build": {
-      "output": "canisters"
+      "output": "canisters",
+      "packtool": ""
     },
     "start": {
       "address": "127.0.0.1",
-      "port": 8000
+      "port": 8000,
+      "serve_root": "canisters/linkedup_assets/assets"
+    }
+  },
+  "networks": {
+    "tungsten": {
+      "providers": ["https://gw.dfinity.network"],
+      "type": "persistent"
+    },
+    "local": {
+      "bind": "0.0.0.0:8000",
+      "type": "ephemeral"
     }
   },
   "dfx": "0.6.2"
