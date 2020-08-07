@@ -46,7 +46,7 @@ function generateWebpackConfigForCanister(name, info) {
     },
     output: {
       filename: "index.js",
-      path: path.join(outputRoot, "assets"),
+      path: path.join(__dirname, "dist", name),
     },
     plugins: [],
     module: {
