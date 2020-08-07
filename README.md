@@ -1,28 +1,71 @@
-## An open professional network.
+# LinkedUp - An open professional network.
 
 [![Build Status](https://travis-ci.org/dfinity-lab/linkedup.svg?branch=master)](https://travis-ci.org/dfinity-lab/linkedup?branch=master)
 
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/dfinity-lab/linkedup) 
 
-### Demo
+The LinkedUp sample application provides a simple implementation of an open professional network that demonstrates how to use **inter-canister calls** within a project.
 
-Install the required Node modules (only needed the first time).
+In the LinkedUp sample application, there are two canisters:
 
-```bash
-npm install
-```
+* The `linkedup` canister creates and stores basic profile information for a user, including work experience and educational background.
+* The `connectd` canister creates and stores a user's connections.
 
-Start the replica, then build and install the canisters.
+## Before you begin
 
-```bash
-dfx start --background
-dfx canister create --all
-dfx build
-dfx canister install --all
-```
+Before building the sample application, verify the following:
 
-Open the canister frontend in your web browser.
+* You have downloaded and installed the DFINITY Canister SDK as described in [Download and install](https://sdk.dfinity.org/docs/quickstart/quickstart.html#download-and-install).
+* You have stopped any Internet Computer network processes running on the local computer.
 
-```bash
-xdg-open "http://127.0.0.1:8000/?canisterId=$(dfx canister id linkedup_assets)"
-```
+## Demo
+
+1. Clone the `linkedup` repository.
+
+2. Change to the local `linkedup` working directory.
+
+    ```bash
+    cd linkedup
+    ```
+
+3. Install the required node modules (only needed the first time).
+
+    ```bash
+    npm install
+    ```
+
+4. Open the `dfx.json` file in a text editor and verify the `dfx` setting has same the version number as the `dfx` executable you have installed. 
+
+5. Start the replica.
+
+    ```bash
+    dfx start --background
+    ```
+
+6. Register unique canister identifiers for the `linkedup` project by running the following command:
+
+    ```bash
+    dfx canister create --all
+    ```
+
+7. Build the application by running the following command:
+
+    ```bash
+    dfx build
+    ```
+
+8. Deploy the application on the local network by running the following command:
+
+    ```bash
+    dfx canister install --all
+    ```
+
+9. Copy the canister identifier for the `linkedup_assets` canister.
+
+10. Open the `linkedup_assets` canister frontend in your web browser.
+
+    For example, if using the default localhost address and port number, the URL looks similar to this:
+
+    ```bash
+    http://localhost:8000/?canisterId=7kncf-oidaa-aaaaa-aaaaa-aaaaa-aaaaa-aaaaa-q
+    ```
