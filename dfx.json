@@ -12,7 +12,10 @@
         "entrypoint": "src/linkedup/public/main.js"
       },
       "type": "assets",
-      "source": ["src/linkedup/public"]
+      "source": [
+        "src/linkedup/public",
+        "dist/linkedup_assets"
+      ]
     }
   },
   "defaults": {
