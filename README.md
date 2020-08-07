@@ -67,7 +67,7 @@ Before building the sample application, verify the following:
     For example, if using the default localhost address and port number, the URL looks similar to this:
 
     ```bash
-    http://localhost:8000/?canisterId=ic:03000000000000000000000000000000000179
+    http://localhost:8000/?canisterId=7kncf-oidaa-aaaaa-aaaaa-aaaaa-aaaaa-aaaaa-q
     ```
 
 <!-- OBSOLETE COMMANDS
