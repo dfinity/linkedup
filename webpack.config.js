@@ -1,4 +1,3 @@
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const dfxJson = require("./dfx.json");
@@ -7,21 +6,17 @@ const dfxJson = require("./dfx.json");
 // the `import ... from "ic:canisters/xyz"` where xyz is the name of a
 // canister.
 const aliases = Object.entries(dfxJson.canisters).reduce((acc, [name,]) => {
-  const outputRoot = path.join(__dirname, dfxJson.defaults.build.output, name);
+
+  // Get the network name, or `local` by default.
+  const networkName = process.env['DFX_NETWORK'] || 'local';
+  const outputRoot = path.join(__dirname, '.dfx', networkName, 'canisters', name);
 
   return {
     ...acc,
-    ["ic:canisters/" + name]: path.join(outputRoot, "main.js"),
-    ["ic:idl/" + name]: path.join(outputRoot, "main.did.js"),
+    ['ic:canisters/' + name]: path.join(outputRoot, name + '.js'),
+    ['ic:idl/' + name]: path.join(outputRoot, name + '.did.js'),
   };
 }, {
-  // This will later point to the userlib from npm, when we publish the userlib.
-  "ic:userlib": path.join(
-    process.env["HOME"],
-    ".cache/dfinity/versions",
-    dfxJson.dfx || process.env["DFX_VERSION"],
-    "js-user-library/dist/lib.prod.js",
-  ),
 });
 
 /**
@@ -32,10 +27,8 @@ function generateWebpackConfigForCanister(name, info) {
     return;
   }
 
-  const outputRoot = path.join(__dirname, dfxJson.defaults.build.output, name);
   const inputRoot = __dirname;
   const entry = path.join(inputRoot, info.frontend.entrypoint);
-  const assets = info.frontend.assets;
 
   return {
     mode: "production",
@@ -50,17 +43,9 @@ function generateWebpackConfigForCanister(name, info) {
     },
     output: {
       filename: "index.js",
-      path: path.join(outputRoot, "assets"),
+      path: path.join(__dirname, "dist", name),
     },
-    plugins: [
-      new CopyPlugin(assets.map(x => {
-        if (typeof x == "string") {
-          return { from: path.join(inputRoot, x), to: path.join(outputRoot, "assets"), flatten: true };
-        } else {
-          return { ...x, from: path.join(inputRoot, x.from), to: path.join(outputRoot, "assets", x.to || '') };
-        }
-      })),
-    ],
+    plugins: [],
     module: {
       rules: [{
         test: /\.css$/,

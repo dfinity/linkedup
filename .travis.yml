@@ -9,7 +9,5 @@ install:
 - export PATH=/home/$USER/bin:$PATH
 script:
 - sh bootstrap.sh
-- ID=$(xxd -p canisters/linkedup/_canister.id)
-- CRC=$(python2 -c "import crc8;h=crc8.crc8();h.update('$ID'.decode('hex'));print(h.hexdigest())")
-- wget -O index.html http://127.0.0.1:8000/?canisterId=ic:$ID$CRC
+- wget -O index.html http://127.0.0.1:8000/?canisterId=$(dfx canister id linkedup_assets)
 - cat index.html
