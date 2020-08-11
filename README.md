@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dfinity-lab/linkedup.svg?branch=master)](https://travis-ci.org/dfinity-lab/linkedup?branch=master)
 
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/dfinity-lab/linkedup) 
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/dfinity-lab/linkedup)
 
 The LinkedUp sample application provides a simple implementation of an open professional network that demonstrates how to use **inter-canister calls** within a project.
 
@@ -34,7 +34,7 @@ Before building the sample application, verify the following:
     npm install
     ```
 
-4. Open the `dfx.json` file in a text editor and verify the `dfx` setting has same the version number as the `dfx` executable you have installed. 
+4. Open the `dfx.json` file in a text editor and verify the `dfx` setting has same the version number as the `dfx` executable you have installed.
 
 5. Start the replica.
 
@@ -60,7 +60,7 @@ Before building the sample application, verify the following:
     dfx canister install --all
     ```
 
-9. Copy the canister identifier for the `linkedup_assets` canister.
+9. Copy the canister identifier for the `linkedup_assets` canister (you can use `dfx canister id linkedup_assets`).
 
 10. Open the `linkedup_assets` canister frontend in your web browser.
 
