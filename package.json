@@ -1,7 +1,7 @@
 {
   "author": "Enzo Haussecker",
   "dependencies": {
-    "@dfinity/agent": "0.6.2",
+    "@dfinity/agent": "0.6.4",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
     "copy-webpack-plugin": "^5.1.1",

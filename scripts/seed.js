@@ -1,17 +1,15 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
-const os = require("os");
 const path = require("path");
 const exec = require('child_process').execSync;
-const { crc8 } = require("node-crc");
 const { Crypto } = require("node-webcrypto-ossl");
 
 global.crypto = new Crypto();
 
 const decode = s => (new TextDecoder()).decode(s);
 
-const { defaults } = require("../dfx.json");
-const DEFAULT_HOST = `http://${defaults.start.address}:${defaults.start.port}`;
+const { defaults, networks } = require("../dfx.json");
+const DEFAULT_HOST = `${networks.local.start.address}`;
 const OUTPUT_DIR = defaults.build.output;
 const {
   generateKeyPair,
@@ -68,8 +66,5 @@ const getCanisterId = (canisterName) => {
   }
 };
 
-const format = (canisterId) => canisterId.toString("hex").toUpperCase();
-
 // Run main()
-
 main();
