@@ -12,6 +12,7 @@ jobs:
       - name: Install dfx
         run: |
           yes | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+          alias dfx=/home/runner/bin/dfx
           dfx start --background --clean
           dfx canister create --all
           dfx build
