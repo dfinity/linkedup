@@ -10,8 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dfx
+        run: sh -c "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+        shell: sh
+      - name: Setup replica for tests
         run: |
-          yes | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
           alias dfx=/home/runner/bin/dfx
           dfx start --background --clean
           dfx canister create --all
