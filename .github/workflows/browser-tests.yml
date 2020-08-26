@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dfx
-      - run: yes Y | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-      - run: |
+        run: yes Y | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+        run: |
           dfx start --background --clean
           dfx canister create --all
           dfx build
