@@ -10,12 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dfx
-        run: yes Y | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-        run: dfx start --background --clean
-        run: dfx canister create --all
-        run: dfx build
-        run: dfx canister install --all
-      - name: Cypress run
+      - run: yes Y | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+      - run: dfx start --background --clean
+      - run: dfx canister create --all
+      - run: dfx build
+      - run: dfx canister install --all
         uses: cypress-io/github-action@v2
         env:
           BROWSERSTACK_APIKEY: ${{ secrets.BROWSERSTACK_APIKEY }}
