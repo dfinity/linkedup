@@ -7,15 +7,8 @@ on:
 jobs:
   browser-tests:
     runs-on: ubuntu-latest
-    strategy:
-      node:
-        - '14'
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
-        with:
-            node-version: ${{ matrix.node  }}
       - name: Install dfx
         run: yes Y | sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
         run: dfx start --background --clean
