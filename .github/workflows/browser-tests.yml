@@ -9,12 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dfx
-        run: sh -c "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-        shell: sh
       - name: Setup replica for tests
         run: |
-          alias dfx=/home/runner/bin/dfx
+          export DFX_INSTALL_ROOT=$GITHUB_WORKSPACE
+          sh -c "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
           dfx start --background --clean
           dfx canister create --all
           dfx build
