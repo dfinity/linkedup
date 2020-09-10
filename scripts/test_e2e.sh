@@ -2,7 +2,12 @@
 
 set -ex
 
-export BROWSERSTACK_USERNAME=andrewwylde1
+if [ -z "$BROWSERSTACK_API_KEY" ]; then
+  1>&2 echo "BROWSERSTACK_API_KEY environment variable is required"
+  exit 1
+fi
+
+BROWSERSTACK_USERNAME=${BROWSERSTACK_USERNAME:=andrewwylde1}
 
 rm -rf .dfx
 npm install
@@ -19,7 +24,6 @@ echo $CAN_JSON >cypress/plugins/canister_ids.json
 BrowserStackLocal --key $BROWSERSTACK_APIKEY --daemon start
 
 npm install
-echo Starting cypress
 
 # Get the build ID from the run command's output
 BUILD_ID=$(
