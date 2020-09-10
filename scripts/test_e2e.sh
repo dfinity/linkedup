@@ -44,7 +44,7 @@ while [ $BUILD_STATUS == "running" ]; do
   # Get the build status
   BUILD_INFO=$(npx browserstack-cypress build-info $BUILD_ID --username $BROWSERSTACK_USERNAME --key $BROWSERSTACK_API_KEY | tail -n +4)
   echo %
-  BUILD_STATUS=$(echo $BUILD_INFO | jq '.status')
+  BUILD_STATUS=$(echo $BUILD_INFO | jq -r '.status')
 done
 
 timeout 240s BrowserStackLocal --key $BROWSERSTACK_API_KEY --daemon stop
