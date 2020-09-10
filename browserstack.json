@@ -11,7 +11,7 @@
     "cypress_proj_dir": "./",
     "project_name": "linkedup",
     "build_name": "e2e tests",
-    "parallels": 5,
+    "parallels": 1,
     "npm_dependencies": {},
     "package_config_options": {}
   },
