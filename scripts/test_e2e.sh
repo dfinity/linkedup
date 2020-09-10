@@ -21,7 +21,7 @@ CAN_JSON="{\"linkedup_assets\": \"$(dfx canister id linkedup_assets)\"}"
 
 # run e2e
 echo $CAN_JSON >cypress/plugins/canister_ids.json
-BrowserStackLocal --key $BROWSERSTACK_APIKEY --daemon start
+BrowserStackLocal --key $BROWSERSTACK_API_KEY --daemon start
 
 npm install
 
