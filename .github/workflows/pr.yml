@@ -15,4 +15,5 @@ jobs:
         run: |
           bash -ex scripts/test_e2e.sh
         env:
-          BROWSERSTACK_APIKEY: ${{ secrets.BROWSERSTACK_APIKEY }}
+          BROWSERSTACK_API_KEY: ${{ secrets.BROWSERSTACK_API_KEY }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}

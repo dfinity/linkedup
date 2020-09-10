@@ -27,7 +27,7 @@ npm install
 
 # Get the build ID from the run command's output
 BUILD_ID=$(
-  npx browserstack-cypress run --username $BROWSERSTACK_USERNAME --key $BROWSERSTACK_APIKEY |
+  npx browserstack-cypress run --username $BROWSERSTACK_USERNAME --key $BROWSERSTACK_API_KEY |
     grep 'build id:' |
     rev |
     cut -d" " -f1 |
@@ -42,12 +42,12 @@ while [ $BUILD_STATUS == "running" ]; do
   sleep $POLLING_INTERVAL
 
   # Get the build status
-  BUILD_INFO=$(npx browserstack-cypress build-info $BUILD_ID --username $BROWSERSTACK_USERNAME --key $BROWSERSTACK_APIKEY | tail -n +4)
+  BUILD_INFO=$(npx browserstack-cypress build-info $BUILD_ID --username $BROWSERSTACK_USERNAME --key $BROWSERSTACK_API_KEY | tail -n +4)
   echo %
   BUILD_STATUS=$(echo $BUILD_INFO | jq '.status')
 done
 
-timeout 240s BrowserStackLocal --key $BROWSERSTACK_APIKEY --daemon stop
+timeout 240s BrowserStackLocal --key $BROWSERSTACK_API_KEY --daemon stop
 
 dfx stop
 
