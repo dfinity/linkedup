@@ -2,8 +2,18 @@
   "auth": {},
   "browsers": [
     {
-      "browser": "chrome",
+      "browser": "edge",
       "os": "Windows 10",
+      "versions": ["81"]
+    },
+    {
+      "browser": "firefox",
+      "os": "Windows 10",
+      "versions": ["75"]
+    },
+    {
+      "browser": "chrome",
+      "os": "OS X Catalina",
       "versions": ["80"]
     }
   ],
