@@ -1,0 +1,19 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  browser-tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Linux Provision
+        run: bash .github/workflows/linux-provision.sh
+      - name: Run Cypress Tests on Browserstack
+        run: |
+          bash -ex scripts/test_e2e.sh
+        env:
+          BROWSERSTACK_API_KEY: ${{ secrets.BROWSERSTACK_API_KEY }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}

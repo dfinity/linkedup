@@ -1,0 +1,33 @@
+{
+  "auth": {},
+  "browsers": [
+    {
+      "browser": "edge",
+      "os": "Windows 10",
+      "versions": ["81"]
+    },
+    {
+      "browser": "firefox",
+      "os": "Windows 10",
+      "versions": ["75"]
+    },
+    {
+      "browser": "chrome",
+      "os": "OS X Catalina",
+      "versions": ["80"]
+    }
+  ],
+  "run_settings": {
+    "cypress_proj_dir": "./",
+    "project_name": "linkedup",
+    "build_name": "e2e tests",
+    "parallels": 1,
+    "npm_dependencies": {},
+    "package_config_options": {}
+  },
+  "connection_settings": {
+    "local": true,
+    "local_identifier": null
+  },
+  "disable_usage_reporting": false
+}

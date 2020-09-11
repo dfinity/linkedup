@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cypress-io/cypress/55b352a11d0a664517ae054c67432d98abc2389e/cli/schema/cypress.schema.json",
+  "baseUrl": "http://localhost:8000",
+  "video": false,
+  "defaultCommandTimeout": 120000
+}
