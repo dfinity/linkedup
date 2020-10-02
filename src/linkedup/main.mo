@@ -4,13 +4,14 @@ import Database "./database";
 import Types "./types";
 import Utils "./utils";
 
-type NewProfile = Types.NewProfile;
-type Profile = Types.Profile;
-type UserId = Types.UserId;
 
 actor LinkedUp {
   var directory: Database.Directory = Database.Directory();
 
+  type NewProfile = Types.NewProfile;
+  type Profile = Types.Profile;
+  type UserId = Types.UserId;
+  
   // Healthcheck
 
   public func healthcheck(): async Bool { true };

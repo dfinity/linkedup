@@ -1,11 +1,12 @@
 import Digraph "./digraph";
 import Types "./types";
 
-type Vertex = Types.Vertex;
 
 actor Connectd {
   var graph: Digraph.Digraph = Digraph.Digraph();
 
+  type Vertex = Types.Vertex;
+  
   public func healthcheck(): async Bool { true };
 
   public func connect(userA: Vertex, userB: Vertex): async () {
