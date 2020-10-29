@@ -4,11 +4,11 @@ import Database "./database";
 import Types "./types";
 import Utils "./utils";
 
-type NewProfile = Types.NewProfile;
-type Profile = Types.Profile;
-type UserId = Types.UserId;
-
 actor LinkedUp {
+  
+  type NewProfile = Types.NewProfile;
+  type Profile = Types.Profile;
+  type UserId = Types.UserId;
   var directory: Database.Directory = Database.Directory();
 
   // Healthcheck

@@ -23,15 +23,18 @@
       "packtool": ""
     }
   },
+  "dfx": "0.6.12",
   "networks": {
-    "tungsten": {
-      "providers": ["https://gw.dfinity.network"],
+    "ic": {
+      "providers": [
+        "https://gw.dfinity.network"
+      ],
       "type": "persistent"
     },
     "local": {
-      "bind": "0.0.0.0:8000",
+      "bind": "127.0.0.1:8000",
       "type": "ephemeral"
     }
   },
-  "dfx": "0.6.6"
+  "version": 1
 }
