@@ -1,9 +1,10 @@
 import Digraph "./digraph";
 import Types "./types";
 
-type Vertex = Types.Vertex;
-
 actor Connectd {
+
+  type Vertex = Types.Vertex;
+
   var graph: Digraph.Digraph = Digraph.Digraph();
 
   public func healthcheck(): async Bool { true };
