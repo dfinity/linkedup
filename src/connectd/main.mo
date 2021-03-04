@@ -1,8 +1,9 @@
 import Digraph "./digraph";
 import Types "./types";
 
-
 actor Connectd {
+  type Vertex = Types.Vertex;
+
   var graph: Digraph.Digraph = Digraph.Digraph();
 
   type Vertex = Types.Vertex;
