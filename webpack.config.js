@@ -13,7 +13,7 @@ const aliases = Object.entries(dfxJson.canisters).reduce((acc, [name,]) => {
 
   return {
     ...acc,
-    ['ic:canisters/' + name]: path.join(outputRoot, name + '.js'),
+    ['ic:canisters/' + name]: path.join(outputRoot, name + '.did.js'),
     ['ic:idl/' + name]: path.join(outputRoot, name + '.did.js'),
   };
 }, {
