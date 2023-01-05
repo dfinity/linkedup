@@ -12,7 +12,7 @@ actor Connectd {
     graph.addEdge(userA, userB);
   };
 
-  public func getConnections(user: Vertex): async [Vertex] {
+  public query func getConnections(user: Vertex): async [Vertex] {
     graph.getAdjacent(user)
   };
 
